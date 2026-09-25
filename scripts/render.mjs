@@ -15,6 +15,7 @@ if (!['opencode', 'claude', 'codex', 'gentle-shell'].includes(client) || !output
 const destination = resolve(output)
 const source = resolve(root, 'source/commands')
 const agentsSource = resolve(root, 'source/agents')
+const skillsSource = resolve(root, 'source/skills')
 const commands = readdirSync(source).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
 const agents = readdirSync(agentsSource).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
 mkdirSync(destination, { recursive: true })
@@ -25,6 +26,8 @@ if (client === 'gentle-shell') {
   for (const name of commands) cpSync(join(source, name), join(prompts, name))
   mkdirSync(join(destination, 'skills', 'qz-commands'), { recursive: true })
   cpSync(resolve(root, 'source/skills/qz-commands/SKILL.md'), join(destination, 'skills/qz-commands/SKILL.md'))
+  mkdirSync(join(destination, 'skills', 'qz-agents'), { recursive: true })
+  cpSync(resolve(root, 'source/skills/qz-agents/SKILL.md'), join(destination, 'skills/qz-agents/SKILL.md'))
   mkdirSync(join(destination, 'agents'), { recursive: true })
   for (const name of agents) cpSync(join(agentsSource, name), join(destination, 'agents', name))
 } else if (client === 'codex') {
@@ -42,6 +45,10 @@ if (client === 'gentle-shell') {
   for (const name of commands) cpSync(join(source, name), join(commandsDir, name))
   mkdirSync(join(destination, 'agents'), { recursive: true })
   for (const name of agents) cpSync(join(agentsSource, name), join(destination, 'agents', name))
+  for (const name of ['qz-commands', 'qz-agents']) {
+    mkdirSync(join(destination, 'skills', name), { recursive: true })
+    cpSync(join(skillsSource, name, 'SKILL.md'), join(destination, 'skills', name, 'SKILL.md'))
+  }
 }
 
 const manifest = JSON.parse(readFileSync(resolve(root, 'manifests/qz-command-manifest.json'), 'utf8'))

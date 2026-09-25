@@ -20,7 +20,11 @@ const renderRoot = mkdtempSync(join(tmpdir(), 'qz-render-'))
 const installHome = mkdtempSync(join(tmpdir(), 'qz-install-'))
 try {
   for (const client of ['opencode', 'claude', 'codex', 'gentle-shell']) {
-    parse(run('scripts/render.mjs', ['--client', client, '--output', join(renderRoot, client)]))
+    const output = join(renderRoot, client)
+    parse(run('scripts/render.mjs', ['--client', client, '--output', output]))
+    if (!existsSync(join(output, 'skills/qz-commands/SKILL.md')) || !existsSync(join(output, 'skills/qz-agents/SKILL.md'))) {
+      throw new Error(`render incompleto para ${client}`)
+    }
   }
   const apply = parse(run('scripts/install.mjs', ['--apply', '--home', installHome]))
   if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz'))) {
