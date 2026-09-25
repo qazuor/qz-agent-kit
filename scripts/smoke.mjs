@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -19,6 +19,8 @@ parse(execFileSync(qz, ['context', 'smoke'], { cwd: fixture, encoding: 'utf8' })
 const renderRoot = mkdtempSync(join(tmpdir(), 'qz-render-'))
 const installHome = mkdtempSync(join(tmpdir(), 'qz-install-'))
 const configRoot = mkdtempSync(join(tmpdir(), 'qz-config-'))
+const invalidProject = mkdtempSync(join(tmpdir(), 'qz-invalid-project-'))
+const registryHome = mkdtempSync(join(tmpdir(), 'qz-registry-'))
 try {
   mkdirSync(join(configRoot, '.qz'), { recursive: true })
   const fixtureConfig = JSON.parse(readFileSync(join(fixture, '.qz/project.json'), 'utf8'))
@@ -26,6 +28,14 @@ try {
   writeFileSync(join(configRoot, '.qz/project.json'), `${JSON.stringify(fixtureConfig)}\n`)
   const sanitized = execFileSync(qz, ['config', '--json'], { cwd: configRoot, encoding: 'utf8' })
   if (sanitized.includes('must-not-appear') || sanitized.includes('privateAuth')) throw new Error('qz config expuso un campo sensible')
+  mkdirSync(join(invalidProject, '.qz'), { recursive: true })
+  writeFileSync(join(invalidProject, '.qz/project.json'), JSON.stringify({ schemaVersion: 1, projectId: 'invalid' }))
+  const invalidRegistration = spawnSync(node, [resolve(root, 'scripts/projects.mjs'), 'register', invalidProject], {
+    cwd: root,
+    env: { ...process.env, QZ_KIT_HOME: registryHome },
+    encoding: 'utf8'
+  })
+  if (invalidRegistration.status === 0 || existsSync(join(registryHome, '.config/qz-agent-kit/projects.json'))) throw new Error('se registró un proyecto inválido')
   for (const client of ['opencode', 'claude', 'codex', 'gentle-shell']) {
     const output = join(renderRoot, client)
     parse(run('scripts/render.mjs', ['--client', client, '--output', output]))
@@ -47,5 +57,7 @@ try {
   rmSync(renderRoot, { recursive: true, force: true })
   rmSync(installHome, { recursive: true, force: true })
   rmSync(configRoot, { recursive: true, force: true })
+  rmSync(invalidProject, { recursive: true, force: true })
+  rmSync(registryHome, { recursive: true, force: true })
 }
 console.log(JSON.stringify({ smoke: 'ok', clients: 4, mutations: 'temporary-only', secretValues: 'not-read' }, null, 2))
