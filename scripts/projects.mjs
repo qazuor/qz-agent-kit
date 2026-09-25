@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -17,9 +17,17 @@ const readRegistry = () => {
 }
 const writeRegistry = (registry) => {
   mkdirSync(stateDir, { recursive: true })
+  let backup = null
+  if (existsSync(registryPath)) {
+    const backupDir = join(stateDir, 'backups')
+    mkdirSync(backupDir, { recursive: true })
+    backup = join(backupDir, `projects-${new Date().toISOString().replaceAll(':', '-')}.json`)
+    copyFileSync(registryPath, backup)
+  }
   const temp = `${registryPath}.tmp-${process.pid}`
   writeFileSync(temp, `${JSON.stringify(registry, null, 2)}\n`)
   renameSync(temp, registryPath)
+  return backup
 }
 const print = (data) => console.log(JSON.stringify(data, null, 2))
 
@@ -40,8 +48,8 @@ if (command === 'register') {
   const registry = readRegistry()
   const entry = { id, root: projectRoot, adapter, registeredAt: new Date().toISOString() }
   registry.projects = [...registry.projects.filter((item) => item.id !== id), entry].sort((a, b) => a.id.localeCompare(b.id))
-  writeRegistry(registry)
-  print({ registered: entry, registry: registryPath, mutations: [registryPath], secretValues: 'not-read' })
+  const backup = writeRegistry(registry)
+  print({ registered: entry, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
   process.exit(0)
 }
 if (command === 'validate') {
