@@ -126,6 +126,9 @@ instala configuración de proyecto.
 qz-kit install --plan
 qz-kit install --apply
 qz-kit doctor
+qz-kit verify --manifest
+qz-kit verify --clients
+qz-kit verify --drift
 ```
 
 La instalación también coloca el dispatcher portable `qz` en
