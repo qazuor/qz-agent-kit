@@ -56,6 +56,16 @@ try {
   if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz')) || !existsSync(join(installHome, '.local/bin/qz-start-issue'))) {
     throw new Error('instalación smoke incompleta')
   }
+  const synchronized = parse(run('scripts/install.mjs', ['--plan', '--home', installHome]))
+  if (synchronized.targetDetails.some((target) => target.state !== 'current')) {
+    throw new Error('el plan no marcó como current una instalación recién aplicada')
+  }
+  const shimTarget = join(installHome, '.local/bin/qz-start-issue')
+  writeFileSync(shimTarget, `${readFileSync(shimTarget, 'utf8')}\n`)
+  const drifted = parse(run('scripts/install.mjs', ['--plan', '--home', installHome]))
+  if (!drifted.targetDetails.some((target) => target.target === shimTarget && target.state === 'drift')) {
+    throw new Error('el plan no detectó drift en un shim modificado')
+  }
   const shimHelp = execFileSync(join(installHome, '.local/bin/qz-start-issue'), ['--help'], {
     cwd: fixture,
     env: { ...process.env, HOME: installHome },
