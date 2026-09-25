@@ -4,6 +4,11 @@ import { resolve } from 'node:path'
 
 const [command = 'help', ...args] = process.argv.slice(2)
 const script = resolve(new URL('..', import.meta.url).pathname, 'scripts/install.mjs')
+const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/projects.mjs')
+if (command === 'project') {
+  const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 const mapped = command === 'update' ? ['--apply', ...args]
   : command === 'doctor' ? ['--check', ...args]
     : command === 'install' ? args
