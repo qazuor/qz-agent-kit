@@ -15,14 +15,15 @@ const has = (flag) => args.includes(flag)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 
 if (has('--help') || args.length === 0) {
-  console.log('Usage: node scripts/install.mjs --plan|--check|--apply [--client <name>] [--home <dir>]')
+  console.log('Usage: node scripts/install.mjs --plan|--check|--apply [--client <name[,name]|all>] [--home <dir>]')
   console.log('Default is read-only. --apply creates a scoped backup and writes only qz-managed files.')
   process.exit(args.length === 0 ? 2 : 0)
 }
 if (![ '--plan', '--check', '--apply' ].some(has)) throw new Error('elegí --plan, --check o --apply')
 
 const names = ['opencode', 'claude', 'codex', 'gentle-shell']
-const selected = value('--client') ? [value('--client')] : names
+const requestedClients = value('--client')
+const selected = !requestedClients || requestedClients === 'all' ? names : requestedClients.split(',').map((name) => name.trim()).filter(Boolean)
 if (selected.some((name) => !names.includes(name))) throw new Error(`cliente inválido: ${selected.join(', ')}`)
 const home = resolve(value('--home') || homedir())
 const destination = {

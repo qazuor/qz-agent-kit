@@ -144,6 +144,8 @@ instala configuración de proyecto.
 ```bash
 qz-kit install --plan
 qz-kit install --apply
+qz-kit install --apply --client all
+qz-kit install --plan --client opencode,claude
 qz-kit doctor
 qz-kit verify --manifest
 qz-kit verify --clients
