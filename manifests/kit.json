@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "kitId": "qz-agent-kit",
+  "version": "0.1.0",
+  "sourceOfTruth": "source",
+  "adapters": ["opencode", "claude", "codex", "gentle-shell"],
+  "genericCommandPrefix": "qz-",
+  "projectCommandPrefixes": "declared by each project adapter",
+  "secrets": "values-not-read",
+  "generatedFiles": "hashes-required",
+  "rollback": "manifest-required"
+}

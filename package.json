@@ -1,0 +1,12 @@
+{
+  "name": "@qz/agent-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fuente de verdad y adapters para workflows de agentes CLI.",
+  "scripts": {
+    "validate:project": "node scripts/validate-project.mjs fixtures/generic-project",
+    "plan:backup": "node scripts/backup-plan.mjs",
+    "check": "npm run validate:project"
+  }
+}
