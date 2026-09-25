@@ -31,6 +31,10 @@ if (command === 'register') {
   const projectRoot = resolve(args[0] || '')
   if (!args[0] || !existsSync(join(projectRoot, '.qz/project.json'))) throw new Error('el proyecto debe tener .qz/project.json')
   const config = JSON.parse(readFileSync(join(projectRoot, '.qz/project.json'), 'utf8'))
+  const validator = resolve(new URL('./validate-project.mjs', import.meta.url).pathname)
+  const validation = spawnSync(process.execPath, [validator, projectRoot], { encoding: 'utf8' })
+  if (validation.stdout) process.stdout.write(validation.stdout)
+  if (validation.status !== 0) throw new Error('el proyecto no se registró porque su adapter es inválido')
   const id = value('--id') || config.projectId
   const adapter = value('--adapter') || config.adapter
   const registry = readRegistry()
