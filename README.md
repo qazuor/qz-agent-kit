@@ -142,6 +142,11 @@ También conserva la fuente universal de instrucciones en
 como recurso administrado para los adapters y para una futura sincronización
 explícita por proyecto.
 
+Los guards ejecutables se instalan junto a esa fuente en
+`~/.config/qz-agent-kit/guards/`, con permisos ejecutables y el mismo backup
+fechado. El kit no los conecta automáticamente a hooks de Git: cada adapter o
+proyecto decide dónde aplicarlos.
+
 Para registrar un proyecto se usa su adapter explícito:
 
 ```bash

@@ -42,6 +42,7 @@ const agentsSkillSource = resolve(root, 'source/skills/qz-agents/SKILL.md')
 const qzSource = resolve(root, 'bin/qz')
 const instructionsSource = resolve(root, 'source/instructions/AGENTS.md')
 const agentFiles = readdirSync(resolve(root, 'source/agents')).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/agents', name) }))
+const guardFiles = readdirSync(resolve(root, 'source/guards')).filter((name) => name.endsWith('.sh')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/guards', name) }))
 const detect = (name) => {
   const result = spawnSync('command', ['-v', executable[name]], { shell: true, encoding: 'utf8' })
   return { detected: result.status === 0, executable: result.status === 0 ? result.stdout.trim() : null }
@@ -50,6 +51,7 @@ const clients = Object.fromEntries(selected.map((name) => [name, detect(name)]))
 const targets = []
 targets.push({ client: 'kit', id: 'qz', source: qzSource, target: join(home, '.local/bin/qz'), executable: true })
 targets.push({ client: 'kit', id: 'AGENTS', source: instructionsSource, target: join(home, '.config/qz-agent-kit/instructions/AGENTS.md'), executable: false })
+for (const guard of guardFiles) targets.push({ client: 'kit', id: guard.id, source: guard.sourcePath, target: join(home, '.config/qz-agent-kit/guards', guard.id + '.sh'), executable: true })
 for (const client of selected) {
   if (!clients[client].detected && !value('--home')) continue
   for (const entry of commandFiles) {
@@ -66,7 +68,7 @@ for (const client of selected) {
     targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget, executable: false })
   }
 }
-const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
+const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...guardFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
 const contentDrift = contentManifest
   ? contentManifest.content.filter(({ path, sha256 }) => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex') !== sha256).map(({ path }) => path)
