@@ -43,6 +43,12 @@ try {
   })
   if (invalidRegistration.status === 0 || existsSync(join(registryHome, '.config/qz-agent-kit/projects.json'))) throw new Error('se registró un proyecto inválido')
   for (const client of ['opencode', 'claude', 'codex', 'gentle-shell']) {
+    const projectOutput = join(renderRoot, `project-${client}`)
+    const projectRendered = parse(run('scripts/project-render.mjs', [fixture, '--client', client, '--output', projectOutput]))
+    if (projectRendered.resources !== 4) throw new Error(`renderer de proyecto incompleto para ${client}`)
+    if (!existsSync(join(projectOutput, 'instructions/AGENTS.md')) || !existsSync(join(projectOutput, 'skills/demo/SKILL.md')) || !existsSync(join(projectOutput, 'agents/demo.md'))) {
+      throw new Error(`knowledge layer incompleta para ${client}`)
+    }
     const output = join(renderRoot, client)
     parse(run('scripts/render.mjs', ['--client', client, '--output', output]))
     if (!existsSync(join(output, 'qz-agent-kit/instructions/AGENTS.md')) || !existsSync(join(output, 'qz-agent-kit/guards/staged-secrets.sh'))) {

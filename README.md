@@ -57,6 +57,38 @@ worktrees, branches, bases de datos, variables de entorno, puertos y closeout
 se resuelven mediante el adapter del proyecto. El cliente sólo invoca el
 workflow común y consume su resultado.
 
+## Knowledge layer por proyecto
+
+Las reglas específicas de un repositorio no se mezclan con la fuente global. El
+adapter puede declarar un bloque opcional `knowledge` en `.qz/project.json`:
+
+```json
+{
+  "knowledge": {
+    "root": ".qz/knowledge",
+    "instructions": "AGENTS.md",
+    "skillsDir": "skills",
+    "agentsDir": "agents",
+    "commandsDir": "commands"
+  }
+}
+```
+
+`qz-kit project render` transforma esa capa al layout de cada CLI sin instalarla
+ni modificar el proyecto. El renderer es read-only respecto del proyecto; sólo
+escribe el directorio de salida indicado:
+
+```bash
+qz-kit project render /ruta/al/proyecto --client opencode --output /tmp/project-opencode
+qz-kit project render /ruta/al/proyecto --client claude --output /tmp/project-claude
+qz-kit project render /ruta/al/proyecto --client codex --output /tmp/project-codex
+qz-kit project render /ruta/al/proyecto --client gentle-shell --output /tmp/project-gentle
+```
+
+El proyecto conserva la fuente (`.qz/knowledge`); el adapter de cada CLI decide
+dónde instalar posteriormente los artefactos generados. Las rutas se validan como
+relativas y no pueden escapar del proyecto.
+
 ## Clientes soportados
 
 | Cliente | Destino generado | Forma de integración |

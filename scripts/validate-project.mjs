@@ -95,6 +95,17 @@ const commandPrefix = /^[A-Za-z][A-Za-z0-9_-]*-$/
 if (typeof config.commands?.genericPrefix !== 'string' || !commandPrefix.test(config.commands.genericPrefix)) errors.push('commands:genericPrefix')
 if (typeof config.commands?.projectPrefix !== 'string' || !commandPrefix.test(config.commands.projectPrefix)) errors.push('commands:projectPrefix')
 if (config.commands?.dispatch !== undefined && (typeof config.commands.dispatch !== 'string' || config.commands.dispatch.length === 0)) errors.push('commands.dispatch:type')
+if (config.knowledge !== undefined) {
+  if (!config.knowledge || typeof config.knowledge !== 'object' || Array.isArray(config.knowledge)) errors.push('knowledge:type')
+  else {
+    const knowledgePath = (value, field) => {
+      if (value !== undefined && (typeof value !== 'string' || value.length === 0 || value.startsWith('/') || value.split(/[\\/]+/).includes('..'))) errors.push(`knowledge.${field}:unsafe-path`)
+    }
+    knowledgePath(config.knowledge.root, 'root')
+    knowledgePath(config.knowledge.instructions, 'instructions')
+    for (const field of ['skillsDir', 'agentsDir', 'commandsDir']) knowledgePath(config.knowledge[field], field)
+  }
+}
 const serialized = JSON.stringify(config).toLowerCase()
 for (const forbidden of ['password', 'secret', 'token', 'privatekey', 'accesskey']) {
   if (serialized.includes(`"${forbidden}"`)) errors.push(`forbidden-field:${forbidden}`)

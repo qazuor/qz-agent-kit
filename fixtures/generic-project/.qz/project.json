@@ -11,17 +11,26 @@
     },
     "branches": {
         "base": "develop",
-        "protected": ["main"],
+        "protected": [
+            "main"
+        ],
         "pattern": "{type}/{slug}",
-        "promotion": ["develop", "main"]
+        "promotion": [
+            "develop",
+            "main"
+        ]
     },
     "worktree": {
         "pathPattern": "../demo-{slug}",
-        "envSource": { "kind": "none" },
+        "envSource": {
+            "kind": "none"
+        },
         "install": "npm ci",
         "build": "npm run build"
     },
-    "database": { "strategy": "none" },
+    "database": {
+        "strategy": "none"
+    },
     "servers": [
         {
             "id": "app",
@@ -35,5 +44,12 @@
         "projectPrefix": "demo-",
         "source": "tools",
         "dispatch": "node tools/dispatch.mjs"
+    },
+    "knowledge": {
+        "root": ".qz/knowledge",
+        "instructions": "AGENTS.md",
+        "skillsDir": "skills",
+        "agentsDir": "agents",
+        "commandsDir": "commands"
     }
 }
