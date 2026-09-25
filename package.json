@@ -14,12 +14,12 @@
   "scripts": {
     "manifest": "node scripts/generate-manifests.mjs",
     "render": "node scripts/render.mjs",
-    "install": "node scripts/install.mjs",
     "validate:project": "node scripts/validate-project.mjs fixtures/generic-project",
     "plan:backup": "node scripts/backup-plan.mjs",
     "check": "npm run validate:project",
     "test": "node scripts/smoke.mjs",
-    "check:package": "node scripts/check-package.mjs"
+    "check:package": "node scripts/check-package.mjs",
+    "install:clients": "node scripts/install.mjs --plan"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1"

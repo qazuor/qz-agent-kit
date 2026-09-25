@@ -22,6 +22,7 @@ const scripts = packageJson.scripts || {}
 const detectedInstall = `${packageManager} install`
 const detectedBuild = scripts.build ? `${packageManager} run build` : 'true'
 const detectedDev = scripts.dev ? `${packageManager} run dev -- --port {port}` : `${packageManager} run start -- --port {port}`
+const detectedDispatch = existsSync(join(root, 'tools/qz-dispatch.mjs')) ? 'node tools/qz-dispatch.mjs' : ''
 const defaults = {
   projectId,
   displayName: packageJson.name || basename(root),
@@ -37,7 +38,8 @@ const defaults = {
   serverId: 'app',
   port: '3000',
   start: detectedDev,
-  healthPath: '/'
+  healthPath: '/',
+  dispatch: detectedDispatch
 }
 const databaseDefaults = {
   container: 'postgres',
@@ -74,7 +76,8 @@ try {
       serverId: await askText('Server id', defaults.serverId),
       port: await askText('Default server port', defaults.port),
       start: await askText('Server start command', defaults.start),
-      healthPath: await askText('Health path', defaults.healthPath)
+      healthPath: await askText('Health path', defaults.healthPath),
+      dispatch: await askText('Dispatcher command (blank to omit)', defaults.dispatch)
     }
     if (values.database === 'postgres-template') {
       Object.assign(values, {
@@ -104,7 +107,12 @@ try {
       connectionEnvVar: values.connectionEnvVar
     } : { strategy: values.database },
     servers: [{ id: values.serverId, defaultPort: Number(values.port), start: values.start, healthPath: values.healthPath }],
-    commands: { genericPrefix: 'qz-', projectPrefix: `${values.adapter}-`, source: '.qz' }
+    commands: {
+      genericPrefix: 'qz-',
+      projectPrefix: `${values.adapter}-`,
+      source: '.qz',
+      ...(values.dispatch ? { dispatch: values.dispatch } : {})
+    }
   }
   const result = { projectRoot: root, manifest: manifestPath, config, mode: apply ? 'apply' : 'plan', mutations: apply ? [manifestPath] : 'none', autodetected: { packageManager, currentBranch, packageName: packageJson.name || null, scripts: Object.keys(scripts) } }
   if (apply) {
