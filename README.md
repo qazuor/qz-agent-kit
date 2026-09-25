@@ -187,7 +187,6 @@ También se puede limitar el alcance:
 
 ```bash
 qz-kit update --client opencode
-qz-kit update --project hospeda
 qz-kit rollback <install-manifest.json>
 ```
 
