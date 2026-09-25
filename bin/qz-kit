@@ -12,6 +12,7 @@ if (command === '--version' || command === 'version') {
 const script = resolve(new URL('..', import.meta.url).pathname, 'scripts/install.mjs')
 const rollback = resolve(new URL('..', import.meta.url).pathname, 'scripts/rollback.mjs')
 const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/projects.mjs')
+const doctor = resolve(new URL('..', import.meta.url).pathname, 'scripts/doctor.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -20,9 +21,12 @@ if (command === 'rollback') {
   const result = spawnSync(process.execPath, [rollback, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
+if (command === 'doctor') {
+  const result = spawnSync(process.execPath, [doctor, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 const mapped = command === 'update' ? ['--apply', ...args]
-  : command === 'doctor' ? ['--check', ...args]
-    : command === 'verify' ? ['--check', ...args]
+  : command === 'verify' ? ['--check', ...args]
     : command === 'install' ? args
       : []
 if (!mapped.length && !['help', '--help', '-h'].includes(command)) {
