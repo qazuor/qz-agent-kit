@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createInterface } from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { basename, join, resolve } from 'node:path'
@@ -60,7 +60,13 @@ try {
   const result = { projectRoot: root, manifest: manifestPath, config, mode: apply ? 'apply' : 'plan', mutations: apply ? [manifestPath] : 'none', autodetected: { packageManager, currentBranch, packageName: packageJson.name || null, scripts: Object.keys(scripts) } }
   if (apply) {
     mkdirSync(join(root, '.qz'), { recursive: true })
+    let backup = null
+    if (existsSync(manifestPath)) {
+      backup = `${manifestPath}.bak-${new Date().toISOString().replaceAll(':', '-')}`
+      copyFileSync(manifestPath, backup)
+    }
     writeFileSync(manifestPath, `${JSON.stringify(config, null, 2)}\n`)
+    result.backup = backup
   }
   console.log(JSON.stringify(result, null, 2))
 } finally {
