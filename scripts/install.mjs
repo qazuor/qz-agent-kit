@@ -92,6 +92,7 @@ if (!has('--apply')) {
   process.exit(missing.length || contentDrift.length ? 1 : 0)
 }
 if (missing.length) throw new Error(`faltan fuentes: ${missing.join(', ')}`)
+if (contentDrift.length) throw new Error(`content manifest desactualizado; ejecutar npm run manifest y revisar: ${contentDrift.join(', ')}`)
 
 const backupRoot = join(home, '.local/state/qz-agent-kit/backups', new Date().toISOString().replaceAll(':', '-'))
 mkdirSync(backupRoot, { recursive: true })
