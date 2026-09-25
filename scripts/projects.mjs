@@ -61,7 +61,16 @@ if (command === 'discover') {
     }
   }
   for (const root of roots) visit(root, 0)
-  print({ roots, maxDepth, projects: found.sort((a, b) => a.root.localeCompare(b.root)), mutations: 'none', secretValues: 'not-read' })
+  const projects = found.sort((a, b) => a.root.localeCompare(b.root))
+  const byId = new Map()
+  for (const project of projects) {
+    if (!project.projectId) continue
+    byId.set(project.projectId, [...(byId.get(project.projectId) || []), project.root])
+  }
+  const duplicates = [...byId.entries()]
+    .filter(([, projectRoots]) => projectRoots.length > 1)
+    .map(([projectId, projectRoots]) => ({ projectId, roots: projectRoots }))
+  print({ roots, maxDepth, projects, duplicates, mutations: 'none', secretValues: 'not-read' })
   process.exit(found.every((project) => project.valid) ? 0 : 1)
 }
 if (command === 'init') {
