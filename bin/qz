@@ -25,6 +25,18 @@ if (!root) {
 }
 const manifestPath = join(root, '.qz/project.json')
 const config = JSON.parse(readFileSync(manifestPath, 'utf8'))
+const sensitive = /(?:secret|token|password|passwd|private.?key|credential|cookie|auth)/i
+const sanitize = (value, key = '') => {
+  if (sensitive.test(key)) return undefined
+  if (Array.isArray(value)) return value.map((item) => sanitize(item)).filter((item) => item !== undefined)
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).flatMap(([childKey, childValue]) => {
+      const safe = sanitize(childValue, childKey)
+      return safe === undefined ? [] : [[childKey, safe]]
+    }))
+  }
+  return value
+}
 
 if (command === 'help' || command === '--help') {
   console.log(`qz — dispatcher portable del adapter ${config.adapter || '(sin adapter)'}
@@ -38,8 +50,7 @@ El dispatcher no implementa Linear, Git, worktrees, env, DB ni servidores.`)
   process.exit(0)
 }
 if (command === 'config') {
-  const safe = JSON.parse(JSON.stringify(config))
-  delete safe.secrets
+  const safe = sanitize(config)
   if (args.includes('--json')) console.log(JSON.stringify({ projectRoot: root, manifest: manifestPath, config: safe, secretValues: 'not-read' }, null, 2))
   else console.log(`${safe.projectId || '(sin id)'} · adapter=${safe.adapter || '(sin adapter)'} · base=${safe.branches?.base || '(sin base)'}`)
   process.exit(0)
