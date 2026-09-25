@@ -180,6 +180,10 @@ qz-kit project unregister <project-id>
 qz-kit project restore <backup.json>
 ```
 
+Si ya existe el mismo `projectId` apuntando a otra raíz, `register` se detiene
+para evitar reemplazar el proyecto silenciosamente. El cambio requiere
+`--replace` explícito.
+
 El registro se guarda en `~/.config/qz-agent-kit/projects.json`, separado de
 los repositorios y sin valores secretos. Cada proyecto registrado declara su
 adapter mediante `.qz/project.json`; el kit valida ese contrato antes de

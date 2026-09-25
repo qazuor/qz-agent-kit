@@ -95,6 +95,10 @@ if (command === 'register') {
   const id = value('--id') || config.projectId
   const adapter = value('--adapter') || config.adapter
   const registry = readRegistry()
+  const existing = registry.projects.find((item) => item.id === id)
+  if (existing && resolve(existing.root) !== projectRoot && !args.includes('--replace')) {
+    throw new Error(`ya existe ${id} registrado en ${existing.root}; usá --replace para cambiarlo explícitamente`)
+  }
   const entry = { id, root: projectRoot, adapter, registeredAt: new Date().toISOString() }
   registry.projects = [...registry.projects.filter((item) => item.id !== id), entry].sort((a, b) => a.id.localeCompare(b.id))
   const backup = writeRegistry(registry)
@@ -138,5 +142,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | discover [path...] [--max-depth N] | init [path] [--plan|--apply] | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
+console.log('Uso: qz-kit project list | discover [path...] [--max-depth N] | init [path] [--plan|--apply] | register <path> [--id <id>] [--adapter <adapter>] [--replace] | unregister <id> | restore <backup.json> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)
