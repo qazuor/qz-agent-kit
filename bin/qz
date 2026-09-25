@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
+import { homedir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
@@ -63,8 +64,15 @@ if (command === 'doctor') {
 
 const dispatch = config.commands?.dispatch
 if (typeof dispatch !== 'string' || dispatch.length === 0) {
+  if (command === 'start-issue') {
+    const fallback = join(homedir(), '.config/qz-agent-kit/bin/generic-start-issue.mjs')
+    if (existsSync(fallback)) {
+      const result = spawnSync(process.execPath, [fallback, '--root', root, ...args], { cwd: root, stdio: 'inherit' })
+      process.exit(result.status ?? 1)
+    }
+  }
   console.error(`qz: el adapter "${config.adapter || '(sin adapter)'}" no declara commands.dispatch`)
-  console.error('qz: el proyecto debe proporcionar el dispatcher determinista para este comando')
+  console.error('qz: este comando requiere soporte del adapter o el fallback genérico disponible')
   process.exit(2)
 }
 const result = spawnSync(dispatch, [command, ...args], { cwd: root, stdio: 'inherit', shell: true })
