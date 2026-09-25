@@ -134,7 +134,7 @@ qz-kit install --apply
 
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
-`qz-kit` y `qz`; los commands, agents, skills, instrucciones y guards se
+`qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se
 distribuyen después mediante `qz-kit install`.
 
 El bootstrap detecta los clientes disponibles, crea un backup de sus destinos,
