@@ -63,7 +63,12 @@ for (const client of selected) {
   }
   if (client === 'codex') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.codex/skills/qz-commands/SKILL.md'), executable: false })
   if (client === 'gentle-shell') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.gentle-shell/agent/skills/qz-commands/SKILL.md'), executable: false })
+  if (client === 'opencode') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.config/opencode/skills/qz-commands/SKILL.md'), executable: false })
+  if (client === 'claude') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.claude/skills/qz-commands/SKILL.md'), executable: false })
   if (client === 'codex') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.codex/skills/qz-agents/SKILL.md'), executable: false })
+  if (client === 'opencode') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.config/opencode/skills/qz-agents/SKILL.md'), executable: false })
+  if (client === 'claude') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.claude/skills/qz-agents/SKILL.md'), executable: false })
+  if (client === 'gentle-shell') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.gentle-shell/agent/skills/qz-agents/SKILL.md'), executable: false })
   for (const agent of agentFiles) {
     const agentTarget = client === 'codex' ? join(home, '.codex/skills/qz-agents', agent.id + '.md') : client === 'gentle-shell' ? join(home, '.gentle-shell/agent/agents', agent.id + '.md') : join(home, client === 'opencode' ? '.config/opencode/agents' : '.claude/agents', agent.id + '.md')
     targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget, executable: false })
