@@ -10,7 +10,7 @@ const home = resolve(process.env.QZ_KIT_HOME || homedir())
 const stateDir = join(home, '.config/qz-agent-kit')
 const registryPath = join(stateDir, 'projects.json')
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
-const discoverRoots = args.filter((arg) => !arg.startsWith('--'))
+const discoverRoots = args.filter((arg, index) => !arg.startsWith('--') && args[index - 1] !== '--max-depth')
 const maxDepth = Number(value('--max-depth') || 3)
 
 const readRegistry = () => {
@@ -47,7 +47,7 @@ if (command === 'discover') {
     seen.add(directory)
     const manifest = join(directory, '.qz/project.json')
     if (existsSync(manifest)) {
-      const validation = spawnSync(process.execPath, [resolve(new URL('./validate-project.mjs', import.meta.url).pathname), directory], { encoding: 'utf8' })
+      const validation = spawnSync(process.execPath, [resolve(new URL('./validate-project.mjs', import.meta.url).pathname), directory], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
       let result
       try { result = JSON.parse(validation.stdout || '{}') } catch { result = { valid: false, output: (validation.stdout || validation.stderr || '').trim() } }
       found.push({ root: directory, manifest, valid: validation.status === 0, projectId: result.projectId || null, adapter: result.adapter || null, validation: result })
