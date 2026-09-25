@@ -14,6 +14,7 @@
     "install": "node scripts/install.mjs",
     "validate:project": "node scripts/validate-project.mjs fixtures/generic-project",
     "plan:backup": "node scripts/backup-plan.mjs",
-    "check": "npm run validate:project"
+    "check": "npm run validate:project",
+    "test": "node scripts/smoke.mjs"
   }
 }
