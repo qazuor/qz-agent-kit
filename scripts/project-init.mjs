@@ -39,6 +39,12 @@ const defaults = {
   start: detectedDev,
   healthPath: '/'
 }
+const databaseDefaults = {
+  container: 'postgres',
+  templateDatabase: `${projectId}_template`,
+  databaseNamePattern: `${projectId}_{slug}`,
+  connectionEnvVar: 'DATABASE_URL'
+}
 const askText = async (message, initialValue) => {
   const result = await text({ message, initialValue, placeholder: initialValue })
   if (isCancel(result)) { cancel('Inicialización cancelada.'); process.exit(0) }
@@ -51,23 +57,36 @@ const askSelect = async (message, initialValue, options) => {
 }
 try {
   if (interactive) intro(`qz project init · ${root}`)
-  const values = interactive ? {
-    projectId: await askText('Project id', defaults.projectId),
-    displayName: await askText('Display name', defaults.displayName),
-    adapter: await askText('Adapter name', defaults.adapter),
-    provider: await askSelect('Issue provider', defaults.provider, ['none', 'linear', 'github']),
-    teamKey: await askText('Issue team key', defaults.teamKey),
-    baseBranch: await askText('Base branch', defaults.baseBranch),
-    branchPattern: await askText('Branch pattern', defaults.branchPattern),
-    worktreePath: await askText('Worktree path pattern', defaults.worktreePath),
-    install: await askText('Install command', defaults.install),
-    build: await askText('Build command', defaults.build),
-    database: await askSelect('Database strategy', defaults.database, ['none', 'postgres-template']),
-    serverId: await askText('Server id', defaults.serverId),
-    port: await askText('Default server port', defaults.port),
-    start: await askText('Server start command', defaults.start),
-    healthPath: await askText('Health path', defaults.healthPath)
-  } : defaults
+  let values
+  if (interactive) {
+    values = {
+      projectId: await askText('Project id', defaults.projectId),
+      displayName: await askText('Display name', defaults.displayName),
+      adapter: await askText('Adapter name', defaults.adapter),
+      provider: await askSelect('Issue provider', defaults.provider, ['none', 'linear', 'github']),
+      teamKey: await askText('Issue team key', defaults.teamKey),
+      baseBranch: await askText('Base branch', defaults.baseBranch),
+      branchPattern: await askText('Branch pattern', defaults.branchPattern),
+      worktreePath: await askText('Worktree path pattern', defaults.worktreePath),
+      install: await askText('Install command', defaults.install),
+      build: await askText('Build command', defaults.build),
+      database: await askSelect('Database strategy', defaults.database, ['none', 'postgres-template']),
+      serverId: await askText('Server id', defaults.serverId),
+      port: await askText('Default server port', defaults.port),
+      start: await askText('Server start command', defaults.start),
+      healthPath: await askText('Health path', defaults.healthPath)
+    }
+    if (values.database === 'postgres-template') {
+      Object.assign(values, {
+        databaseContainer: await askText('Database container', databaseDefaults.container),
+        templateDatabase: await askText('Template database', databaseDefaults.templateDatabase),
+        databaseNamePattern: await askText('Database name pattern', databaseDefaults.databaseNamePattern),
+        connectionEnvVar: await askText('Connection env var', databaseDefaults.connectionEnvVar)
+      })
+    }
+  } else {
+    values = defaults
+  }
   const config = {
     $schema: 'https://qz.dev/schemas/project.v1.json',
     schemaVersion: 1,
@@ -77,7 +96,13 @@ try {
     issues: { provider: values.provider, teamKey: values.teamKey },
     branches: { base: values.baseBranch, protected: ['main'], pattern: values.branchPattern, promotion: [values.baseBranch, 'main'] },
     worktree: { pathPattern: values.worktreePath, envSource: { kind: 'none' }, install: values.install, build: values.build },
-    database: { strategy: values.database },
+    database: values.database === 'postgres-template' ? {
+      strategy: values.database,
+      container: values.databaseContainer,
+      templateDatabase: values.templateDatabase,
+      databaseNamePattern: values.databaseNamePattern,
+      connectionEnvVar: values.connectionEnvVar
+    } : { strategy: values.database },
     servers: [{ id: values.serverId, defaultPort: Number(values.port), start: values.start, healthPath: values.healthPath }],
     commands: { genericPrefix: 'qz-', projectPrefix: `${values.adapter}-`, source: '.qz' }
   }
