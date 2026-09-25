@@ -43,6 +43,7 @@ const commandFiles = manifest.commands.map((entry) => ({ ...entry, sourcePath: r
 const skillSource = resolve(root, 'source/skills/qz-commands/SKILL.md')
 const agentsSkillSource = resolve(root, 'source/skills/qz-agents/SKILL.md')
 const qzSource = resolve(root, 'bin/qz')
+const qzShimSource = resolve(root, 'scripts/qz-command-shim.sh')
 const instructionsSource = resolve(root, 'source/instructions/AGENTS.md')
 const agentFiles = readdirSync(resolve(root, 'source/agents')).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/agents', name) }))
 const guardFiles = readdirSync(resolve(root, 'source/guards')).filter((name) => name.endsWith('.sh')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/guards', name) }))
@@ -53,6 +54,9 @@ const detect = (name) => {
 const clients = Object.fromEntries(selected.map((name) => [name, detect(name)]))
 const targets = []
 targets.push({ client: 'kit', id: 'qz', source: qzSource, target: join(home, '.local/bin/qz'), executable: true })
+for (const entry of commandFiles) {
+  targets.push({ client: 'kit', id: `${entry.id}-shim`, source: qzShimSource, target: join(home, '.local/bin', entry.id), executable: true })
+}
 const genericStartIssueSource = resolve(root, 'scripts/generic-start-issue.mjs')
 targets.push({ client: 'kit', id: 'generic-start-issue', source: genericStartIssueSource, target: join(home, '.config/qz-agent-kit/bin/generic-start-issue.mjs'), executable: true })
 const genericCloseIssueSource = resolve(root, 'scripts/generic-close-issue.mjs')
@@ -80,7 +84,7 @@ for (const client of selected) {
     targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget, executable: false })
   }
 }
-const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(genericStartIssueSource) ? ['generic-start-issue'] : []), ...(!existsSync(genericCloseIssueSource) ? ['generic-close-issue'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...guardFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
+const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(qzShimSource) ? ['qz-command-shim'] : []), ...(!existsSync(genericStartIssueSource) ? ['generic-start-issue'] : []), ...(!existsSync(genericCloseIssueSource) ? ['generic-close-issue'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...guardFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
 const contentDrift = contentManifest
   ? contentManifest.content.filter(({ path, sha256 }) => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex') !== sha256).map(({ path }) => path)

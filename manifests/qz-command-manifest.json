@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-command-pack",
   "sourceOfTruth": "source/commands",
-  "generatedAt": "2026-09-25T15:46:58.494Z",
+  "generatedAt": "2026-09-25T19:48:55.235Z",
   "clients": [
     "opencode",
     "claude",

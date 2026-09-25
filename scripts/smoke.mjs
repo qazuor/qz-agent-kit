@@ -53,9 +53,15 @@ try {
     }
   }
   const apply = parse(run('scripts/install.mjs', ['--apply', '--home', installHome]))
-  if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz'))) {
+  if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz')) || !existsSync(join(installHome, '.local/bin/qz-start-issue'))) {
     throw new Error('instalación smoke incompleta')
   }
+  const shimHelp = execFileSync(join(installHome, '.local/bin/qz-start-issue'), ['--help'], {
+    cwd: fixture,
+    env: { ...process.env, HOME: installHome },
+    encoding: 'utf8'
+  })
+  if (!shimHelp.includes('qz start-issue')) throw new Error('shim qz-start-issue no delegó en qz')
   mkdirSync(join(fallbackRoot, '.qz'), { recursive: true })
   execFileSync('git', ['init', '-q', '-b', 'develop'], { cwd: fallbackRoot })
   execFileSync('git', ['config', 'user.email', 'qz-test@example.invalid'], { cwd: fallbackRoot })
