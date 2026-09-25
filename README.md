@@ -133,6 +133,12 @@ La instalación también coloca el dispatcher portable `qz` en
 proyecto con `.qz/project.json` tiene una entrada común sin copiar workflows
 específicos de Hospeda al kit.
 
+También conserva la fuente universal de instrucciones en
+`~/.config/qz-agent-kit/instructions/AGENTS.md`. Ese archivo no reemplaza el
+`AGENTS.md` de un proyecto ni se inyecta silenciosamente en repositorios: sirve
+como recurso administrado para los adapters y para una futura sincronización
+explícita por proyecto.
+
 Para registrar un proyecto se usa su adapter explícito:
 
 ```bash

@@ -9,3 +9,6 @@ formato que necesita cada cliente; no se editan copias instaladas a mano.
 - `prompts/`: templates para clientes que los exponen como slash commands.
 - `policies/`: reglas de permisos y seguridad.
 - `guards/`: validaciones ejecutables sin secretos.
+- `instructions/`: instrucciones universales (`AGENTS.md`) que se distribuyen
+  como referencia administrada por el kit y no contienen reglas de un proyecto
+  concreto.
