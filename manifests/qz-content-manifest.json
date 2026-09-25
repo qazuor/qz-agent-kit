@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "qz-content-pack",
+  "sourceOfTruth": "source",
+  "generatedAt": "2026-09-25T02:00:33.098Z",
+  "content": [
+    {
+      "path": "source/agents/qz-implementation.md",
+      "sha256": "ee3c7e79bdd3960b2a394fa12ea9cd16681088bc39ac4b65ae374420e4e13cc1"
+    },
+    {
+      "path": "source/agents/qz-review-readonly.md",
+      "sha256": "8dec1e2bb5d820a44ed15a8e8f46126a62146452b7edf51a58de5dd9ce777f81"
+    },
+    {
+      "path": "source/agents/qz-verification.md",
+      "sha256": "762eb3ef8a2c138e0db37201f8d59c29be828bf4d38173b33a154d410eaf254a"
+    },
+    {
+      "path": "source/commands/qz-artifact.md",
+      "sha256": "1c650177ff6c347d225e3408480b662d7f4ee356935767d77f02ccf4234bc354"
+    },
+    {
+      "path": "source/commands/qz-close-issue.md",
+      "sha256": "5d6acb76086d1d3e8d5e1ad9196c0b3392c5cc3bb009186ce6b349cb10550536"
+    },
+    {
+      "path": "source/commands/qz-engram.md",
+      "sha256": "626e92cefcb19618b9e1c5f2fe72057ed084fafb8ee966c4eb371d7afd6f73c2"
+    },
+    {
+      "path": "source/commands/qz-handoff.md",
+      "sha256": "e95077e8a719cd6ce51cc688336b3b9b23744fce53d8b663c153108f200a0b51"
+    },
+    {
+      "path": "source/commands/qz-recap.md",
+      "sha256": "ae992ec7c5f15b5cb6f3efecbfaf7923e269164a3ab3d185b786fc2ed434381d"
+    },
+    {
+      "path": "source/commands/qz-start-issue.md",
+      "sha256": "949b5fbfb6283200444b428c17186985085c6be892ffa6a5e05affa514810459"
+    },
+    {
+      "path": "source/commands/qz-verify.md",
+      "sha256": "a0564b5936df1493c21428cc8e2c7bd1d80f83f1101fe1ad253542bb70d932a8"
+    },
+    {
+      "path": "source/guards/staged-secrets.sh",
+      "sha256": "dd6d8f028cc2570aee050caa9a5a980ee1330a1c5c2eb3312ae31fdd0824d9d0"
+    },
+    {
+      "path": "source/instructions/AGENTS.md",
+      "sha256": "dcbec3887faacb6fba72ee21a5da6d01c92388b5521a87bb5abbd0d0823acb67"
+    },
+    {
+      "path": "source/skills/qz-agents/SKILL.md",
+      "sha256": "a908fc48a19d14885666f27fe0b3b600da513da82eda2ab400ebd6aad4af045e"
+    },
+    {
+      "path": "source/skills/qz-commands/SKILL.md",
+      "sha256": "358b97f9a213465b8758c00993c559ef9212e83ff54eb7aa1712f116d0cf6689"
+    }
+  ]
+}

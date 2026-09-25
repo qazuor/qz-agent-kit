@@ -191,6 +191,10 @@ qz-kit update --rollback <manifest-id>
 smoke checks y escribe un manifest de rollback. La aplicación es idempotente:
 repetirla con la misma versión no produce cambios adicionales.
 
+`manifests/qz-content-manifest.json` registra hashes de commands, agents,
+skills, guards e instrucciones. El manifest permite revisar drift de toda la
+fuente portable, incluso cuando el cambio no pertenece a un command.
+
 La actualización automática no reemplaza el plan explícito. Puede ejecutarse
 en modo chequeo para avisar que existe una versión nueva, pero la aplicación
 requiere una orden clara cuando modifica permisos, prompts o policies.
