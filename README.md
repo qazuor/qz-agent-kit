@@ -323,7 +323,7 @@ qz config --json
 qz <comando> [args...]
 ```
 
-`qz doctor` valida el contrato del proyecto y `qz config` muestra únicamente configuración sanitizada: elimina las secciones de secretos y nunca lee sus valores. Los demás comandos se delegan al adapter mediante `commands.dispatch` en `.qz/project.json`. El kit mantiene la entrada estable y el límite de seguridad; cada proyecto conserva su lógica de issues, worktrees, bases, variables de entorno y servidores. El dispatcher genérico no inventa workflows de Hospeda ni exige Linear.
+`qz doctor` valida el contrato del proyecto y `qz config` muestra únicamente configuración sanitizada: elimina las secciones de secretos y nunca lee sus valores. Los comandos se delegan al adapter mediante `commands.dispatch` cuando existe. `qz start-issue` tiene además un fallback genérico para adapters ausentes o parciales: crea el worktree Git, branch, instalación y build declarados, sin inventar Linear, envs, bases ni servidores. El adapter especializado conserva esas capacidades del proyecto. El kit mantiene la entrada estable y el límite de seguridad; cada proyecto conserva su lógica específica.
 
 Un adapter puede declarar un dispatcher determinista:
 
@@ -336,4 +336,4 @@ Un adapter puede declarar un dispatcher determinista:
 }
 ```
 
-La orden se ejecuta con la raíz del proyecto como directorio de trabajo. Si el adapter no declara `commands.dispatch`, `qz` falla de forma explícita en lugar de adivinar un workflow.
+La orden se ejecuta con la raíz del proyecto como directorio de trabajo. Si el adapter no declara `commands.dispatch`, `qz start-issue` usa el fallback genérico instalado en `~/.config/qz-agent-kit/bin`; los demás comandos fallan de forma explícita. Si un dispatcher parcial devuelve código 2 para `start-issue`, también se intenta el fallback.
