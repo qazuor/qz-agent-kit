@@ -254,3 +254,28 @@ archivos coinciden con la fuente y qué destinos necesitan revisión.
 - Toda actualización es revisable, idempotente y reversible.
 - La compatibilidad entre clientes es operativa, no una promesa de identidad
   interna.
+
+## Dispatcher portable `qz`
+
+El ejecutable instalado `qz` es una entrada común consciente del proyecto. Busca `.qz/project.json` desde el directorio actual hacia arriba y expone:
+
+```text
+qz doctor
+qz config --json
+qz <comando> [args...]
+```
+
+`qz doctor` valida el contrato del proyecto y `qz config` muestra únicamente configuración sanitizada: elimina las secciones de secretos y nunca lee sus valores. Los demás comandos se delegan al adapter mediante `commands.dispatch` en `.qz/project.json`. El kit mantiene la entrada estable y el límite de seguridad; cada proyecto conserva su lógica de issues, worktrees, bases, variables de entorno y servidores. El dispatcher genérico no inventa workflows de Hospeda ni exige Linear.
+
+Un adapter puede declarar un dispatcher determinista:
+
+```json
+{
+  "commands": {
+    "genericPrefix": "qz-",
+    "dispatch": "node tools/dispatch.mjs"
+  }
+}
+```
+
+La orden se ejecuta con la raíz del proyecto como directorio de trabajo. Si el adapter no declara `commands.dispatch`, `qz` falla de forma explícita en lugar de adivinar un workflow.

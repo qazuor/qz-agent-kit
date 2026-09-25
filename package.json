@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "bin": {
-    "qz-kit": "bin/qz-kit"
+    "qz-kit": "bin/qz-kit",
+    "qz": "bin/qz"
   },
   "description": "Fuente de verdad y adapters para workflows de agentes CLI.",
   "scripts": {

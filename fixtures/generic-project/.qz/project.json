@@ -33,6 +33,7 @@
     "commands": {
         "genericPrefix": "qz-",
         "projectPrefix": "demo-",
-        "source": "tools"
+        "source": "tools",
+        "dispatch": "node tools/dispatch.mjs"
     }
 }

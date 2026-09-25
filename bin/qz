@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { spawnSync } from 'node:child_process'
+
+const args = process.argv.slice(2)
+const command = args.shift() || 'help'
+const findRoot = (start) => {
+  let current = resolve(start)
+  while (true) {
+    if (existsSync(join(current, '.qz/project.json'))) return current
+    const parent = dirname(current)
+    if (parent === current) return null
+    current = parent
+  }
+}
+const root = findRoot(process.cwd())
+if (!root) {
+  console.error('qz: no encontré .qz/project.json en este directorio ni sus padres')
+  process.exit(1)
+}
+const manifestPath = join(root, '.qz/project.json')
+const config = JSON.parse(readFileSync(manifestPath, 'utf8'))
+
+if (command === 'help' || command === '--help') {
+  console.log(`qz — dispatcher portable del adapter ${config.adapter || '(sin adapter)'}
+
+Uso:
+  qz doctor                 valida el contrato del proyecto
+  qz config [--json]        muestra configuración no secreta
+  qz <comando> [args...]    delega en el adapter declarado
+
+El dispatcher no implementa Linear, Git, worktrees, env, DB ni servidores.`)
+  process.exit(0)
+}
+if (command === 'config') {
+  const safe = JSON.parse(JSON.stringify(config))
+  delete safe.secrets
+  if (args.includes('--json')) console.log(JSON.stringify({ projectRoot: root, manifest: manifestPath, config: safe, secretValues: 'not-read' }, null, 2))
+  else console.log(`${safe.projectId || '(sin id)'} · adapter=${safe.adapter || '(sin adapter)'} · base=${safe.branches?.base || '(sin base)'}`)
+  process.exit(0)
+}
+if (command === 'doctor') {
+  const validator = resolve(new URL('../scripts/validate-project.mjs', import.meta.url).pathname)
+  const result = spawnSync(process.execPath, [validator, root], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+
+const dispatch = config.commands?.dispatch
+if (typeof dispatch !== 'string' || dispatch.length === 0) {
+  console.error(`qz: el adapter "${config.adapter || '(sin adapter)'}" no declara commands.dispatch`)
+  console.error('qz: el proyecto debe proporcionar el dispatcher determinista para este comando')
+  process.exit(2)
+}
+const result = spawnSync(dispatch, [command, ...args], { cwd: root, stdio: 'inherit', shell: true })
+process.exit(result.status ?? 1)
