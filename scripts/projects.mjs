@@ -41,15 +41,21 @@ if (command === 'register') {
   const config = JSON.parse(readFileSync(join(projectRoot, '.qz/project.json'), 'utf8'))
   const validator = resolve(new URL('./validate-project.mjs', import.meta.url).pathname)
   const validation = spawnSync(process.execPath, [validator, projectRoot], { encoding: 'utf8' })
-  if (validation.stdout) process.stdout.write(validation.stdout)
-  if (validation.status !== 0) throw new Error('el proyecto no se registró porque su adapter es inválido')
+  let validationResult = null
+  if (validation.stdout) {
+    try { validationResult = JSON.parse(validation.stdout) } catch { validationResult = { output: validation.stdout.trim() } }
+  }
+  if (validation.status !== 0) {
+    if (validation.stdout) process.stdout.write(validation.stdout)
+    throw new Error('el proyecto no se registró porque su adapter es inválido')
+  }
   const id = value('--id') || config.projectId
   const adapter = value('--adapter') || config.adapter
   const registry = readRegistry()
   const entry = { id, root: projectRoot, adapter, registeredAt: new Date().toISOString() }
   registry.projects = [...registry.projects.filter((item) => item.id !== id), entry].sort((a, b) => a.id.localeCompare(b.id))
   const backup = writeRegistry(registry)
-  print({ registered: entry, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
+  print({ registered: entry, validation: validationResult, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
   process.exit(0)
 }
 if (command === 'restore') {
