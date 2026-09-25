@@ -174,6 +174,7 @@ Para registrar un proyecto se usa su adapter explícito:
 qz-kit project register /ruta/al/proyecto
 qz-kit project init /ruta/al/proyecto --plan
 qz-kit project init /ruta/al/proyecto --apply
+qz-kit project discover /ruta/de/proyectos --max-depth 3
 qz-kit project list
 qz-kit project unregister <project-id>
 qz-kit project restore <backup.json>
@@ -192,6 +193,12 @@ qz-kit project inspect
 
 `project inspect` valida todos los proyectos registrados y devuelve un informe
 estructurado sin iniciar servidores, consultar issues ni modificar repositorios.
+
+`project discover` busca `.qz/project.json` debajo de una o varias rutas, valida
+cada adapter encontrado y devuelve sus ids, raíces y estado. Es read-only: no
+registra proyectos, no crea manifests y no lee secretos. Ignora directorios de
+dependencias, builds y metadatos de Git; `--max-depth` limita el alcance de la
+búsqueda.
 
 El instalador nunca copia credenciales, tokens, `.env`, bases de datos ni
 memoria Engram. Esos recursos se detectan y validan localmente, pero sus

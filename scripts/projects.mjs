@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -10,6 +10,8 @@ const home = resolve(process.env.QZ_KIT_HOME || homedir())
 const stateDir = join(home, '.config/qz-agent-kit')
 const registryPath = join(stateDir, 'projects.json')
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
+const discoverRoots = args.filter((arg) => !arg.startsWith('--'))
+const maxDepth = Number(value('--max-depth') || 3)
 
 const readRegistry = () => {
   if (!existsSync(registryPath)) return { schemaVersion: 1, projects: [] }
@@ -34,6 +36,33 @@ const print = (data) => console.log(JSON.stringify(data, null, 2))
 if (command === 'list') {
   print({ ...readRegistry(), registry: registryPath, mutations: 'none', secretValues: 'not-read' })
   process.exit(0)
+}
+if (command === 'discover') {
+  const roots = (discoverRoots.length ? discoverRoots : [process.cwd()]).map((root) => resolve(root))
+  const found = []
+  const seen = new Set()
+  const ignored = new Set(['.git', 'node_modules', '.next', '.turbo', 'dist', 'build', 'coverage'])
+  const visit = (directory, depth) => {
+    if (depth > maxDepth || seen.has(directory) || !existsSync(directory)) return
+    seen.add(directory)
+    const manifest = join(directory, '.qz/project.json')
+    if (existsSync(manifest)) {
+      const validation = spawnSync(process.execPath, [resolve(new URL('./validate-project.mjs', import.meta.url).pathname), directory], { encoding: 'utf8' })
+      let result
+      try { result = JSON.parse(validation.stdout || '{}') } catch { result = { valid: false, output: (validation.stdout || validation.stderr || '').trim() } }
+      found.push({ root: directory, manifest, valid: validation.status === 0, projectId: result.projectId || null, adapter: result.adapter || null, validation: result })
+      return
+    }
+    let entries
+    try { entries = readdirSync(directory, { withFileTypes: true }) } catch { return }
+    for (const entry of entries) {
+      if (!entry.isDirectory() || entry.name.startsWith('.') || ignored.has(entry.name)) continue
+      visit(join(directory, entry.name), depth + 1)
+    }
+  }
+  for (const root of roots) visit(root, 0)
+  print({ roots, maxDepth, projects: found.sort((a, b) => a.root.localeCompare(b.root)), mutations: 'none', secretValues: 'not-read' })
+  process.exit(found.every((project) => project.valid) ? 0 : 1)
 }
 if (command === 'init') {
   const initializer = resolve(new URL('./project-init.mjs', import.meta.url).pathname)
@@ -100,5 +129,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | init [path] [--plan|--apply] | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
+console.log('Uso: qz-kit project list | discover [path...] [--max-depth N] | init [path] [--plan|--apply] | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)

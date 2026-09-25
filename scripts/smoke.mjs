@@ -25,6 +25,11 @@ const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 try {
   mkdirSync(join(configRoot, '.qz'), { recursive: true })
   const fixtureConfig = JSON.parse(readFileSync(join(fixture, '.qz/project.json'), 'utf8'))
+  writeFileSync(join(configRoot, '.qz/project.json'), `${JSON.stringify(fixtureConfig)}\n`)
+  const discovered = parse(execFileSync(node, [resolve(root, 'scripts/projects.mjs'), 'discover', configRoot], { cwd: root, encoding: 'utf8' }))
+  if (discovered.mutations !== 'none' || discovered.projects.length !== 1 || discovered.projects[0].projectId !== fixtureConfig.projectId) {
+    throw new Error('discover no encontró el adapter del proyecto')
+  }
   fixtureConfig.privateAuth = { token: 'must-not-appear', nested: { password: 'must-not-appear' } }
   writeFileSync(join(configRoot, '.qz/project.json'), `${JSON.stringify(fixtureConfig)}\n`)
   const sanitized = execFileSync(qz, ['config', '--json'], { cwd: configRoot, encoding: 'utf8' })
