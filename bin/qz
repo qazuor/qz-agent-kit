@@ -76,4 +76,11 @@ if (typeof dispatch !== 'string' || dispatch.length === 0) {
   process.exit(2)
 }
 const result = spawnSync(dispatch, [command, ...args], { cwd: root, stdio: 'inherit', shell: true })
+if (command === 'start-issue' && result.status === 2) {
+  const fallback = join(homedir(), '.config/qz-agent-kit/bin/generic-start-issue.mjs')
+  if (existsSync(fallback)) {
+    const generic = spawnSync(process.execPath, [fallback, '--root', root, ...args], { cwd: root, stdio: 'inherit' })
+    process.exit(generic.status ?? 1)
+  }
+}
 process.exit(result.status ?? 1)
