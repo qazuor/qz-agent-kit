@@ -1,5 +1,16 @@
 # OpenCode adapter
 
-Genera commands, skills, agents, plugins y configuración para OpenCode desde
-`source/`. El destino global es `~/.config/opencode/`; el destino project-local
-se determina por el adapter del proyecto.
+Distribuye commands y agents portables desde `source/` hacia
+`~/.config/opencode/`. La fuente universal `AGENTS.md` y los guards quedan en
+`~/.config/qz-agent-kit/` y no se inyectan automáticamente en repositorios.
+
+| Recurso | Destino | Estado |
+| --- | --- | --- |
+| `qz-*` commands | `~/.config/opencode/commands/` | instalado por el kit |
+| `qz-*` agents | `~/.config/opencode/agents/` | instalado por el kit |
+| skills | no se copia a OpenCode todavía | pendiente de adapter específico |
+| plugins/config | no administrados por el kit | deliberado |
+| `AGENTS.md` | store central del kit | sincronización por proyecto pendiente |
+
+El adapter no promete que OpenCode interprete igual los recursos de otros
+clientes; sólo distribuye el formato que el cliente reconoce.
