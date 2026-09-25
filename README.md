@@ -123,6 +123,7 @@ sin copiar su fuente de verdad:
 
 ```bash
 npm install --global .
+qz-kit --version
 qz-kit install --plan
 qz-kit install --apply
 ```

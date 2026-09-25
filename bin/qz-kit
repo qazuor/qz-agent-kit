@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
-import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
 
 const [command = 'help', ...args] = process.argv.slice(2)
+const packageJson = JSON.parse(readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'package.json'), 'utf8'))
+if (command === '--version' || command === 'version') {
+  console.log(`${packageJson.name} ${packageJson.version}`)
+  process.exit(0)
+}
 const script = resolve(new URL('..', import.meta.url).pathname, 'scripts/install.mjs')
 const rollback = resolve(new URL('..', import.meta.url).pathname, 'scripts/rollback.mjs')
 const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/projects.mjs')

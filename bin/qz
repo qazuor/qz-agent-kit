@@ -5,6 +5,10 @@ import { spawnSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
 const command = args.shift() || 'help'
+if (command === '--version' || command === 'version') {
+  console.log('qz dispatcher 1')
+  process.exit(0)
+}
 const findRoot = (start) => {
   let current = resolve(start)
   while (true) {
