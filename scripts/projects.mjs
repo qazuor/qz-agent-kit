@@ -35,6 +35,11 @@ if (command === 'list') {
   print({ ...readRegistry(), registry: registryPath, mutations: 'none', secretValues: 'not-read' })
   process.exit(0)
 }
+if (command === 'init') {
+  const initializer = resolve(new URL('./project-init.mjs', import.meta.url).pathname)
+  const result = spawnSync(process.execPath, [initializer, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 if (command === 'register') {
   const projectRoot = resolve(args[0] || '')
   if (!args[0] || !existsSync(join(projectRoot, '.qz/project.json'))) throw new Error('el proyecto debe tener .qz/project.json')
@@ -95,5 +100,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
+console.log('Uso: qz-kit project list | init [path] [--plan|--apply] | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)

@@ -172,6 +172,8 @@ Para registrar un proyecto se usa su adapter explícito:
 
 ```bash
 qz-kit project register /ruta/al/proyecto
+qz-kit project init /ruta/al/proyecto --plan
+qz-kit project init /ruta/al/proyecto --apply
 qz-kit project list
 qz-kit project unregister <project-id>
 qz-kit project restore <backup.json>
