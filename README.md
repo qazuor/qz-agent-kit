@@ -112,9 +112,11 @@ npm run render -- --client codex --output /tmp/qz-codex
 npm run render -- --client gentle-shell --output /tmp/qz-gentle
 ```
 
-El renderer sólo escribe en el directorio indicado. No elige destinos globales
-ni instala archivos por su cuenta; esa responsabilidad pertenece al instalador
-con backup, plan y rollback.
+El renderer sólo escribe en el directorio indicado. Incluye el contenido del
+cliente y una copia visible de los recursos centrales bajo
+`qz-agent-kit/instructions/` y `qz-agent-kit/guards/`. No elige destinos
+globales ni instala archivos por su cuenta; esa responsabilidad pertenece al
+instalador con backup, plan y rollback.
 
 ## Instalación
 

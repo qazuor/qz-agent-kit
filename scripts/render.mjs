@@ -16,9 +16,16 @@ const destination = resolve(output)
 const source = resolve(root, 'source/commands')
 const agentsSource = resolve(root, 'source/agents')
 const skillsSource = resolve(root, 'source/skills')
+const guardsSource = resolve(root, 'source/guards')
 const commands = readdirSync(source).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
 const agents = readdirSync(agentsSource).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
 mkdirSync(destination, { recursive: true })
+mkdirSync(join(destination, 'qz-agent-kit', 'instructions'), { recursive: true })
+cpSync(resolve(root, 'source/instructions/AGENTS.md'), join(destination, 'qz-agent-kit/instructions/AGENTS.md'))
+mkdirSync(join(destination, 'qz-agent-kit', 'guards'), { recursive: true })
+for (const name of readdirSync(guardsSource).filter((name) => name.endsWith('.sh'))) {
+  cpSync(join(guardsSource, name), join(destination, 'qz-agent-kit/guards', name))
+}
 
 if (client === 'gentle-shell') {
   const prompts = join(destination, 'prompts')

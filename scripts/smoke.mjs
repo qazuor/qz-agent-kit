@@ -22,6 +22,9 @@ try {
   for (const client of ['opencode', 'claude', 'codex', 'gentle-shell']) {
     const output = join(renderRoot, client)
     parse(run('scripts/render.mjs', ['--client', client, '--output', output]))
+    if (!existsSync(join(output, 'qz-agent-kit/instructions/AGENTS.md')) || !existsSync(join(output, 'qz-agent-kit/guards/staged-secrets.sh'))) {
+      throw new Error(`recursos centrales incompletos para ${client}`)
+    }
     if (!existsSync(join(output, 'skills/qz-commands/SKILL.md')) || !existsSync(join(output, 'skills/qz-agents/SKILL.md'))) {
       throw new Error(`render incompleto para ${client}`)
     }
