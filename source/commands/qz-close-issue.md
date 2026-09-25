@@ -10,6 +10,8 @@ qz close-issue --plan --issue ISSUE-ID
 ```
 
 Usá el resultado para resumir criterios de cierre, Git, commits, spec/closeout,
-issue tracker, PR/CI, smoke gates y worktrees. No marques Done, no publiques
+issue tracker, PR/CI, smoke gates y worktrees. Si el proyecto no tiene adapter
+de cierre, qz ejecuta un fallback local que sólo verifica branch y worktree
+limpios y devuelve `linearClosed: false`. No marques Done, no publiques
 comentarios, no limpies worktrees y no ejecutes push, merge ni otras
 mutaciones.

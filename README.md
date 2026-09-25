@@ -323,7 +323,7 @@ qz config --json
 qz <comando> [args...]
 ```
 
-`qz doctor` valida el contrato del proyecto y `qz config` muestra únicamente configuración sanitizada: elimina las secciones de secretos y nunca lee sus valores. Los comandos se delegan al adapter mediante `commands.dispatch` cuando existe. `qz start-issue` tiene además un fallback genérico para adapters ausentes o parciales: crea el worktree Git, branch, instalación y build declarados, sin inventar Linear, envs, bases ni servidores. El adapter especializado conserva esas capacidades del proyecto. El kit mantiene la entrada estable y el límite de seguridad; cada proyecto conserva su lógica específica.
+`qz doctor` valida el contrato del proyecto y `qz config` muestra únicamente configuración sanitizada: elimina las secciones de secretos y nunca lee sus valores. Los comandos se delegan al adapter mediante `commands.dispatch` cuando existe. `qz start-issue` tiene además un fallback genérico para adapters ausentes o parciales: crea el worktree Git, branch, instalación y build declarados, sin inventar Linear, envs, bases ni servidores. `qz close-issue` dispone de un fallback local que verifica branch, worktree y limpieza sin afirmar que Linear fue actualizado. El adapter especializado conserva esas capacidades del proyecto. El kit mantiene la entrada estable y el límite de seguridad; cada proyecto conserva su lógica específica.
 
 Un adapter puede declarar un dispatcher determinista:
 
@@ -336,4 +336,4 @@ Un adapter puede declarar un dispatcher determinista:
 }
 ```
 
-La orden se ejecuta con la raíz del proyecto como directorio de trabajo. Si el adapter no declara `commands.dispatch`, `qz start-issue` usa el fallback genérico instalado en `~/.config/qz-agent-kit/bin`; los demás comandos fallan de forma explícita. Si un dispatcher parcial devuelve código 2 para `start-issue`, también se intenta el fallback.
+La orden se ejecuta con la raíz del proyecto como directorio de trabajo. Si el adapter no declara `commands.dispatch`, `qz start-issue` y `qz close-issue` usan sus fallbacks genéricos instalados en `~/.config/qz-agent-kit/bin`; los demás comandos fallan de forma explícita. Si un dispatcher parcial devuelve código 2 para `start-issue`, también se intenta el fallback.
