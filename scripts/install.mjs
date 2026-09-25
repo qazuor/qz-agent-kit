@@ -97,7 +97,17 @@ const result = {
   selected,
   clients,
   targets: targets.length,
-  targetDetails: targets.map(({ client, id, target, executable }) => ({ client, id, target, executable })),
+  targetDetails: targets.map(({ client, id, source, target, executable }) => ({
+    client,
+    id,
+    target,
+    executable,
+    state: !existsSync(target)
+      ? 'missing'
+      : createHash('sha256').update(readFileSync(source)).digest('hex') === createHash('sha256').update(readFileSync(target)).digest('hex')
+        ? 'current'
+        : 'drift'
+  })),
   missing,
   drift,
   contentDrift,
