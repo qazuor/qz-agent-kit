@@ -3,10 +3,14 @@
   "kitId": "qz-agent-kit",
   "version": "0.1.0",
   "sourceOfTruth": "source",
+  "contentManifest": "manifests/qz-content-manifest.json",
+  "commandManifest": "manifests/qz-command-manifest.json",
+  "entrypoints": ["qz-kit", "qz"],
   "adapters": ["opencode", "claude", "codex", "gentle-shell"],
   "genericCommandPrefix": "qz-",
   "projectCommandPrefixes": "declared by each project adapter",
   "secrets": "values-not-read",
   "generatedFiles": "hashes-required",
-  "rollback": "manifest-required"
+  "rollback": "manifest-required",
+  "distributedResources": ["commands", "agents", "skills", "instructions", "guards"]
 }
