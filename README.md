@@ -128,6 +128,11 @@ qz-kit install --apply
 qz-kit doctor
 ```
 
+La instalación también coloca el dispatcher portable `qz` en
+`~/.local/bin/qz` (o bajo el `--home` usado en una prueba). Así cualquier
+proyecto con `.qz/project.json` tiene una entrada común sin copiar workflows
+específicos de Hospeda al kit.
+
 Para registrar un proyecto se usa su adapter explícito:
 
 ```bash

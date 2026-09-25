@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { chmodSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
@@ -37,6 +37,7 @@ const executable = {
 const commandFiles = manifest.commands.map((entry) => ({ ...entry, sourcePath: resolve(root, entry.source) }))
 const skillSource = resolve(root, 'source/skills/qz-commands/SKILL.md')
 const agentsSkillSource = resolve(root, 'source/skills/qz-agents/SKILL.md')
+const qzSource = resolve(root, 'bin/qz')
 const agentFiles = readdirSync(resolve(root, 'source/agents')).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/agents', name) }))
 const detect = (name) => {
   const result = spawnSync('command', ['-v', executable[name]], { shell: true, encoding: 'utf8' })
@@ -44,23 +45,24 @@ const detect = (name) => {
 }
 const clients = Object.fromEntries(selected.map((name) => [name, detect(name)]))
 const targets = []
+targets.push({ client: 'kit', id: 'qz', source: qzSource, target: join(home, '.local/bin/qz'), executable: true })
 for (const client of selected) {
   if (!clients[client].detected && !value('--home')) continue
   for (const entry of commandFiles) {
     const target = client === 'codex'
       ? join(destination[client], entry.id + '.md')
       : join(destination[client], entry.id + '.md')
-    targets.push({ client, id: entry.id, source: entry.sourcePath, target })
+    targets.push({ client, id: entry.id, source: entry.sourcePath, target, executable: false })
   }
-  if (client === 'codex') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.codex/skills/qz-commands/SKILL.md') })
-  if (client === 'gentle-shell') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.gentle-shell/agent/skills/qz-commands/SKILL.md') })
-  if (client === 'codex') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.codex/skills/qz-agents/SKILL.md') })
+  if (client === 'codex') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.codex/skills/qz-commands/SKILL.md'), executable: false })
+  if (client === 'gentle-shell') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.gentle-shell/agent/skills/qz-commands/SKILL.md'), executable: false })
+  if (client === 'codex') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.codex/skills/qz-agents/SKILL.md'), executable: false })
   for (const agent of agentFiles) {
     const agentTarget = client === 'codex' ? join(home, '.codex/skills/qz-agents', agent.id + '.md') : client === 'gentle-shell' ? join(home, '.gentle-shell/agent/agents', agent.id + '.md') : join(home, client === 'opencode' ? '.config/opencode/agents' : '.claude/agents', agent.id + '.md')
-    targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget })
+    targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget, executable: false })
   }
 }
-const missing = [...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
+const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
 const result = {
   mode: has('--apply') ? 'apply' : has('--check') ? 'check' : 'plan',
@@ -86,13 +88,14 @@ mkdirSync(backupRoot, { recursive: true })
 const backed = []
 for (const item of targets) {
   if (existsSync(item.target)) {
-    const backup = join(backupRoot, item.client, item.id + '.md')
+    const backup = join(backupRoot, item.client, item.id + (item.executable ? '' : '.md'))
     mkdirSync(join(backupRoot, item.client), { recursive: true })
     copyFileSync(item.target, backup)
     backed.push({ target: item.target, backup })
   }
   mkdirSync(dirname(item.target), { recursive: true })
   copyFileSync(item.source, item.target)
+  if (item.executable) chmodSync(item.target, 0o755)
 }
 const installManifest = { kit: manifest.manifestId, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, rollback: backupRoot, secrets: 'values-not-read' }
 writeFileSync(join(backupRoot, 'install-manifest.json'), `${JSON.stringify(installManifest, null, 2)}\n`)
