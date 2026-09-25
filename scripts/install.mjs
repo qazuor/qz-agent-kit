@@ -23,7 +23,8 @@ if (![ '--plan', '--check', '--apply' ].some(has)) throw new Error('elegí --pla
 
 const names = ['opencode', 'claude', 'codex', 'gentle-shell']
 const requestedClients = value('--client')
-const selected = !requestedClients || requestedClients === 'all' ? names : requestedClients.split(',').map((name) => name.trim()).filter(Boolean)
+const selected = !requestedClients || requestedClients === 'all' ? names : [...new Set(requestedClients.split(',').map((name) => name.trim()).filter(Boolean))]
+if (selected.length === 0) throw new Error('--client no puede estar vacío')
 if (selected.some((name) => !names.includes(name))) throw new Error(`cliente inválido: ${selected.join(', ')}`)
 const home = resolve(value('--home') || homedir())
 const destination = {
