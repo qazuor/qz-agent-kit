@@ -233,6 +233,9 @@ ese manifest creó sin backup. No busca archivos por nombre ni toca otros
 archivos del sistema.
 
 `update --plan` muestra archivos nuevos, modificados, eliminados y con drift.
+Cada destino aparece además con estado `missing`, `drift` o `current`.
+`update --check` ejecuta la misma comprobación sin aplicar cambios; `update`
+sin modo explícito es la única variante que aplica la actualización.
 `update --apply` crea un backup, valida fuentes y hashes, copia sólo los
 destinos administrados y escribe un manifest de rollback. La aplicación es
 idempotente:
