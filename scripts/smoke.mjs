@@ -21,6 +21,7 @@ const installHome = mkdtempSync(join(tmpdir(), 'qz-install-'))
 const configRoot = mkdtempSync(join(tmpdir(), 'qz-config-'))
 const invalidProject = mkdtempSync(join(tmpdir(), 'qz-invalid-project-'))
 const registryHome = mkdtempSync(join(tmpdir(), 'qz-registry-'))
+const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 try {
   mkdirSync(join(configRoot, '.qz'), { recursive: true })
   const fixtureConfig = JSON.parse(readFileSync(join(fixture, '.qz/project.json'), 'utf8'))
@@ -50,6 +51,31 @@ try {
   if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz'))) {
     throw new Error('instalación smoke incompleta')
   }
+  mkdirSync(join(fallbackRoot, '.qz'), { recursive: true })
+  execFileSync('git', ['init', '-q', '-b', 'develop'], { cwd: fallbackRoot })
+  execFileSync('git', ['config', 'user.email', 'qz-test@example.invalid'], { cwd: fallbackRoot })
+  execFileSync('git', ['config', 'user.name', 'qz-test'], { cwd: fallbackRoot })
+  writeFileSync(join(fallbackRoot, 'README.md'), 'fixture\n')
+  writeFileSync(join(fallbackRoot, '.qz/project.json'), JSON.stringify({
+    schemaVersion: 1,
+    projectId: 'generic-smoke',
+    adapter: 'qz',
+    issues: { provider: 'none', teamKey: 'GEN' },
+    branches: { base: 'develop', protected: ['main'], pattern: '{type}/{slug}' },
+    worktree: { pathPattern: '../generic-smoke-{slug}', envSource: { kind: 'none' } },
+    database: { strategy: 'none' },
+    servers: [{ id: 'app', defaultPort: 3000 }],
+    commands: { genericPrefix: 'qz-', projectPrefix: 'gen-' }
+  }) + '\n')
+  execFileSync('git', ['add', '.'], { cwd: fallbackRoot })
+  execFileSync('git', ['commit', '-q', '-m', 'fixture'], { cwd: fallbackRoot })
+  execFileSync(qz, ['start-issue', 'GEN-7', 'fix'], {
+    cwd: fallbackRoot,
+    env: { ...process.env, HOME: installHome },
+    encoding: 'utf8'
+  })
+  const fallbackWorktree = resolve(fallbackRoot, '../generic-smoke-gen-7')
+  if (!existsSync(join(fallbackWorktree, '.git'))) throw new Error('fallback no creó el worktree')
   const rollbackManifest = apply.rollbackManifest
   parse(run('scripts/rollback.mjs', [rollbackManifest]))
   if (existsSync(join(installHome, '.local/bin/qz'))) throw new Error('rollback no eliminó qz creado por la prueba')
@@ -59,5 +85,7 @@ try {
   rmSync(configRoot, { recursive: true, force: true })
   rmSync(invalidProject, { recursive: true, force: true })
   rmSync(registryHome, { recursive: true, force: true })
+  rmSync(fallbackRoot, { recursive: true, force: true })
+  rmSync(resolve(fallbackRoot, '../generic-smoke-gen-7'), { recursive: true, force: true })
 }
 console.log(JSON.stringify({ smoke: 'ok', clients: 4, mutations: 'temporary-only', secretValues: 'not-read' }, null, 2))
