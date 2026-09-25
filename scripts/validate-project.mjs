@@ -94,10 +94,11 @@ for (const [index, server] of (config.servers || []).entries()) {
 const commandPrefix = /^[A-Za-z][A-Za-z0-9_-]*-$/
 if (typeof config.commands?.genericPrefix !== 'string' || !commandPrefix.test(config.commands.genericPrefix)) errors.push('commands:genericPrefix')
 if (typeof config.commands?.projectPrefix !== 'string' || !commandPrefix.test(config.commands.projectPrefix)) errors.push('commands:projectPrefix')
+if (config.commands?.dispatch !== undefined && (typeof config.commands.dispatch !== 'string' || config.commands.dispatch.length === 0)) errors.push('commands.dispatch:type')
 const serialized = JSON.stringify(config).toLowerCase()
 for (const forbidden of ['password', 'secret', 'token', 'privatekey', 'accesskey']) {
   if (serialized.includes(`"${forbidden}"`)) errors.push(`forbidden-field:${forbidden}`)
 }
-const result = { projectRoot, manifest: path, projectId: config.projectId, adapter: config.adapter, servers: config.servers?.map((s) => s.id), errors, valid: errors.length === 0, mutations: 'none', secretValues: 'not-read' }
+const result = { projectRoot, manifest: path, projectId: config.projectId, adapter: config.adapter, dispatchDeclared: typeof config.commands?.dispatch === 'string', servers: config.servers?.map((s) => s.id), errors, valid: errors.length === 0, mutations: 'none', secretValues: 'not-read' }
 console.log(JSON.stringify(result, null, 2))
 process.exit(result.valid ? 0 : 1)
