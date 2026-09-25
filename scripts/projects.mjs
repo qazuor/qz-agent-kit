@@ -52,6 +52,17 @@ if (command === 'register') {
   print({ registered: entry, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
   process.exit(0)
 }
+if (command === 'unregister') {
+  const id = args[0]
+  if (!id) throw new Error('falta el id del proyecto')
+  const registry = readRegistry()
+  const previous = registry.projects.length
+  registry.projects = registry.projects.filter((item) => item.id !== id)
+  if (registry.projects.length === previous) throw new Error(`no existe el proyecto registrado: ${id}`)
+  const backup = writeRegistry(registry)
+  print({ unregistered: id, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
+  process.exit(0)
+}
 if (command === 'validate') {
   const projectRoot = resolve(args[0] || '')
   const script = resolve(new URL('./validate-project.mjs', import.meta.url).pathname)
@@ -68,5 +79,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | validate <path> | inspect')
+console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)
