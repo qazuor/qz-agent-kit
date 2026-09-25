@@ -117,7 +117,8 @@ const result = {
 
 if (!has('--apply')) {
   console.log(JSON.stringify(result, null, 2))
-  process.exit(missing.length || contentDrift.length ? 1 : 0)
+  const targetDrift = result.targetDetails.some((target) => target.state !== 'current')
+  process.exit(missing.length || contentDrift.length || (has('--check') && targetDrift) ? 1 : 0)
 }
 if (missing.length) throw new Error(`faltan fuentes: ${missing.join(', ')}`)
 if (contentDrift.length) throw new Error(`content manifest desactualizado; ejecutar npm run manifest y revisar: ${contentDrift.join(', ')}`)

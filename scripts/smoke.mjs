@@ -60,15 +60,15 @@ try {
   if (synchronized.targetDetails.some((target) => target.state !== 'current')) {
     throw new Error('el plan no marcó como current una instalación recién aplicada')
   }
+  const updateCheck = parse(execFileSync(resolve(root, 'bin/qz-kit'), ['update', '--check', '--home', installHome], { cwd: root, encoding: 'utf8' }))
+  if (updateCheck.mode !== 'check' || updateCheck.mutations !== 'none') {
+    throw new Error('qz-kit update --check no fue read-only')
+  }
   const shimTarget = join(installHome, '.local/bin/qz-start-issue')
   writeFileSync(shimTarget, `${readFileSync(shimTarget, 'utf8')}\n`)
   const drifted = parse(run('scripts/install.mjs', ['--plan', '--home', installHome]))
   if (!drifted.targetDetails.some((target) => target.target === shimTarget && target.state === 'drift')) {
     throw new Error('el plan no detectó drift en un shim modificado')
-  }
-  const updateCheck = parse(execFileSync(resolve(root, 'bin/qz-kit'), ['update', '--check', '--home', installHome], { cwd: root, encoding: 'utf8' }))
-  if (updateCheck.mode !== 'check' || updateCheck.mutations !== 'none') {
-    throw new Error('qz-kit update --check no fue read-only')
   }
   const shimHelp = execFileSync(join(installHome, '.local/bin/qz-start-issue'), ['--help'], {
     cwd: fixture,
