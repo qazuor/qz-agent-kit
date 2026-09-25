@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdtempSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -18,7 +18,14 @@ parse(execFileSync(qz, ['context', 'smoke'], { cwd: fixture, encoding: 'utf8' })
 
 const renderRoot = mkdtempSync(join(tmpdir(), 'qz-render-'))
 const installHome = mkdtempSync(join(tmpdir(), 'qz-install-'))
+const configRoot = mkdtempSync(join(tmpdir(), 'qz-config-'))
 try {
+  mkdirSync(join(configRoot, '.qz'), { recursive: true })
+  const fixtureConfig = JSON.parse(readFileSync(join(fixture, '.qz/project.json'), 'utf8'))
+  fixtureConfig.privateAuth = { token: 'must-not-appear', nested: { password: 'must-not-appear' } }
+  writeFileSync(join(configRoot, '.qz/project.json'), `${JSON.stringify(fixtureConfig)}\n`)
+  const sanitized = execFileSync(qz, ['config', '--json'], { cwd: configRoot, encoding: 'utf8' })
+  if (sanitized.includes('must-not-appear') || sanitized.includes('privateAuth')) throw new Error('qz config expuso un campo sensible')
   for (const client of ['opencode', 'claude', 'codex', 'gentle-shell']) {
     const output = join(renderRoot, client)
     parse(run('scripts/render.mjs', ['--client', client, '--output', output]))
@@ -39,5 +46,6 @@ try {
 } finally {
   rmSync(renderRoot, { recursive: true, force: true })
   rmSync(installHome, { recursive: true, force: true })
+  rmSync(configRoot, { recursive: true, force: true })
 }
 console.log(JSON.stringify({ smoke: 'ok', clients: 4, mutations: 'temporary-only', secretValues: 'not-read' }, null, 2))
