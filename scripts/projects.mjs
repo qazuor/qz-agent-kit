@@ -52,6 +52,16 @@ if (command === 'register') {
   print({ registered: entry, registry: registryPath, backup, mutations: [registryPath, ...(backup ? [backup] : [])], secretValues: 'not-read' })
   process.exit(0)
 }
+if (command === 'restore') {
+  const backupPath = resolve(args[0] || '')
+  if (!args[0] || !existsSync(backupPath)) throw new Error('falta un backup existente del registry')
+  const backup = JSON.parse(readFileSync(backupPath, 'utf8'))
+  if (backup.schemaVersion !== 1 || !Array.isArray(backup.projects)) throw new Error('backup de registry inválido')
+  const current = readRegistry()
+  const saved = writeRegistry(backup)
+  print({ restoredFrom: backupPath, previous: current.projects.length, restored: backup.projects.length, registry: registryPath, backup: saved, mutations: [registryPath, ...(saved ? [saved] : [])], secretValues: 'not-read' })
+  process.exit(0)
+}
 if (command === 'unregister') {
   const id = args[0]
   if (!id) throw new Error('falta el id del proyecto')
@@ -79,5 +89,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | validate <path> | inspect')
+console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | unregister <id> | restore <backup.json> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)

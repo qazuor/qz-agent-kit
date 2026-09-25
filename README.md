@@ -153,6 +153,7 @@ Para registrar un proyecto se usa su adapter explícito:
 qz-kit project register /ruta/al/proyecto
 qz-kit project list
 qz-kit project unregister <project-id>
+qz-kit project restore <backup.json>
 ```
 
 El registro se guarda en `~/.config/qz-agent-kit/projects.json`, separado de
