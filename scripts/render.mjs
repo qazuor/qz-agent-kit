@@ -14,7 +14,9 @@ const output = value('--output')
 if (!['opencode', 'claude', 'codex', 'gentle-shell'].includes(client) || !output) throw new Error('client y output son obligatorios')
 const destination = resolve(output)
 const source = resolve(root, 'source/commands')
+const agentsSource = resolve(root, 'source/agents')
 const commands = readdirSync(source).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
+const agents = readdirSync(agentsSource).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort()
 mkdirSync(destination, { recursive: true })
 
 if (client === 'gentle-shell') {
@@ -23,15 +25,23 @@ if (client === 'gentle-shell') {
   for (const name of commands) cpSync(join(source, name), join(prompts, name))
   mkdirSync(join(destination, 'skills', 'qz-commands'), { recursive: true })
   cpSync(resolve(root, 'source/skills/qz-commands/SKILL.md'), join(destination, 'skills/qz-commands/SKILL.md'))
+  mkdirSync(join(destination, 'agents'), { recursive: true })
+  for (const name of agents) cpSync(join(agentsSource, name), join(destination, 'agents', name))
 } else if (client === 'codex') {
   const skill = join(destination, 'skills', 'qz-commands')
   mkdirSync(skill, { recursive: true })
   cpSync(resolve(root, 'source/skills/qz-commands/SKILL.md'), join(skill, 'SKILL.md'))
   for (const name of commands) cpSync(join(source, name), join(skill, name))
+  const agentSkill = join(destination, 'skills', 'qz-agents')
+  mkdirSync(agentSkill, { recursive: true })
+  cpSync(resolve(root, 'source/skills/qz-agents/SKILL.md'), join(agentSkill, 'SKILL.md'))
+  for (const name of agents) cpSync(join(agentsSource, name), join(agentSkill, name))
 } else {
   const commandsDir = join(destination, 'commands')
   mkdirSync(commandsDir, { recursive: true })
   for (const name of commands) cpSync(join(source, name), join(commandsDir, name))
+  mkdirSync(join(destination, 'agents'), { recursive: true })
+  for (const name of agents) cpSync(join(agentsSource, name), join(destination, 'agents', name))
 }
 
 const manifest = JSON.parse(readFileSync(resolve(root, 'manifests/qz-command-manifest.json'), 'utf8'))

@@ -36,6 +36,8 @@ const executable = {
 }
 const commandFiles = manifest.commands.map((entry) => ({ ...entry, sourcePath: resolve(root, entry.source) }))
 const skillSource = resolve(root, 'source/skills/qz-commands/SKILL.md')
+const agentsSkillSource = resolve(root, 'source/skills/qz-agents/SKILL.md')
+const agentFiles = readdirSync(resolve(root, 'source/agents')).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/agents', name) }))
 const detect = (name) => {
   const result = spawnSync('command', ['-v', executable[name]], { shell: true, encoding: 'utf8' })
   return { detected: result.status === 0, executable: result.status === 0 ? result.stdout.trim() : null }
@@ -52,8 +54,13 @@ for (const client of selected) {
   }
   if (client === 'codex') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.codex/skills/qz-commands/SKILL.md') })
   if (client === 'gentle-shell') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.gentle-shell/agent/skills/qz-commands/SKILL.md') })
+  if (client === 'codex') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.codex/skills/qz-agents/SKILL.md') })
+  for (const agent of agentFiles) {
+    const agentTarget = client === 'codex' ? join(home, '.codex/skills/qz-agents', agent.id + '.md') : client === 'gentle-shell' ? join(home, '.gentle-shell/agent/agents', agent.id + '.md') : join(home, client === 'opencode' ? '.config/opencode/agents' : '.claude/agents', agent.id + '.md')
+    targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget })
+  }
 }
-const missing = [...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : [])]
+const missing = [...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
 const result = {
   mode: has('--apply') ? 'apply' : has('--check') ? 'check' : 'plan',
