@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -57,6 +57,18 @@ try {
     if (!existsSync(join(output, 'skills/qz-commands/SKILL.md')) || !existsSync(join(output, 'skills/qz-agents/SKILL.md'))) {
       throw new Error(`render incompleto para ${client}`)
     }
+  }
+  const syncProject = mkdtempSync(join(tmpdir(), 'qz-sync-project-'))
+  try {
+    cpSync(fixture, syncProject, { recursive: true })
+    const syncApply = parse(run('scripts/project-sync.mjs', [syncProject, '--apply', '--client', 'all', '--home', installHome]))
+    if (syncApply.counts.total !== 16 || !existsSync(join(syncProject, 'AGENTS.md')) || !existsSync(join(syncProject, '.opencode/skills/demo/SKILL.md')) || !existsSync(join(syncProject, '.gentle-shell/agent/prompts/demo-command.md'))) {
+      throw new Error('project sync incompleto')
+    }
+    const syncCheck = spawnSync(node, [resolve(root, 'scripts/project-sync.mjs'), syncProject, '--check', '--client', 'all', '--home', installHome], { cwd: root, encoding: 'utf8' })
+    if (syncCheck.status !== 0) throw new Error('project sync check no detectó estado current')
+  } finally {
+    rmSync(syncProject, { recursive: true, force: true })
   }
   const apply = parse(run('scripts/install.mjs', ['--apply', '--home', installHome]))
   if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz')) || !existsSync(join(installHome, '.local/bin/qz-start-issue'))) {

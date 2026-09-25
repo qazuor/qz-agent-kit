@@ -83,6 +83,11 @@ if (command === 'render') {
   const result = spawnSync(process.execPath, [renderer, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
+if (command === 'sync') {
+  const synchronizer = resolve(new URL('./project-sync.mjs', import.meta.url).pathname)
+  const result = spawnSync(process.execPath, [synchronizer, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 if (command === 'register') {
   const projectRoot = resolve(args[0] || '')
   if (!args[0] || !existsSync(join(projectRoot, '.qz/project.json'))) throw new Error('el proyecto debe tener .qz/project.json')
@@ -147,5 +152,5 @@ if (command === 'inspect') {
   print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
   process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
 }
-console.log('Uso: qz-kit project list | discover [path...] [--max-depth N] | init [path] [--plan|--apply] | render <path> --client <cliente> --output <dir> | register <path> [--id <id>] [--adapter <adapter>] [--replace] | unregister <id> | restore <backup.json> | validate <path> | inspect')
+console.log('Uso: qz-kit project list | discover [path...] [--max-depth N] | init [path] [--plan|--apply] | render <path> --client <cliente> --output <dir> | sync <path> --plan|--check|--apply [--client <cliente>|all] [--replace] | register <path> [--id <id>] [--adapter <adapter>] [--replace] | unregister <id> | restore <backup.json> | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)

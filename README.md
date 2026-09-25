@@ -230,6 +230,25 @@ qz-kit project inspect
 `project inspect` valida todos los proyectos registrados y devuelve un informe
 estructurado sin iniciar servidores, consultar issues ni modificar repositorios.
 
+Para llevar la capa de conocimiento de un proyecto a los directorios que cada
+cliente reconoce se usa `project sync`. Por defecto sólo calcula el plan; el
+modo `--check` devuelve código distinto de cero si falta o cambió un recurso.
+`--apply` crea un backup fuera del repositorio y copia únicamente los archivos
+declarados por `knowledge`. Un archivo existente con drift bloquea la aplicación
+hasta indicar `--replace`; `AGENTS.md` requiere además `--replace-instructions`
+porque puede contener reglas universales mantenidas manualmente.
+
+```bash
+qz-kit project sync /ruta/al/proyecto --plan --client all
+qz-kit project sync /ruta/al/proyecto --check --client opencode,claude
+qz-kit project sync /ruta/al/proyecto --apply --client all
+qz-kit project sync /ruta/al/proyecto --apply --replace --replace-instructions
+```
+
+El sync no elimina recursos obsoletos, no toca `.env`, credenciales, bases de
+datos ni Git, y no ejecuta comandos del proyecto. Su manifest de rollback queda
+en `~/.local/state/qz-agent-kit/project-backups/`.
+
 `project discover` busca `.qz/project.json` debajo de una o varias rutas, valida
 cada adapter encontrado y devuelve sus ids, raíces y estado. Es read-only: no
 registra proyectos, no crea manifests y no lee secretos. Ignora directorios de
