@@ -66,6 +66,10 @@ try {
   if (!drifted.targetDetails.some((target) => target.target === shimTarget && target.state === 'drift')) {
     throw new Error('el plan no detectó drift en un shim modificado')
   }
+  const updateCheck = parse(execFileSync(resolve(root, 'bin/qz-kit'), ['update', '--check', '--home', installHome], { cwd: root, encoding: 'utf8' }))
+  if (updateCheck.mode !== 'check' || updateCheck.mutations !== 'none') {
+    throw new Error('qz-kit update --check no fue read-only')
+  }
   const shimHelp = execFileSync(join(installHome, '.local/bin/qz-start-issue'), ['--help'], {
     cwd: fixture,
     env: { ...process.env, HOME: installHome },
