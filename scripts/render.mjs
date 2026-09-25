@@ -21,10 +21,12 @@ if (client === 'gentle-shell') {
   const prompts = join(destination, 'prompts')
   mkdirSync(prompts, { recursive: true })
   for (const name of commands) cpSync(join(source, name), join(prompts, name))
+  mkdirSync(join(destination, 'skills', 'qz-commands'), { recursive: true })
+  cpSync(resolve(root, 'source/skills/qz-commands/SKILL.md'), join(destination, 'skills/qz-commands/SKILL.md'))
 } else if (client === 'codex') {
   const skill = join(destination, 'skills', 'qz-commands')
   mkdirSync(skill, { recursive: true })
-  writeFileSync(join(skill, 'SKILL.md'), '---\nname: qz-commands\ndescription: Usa los workflows portables qz del proyecto.\n---\n\nLa fuente de verdad está en los archivos de referencia junto a este skill. Ejecutá el wrapper qz correspondiente y no reimplementes workflows.\n')
+  cpSync(resolve(root, 'source/skills/qz-commands/SKILL.md'), join(skill, 'SKILL.md'))
   for (const name of commands) cpSync(join(source, name), join(skill, name))
 } else {
   const commandsDir = join(destination, 'commands')
