@@ -6,6 +6,7 @@ import { dirname, join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
+const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
 const manifest = JSON.parse(readFileSync(join(root, 'manifests/qz-command-manifest.json'), 'utf8'))
 const contentManifestPath = join(root, 'manifests/qz-content-manifest.json')
 const contentManifest = existsSync(contentManifestPath) ? JSON.parse(readFileSync(contentManifestPath, 'utf8')) : null
@@ -76,6 +77,7 @@ const contentDrift = contentManifest
 const result = {
   mode: has('--apply') ? 'apply' : has('--check') ? 'check' : 'plan',
   kit: manifest.manifestId,
+  kitVersion: packageJson.version,
   version: manifest.schemaVersion,
   selected,
   clients,
@@ -108,6 +110,6 @@ for (const item of targets) {
   copyFileSync(item.source, item.target)
   if (item.executable) chmodSync(item.target, 0o755)
 }
-const installManifest = { kit: manifest.manifestId, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, rollback: backupRoot, secrets: 'values-not-read' }
+const installManifest = { kit: manifest.manifestId, kitVersion: packageJson.version, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, rollback: backupRoot, secrets: 'values-not-read' }
 writeFileSync(join(backupRoot, 'install-manifest.json'), `${JSON.stringify(installManifest, null, 2)}\n`)
 console.log(JSON.stringify({ ...result, backup: backupRoot, installed: targets.length, rollbackManifest: join(backupRoot, 'install-manifest.json') }, null, 2))
