@@ -7,6 +7,8 @@ import { spawnSync } from 'node:child_process'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const manifest = JSON.parse(readFileSync(join(root, 'manifests/qz-command-manifest.json'), 'utf8'))
+const contentManifestPath = join(root, 'manifests/qz-content-manifest.json')
+const contentManifest = existsSync(contentManifestPath) ? JSON.parse(readFileSync(contentManifestPath, 'utf8')) : null
 const args = process.argv.slice(2)
 const has = (flag) => args.includes(flag)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
@@ -66,6 +68,9 @@ for (const client of selected) {
 }
 const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
+const contentDrift = contentManifest
+  ? contentManifest.content.filter(({ path, sha256 }) => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex') !== sha256).map(({ path }) => path)
+  : ['manifests/qz-content-manifest.json']
 const result = {
   mode: has('--apply') ? 'apply' : has('--check') ? 'check' : 'plan',
   kit: manifest.manifestId,
@@ -75,13 +80,14 @@ const result = {
   targets: targets.length,
   missing,
   drift,
+  contentDrift,
   mutations: has('--apply') ? 'scoped qz-managed files only' : 'none',
   secretValues: 'not-read'
 }
 
 if (!has('--apply')) {
   console.log(JSON.stringify(result, null, 2))
-  process.exit(missing.length ? 1 : 0)
+  process.exit(missing.length || contentDrift.length ? 1 : 0)
 }
 if (missing.length) throw new Error(`faltan fuentes: ${missing.join(', ')}`)
 
