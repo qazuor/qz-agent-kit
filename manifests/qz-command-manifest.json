@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "qz-command-pack",
+  "sourceOfTruth": "source/commands",
+  "generatedAt": "2026-09-25T01:22:33.560Z",
+  "clients": [
+    "opencode",
+    "claude",
+    "codex",
+    "gentle-shell"
+  ],
+  "commands": [
+    {
+      "id": "qz-artifact",
+      "source": "source/commands/qz-artifact.md",
+      "sha256": "1c650177ff6c347d225e3408480b662d7f4ee356935767d77f02ccf4234bc354"
+    },
+    {
+      "id": "qz-close-issue",
+      "source": "source/commands/qz-close-issue.md",
+      "sha256": "5d6acb76086d1d3e8d5e1ad9196c0b3392c5cc3bb009186ce6b349cb10550536"
+    },
+    {
+      "id": "qz-engram",
+      "source": "source/commands/qz-engram.md",
+      "sha256": "626e92cefcb19618b9e1c5f2fe72057ed084fafb8ee966c4eb371d7afd6f73c2"
+    },
+    {
+      "id": "qz-handoff",
+      "source": "source/commands/qz-handoff.md",
+      "sha256": "e95077e8a719cd6ce51cc688336b3b9b23744fce53d8b663c153108f200a0b51"
+    },
+    {
+      "id": "qz-recap",
+      "source": "source/commands/qz-recap.md",
+      "sha256": "ae992ec7c5f15b5cb6f3efecbfaf7923e269164a3ab3d185b786fc2ed434381d"
+    },
+    {
+      "id": "qz-start-issue",
+      "source": "source/commands/qz-start-issue.md",
+      "sha256": "949b5fbfb6283200444b428c17186985085c6be892ffa6a5e05affa514810459"
+    },
+    {
+      "id": "qz-verify",
+      "source": "source/commands/qz-verify.md",
+      "sha256": "a0564b5936df1493c21428cc8e2c7bd1d80f83f1101fe1ad253542bb70d932a8"
+    }
+  ]
+}

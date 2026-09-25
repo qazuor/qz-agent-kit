@@ -97,6 +97,25 @@ qz-start-issue       # workflow portable
 hops-start-issue     # adapter exclusivo de Hospeda
 ```
 
+La primera colección portable incluye siete commands: `qz-recap`,
+`qz-handoff`, `qz-verify`, `qz-start-issue`, `qz-close-issue`, `qz-engram` y
+`qz-artifact`. El manifest generado en `manifests/qz-command-manifest.json`
+registra sus hashes y sirve como entrada para todos los adapters.
+
+Para regenerar el manifest y comprobar cada formato:
+
+```bash
+npm run manifest
+npm run render -- --client opencode --output /tmp/qz-opencode
+npm run render -- --client claude --output /tmp/qz-claude
+npm run render -- --client codex --output /tmp/qz-codex
+npm run render -- --client gentle-shell --output /tmp/qz-gentle
+```
+
+El renderer sólo escribe en el directorio indicado. No elige destinos globales
+ni instala archivos por su cuenta; esa responsabilidad pertenece al instalador
+con backup, plan y rollback.
+
 ## Instalación
 
 El bootstrap detecta los clientes disponibles, crea un backup de sus destinos,
