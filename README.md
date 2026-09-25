@@ -123,6 +123,8 @@ instalador con backup, plan y rollback.
 Desde un clone del repositorio, el kit puede exponerse como comandos globales
 sin copiar su fuente de verdad:
 
+Requiere Node.js 22 o superior.
+
 ```bash
 npm install --global .
 qz-kit --version
