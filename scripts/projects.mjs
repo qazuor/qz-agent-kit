@@ -46,5 +46,15 @@ if (command === 'validate') {
   const result = spawnSync(process.execPath, [script, projectRoot], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
-console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | validate <path>')
+if (command === 'inspect') {
+  const registry = readRegistry()
+  const projects = registry.projects.map((project) => {
+    const manifest = join(project.root, '.qz/project.json')
+    const result = spawnSync(process.execPath, [resolve(new URL('./validate-project.mjs', import.meta.url).pathname), project.root], { encoding: 'utf8' })
+    return { ...project, manifest, exists: existsSync(manifest), valid: result.status === 0, validatorOutput: result.stdout?.trim() || null }
+  })
+  print({ registry: registryPath, projects, mutations: 'none', secretValues: 'not-read' })
+  process.exit(projects.every((project) => project.exists && project.valid) ? 0 : 1)
+}
+console.log('Uso: qz-kit project list | register <path> [--id <id>] [--adapter <adapter>] | validate <path> | inspect')
 process.exit(command === 'help' ? 0 : 2)

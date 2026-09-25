@@ -143,7 +143,11 @@ aceptarlo.
 ```bash
 qz-kit project validate /ruta/al/proyecto
 qz-kit project list
+qz-kit project inspect
 ```
+
+`project inspect` valida todos los proyectos registrados y devuelve un informe
+estructurado sin iniciar servidores, consultar issues ni modificar repositorios.
 
 El instalador nunca copia credenciales, tokens, `.env`, bases de datos ni
 memoria Engram. Esos recursos se detectan y validan localmente, pero sus
