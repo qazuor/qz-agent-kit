@@ -118,6 +118,20 @@ con backup, plan y rollback.
 
 ## Instalación
 
+Desde un clone del repositorio, el kit puede exponerse como comandos globales
+sin copiar su fuente de verdad:
+
+```bash
+npm install --global .
+qz-kit install --plan
+qz-kit install --apply
+```
+
+Para una reinstalación reproducible, primero se clona una revisión concreta y
+se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
+`qz-kit` y `qz`; los commands, agents, skills, instrucciones y guards se
+distribuyen después mediante `qz-kit install`.
+
 El bootstrap detecta los clientes disponibles, crea un backup de sus destinos,
 instala la versión solicitada y registra el resultado. La instalación global no
 instala configuración de proyecto.
