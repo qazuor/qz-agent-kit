@@ -15,6 +15,7 @@
     "validate:project": "node scripts/validate-project.mjs fixtures/generic-project",
     "plan:backup": "node scripts/backup-plan.mjs",
     "check": "npm run validate:project",
-    "test": "node scripts/smoke.mjs"
+    "test": "node scripts/smoke.mjs",
+    "check:package": "node scripts/check-package.mjs"
   }
 }
