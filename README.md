@@ -61,10 +61,10 @@ workflow común y consume su resultado.
 
 | Cliente | Destino generado | Forma de integración |
 |---|---|---|
-| OpenCode | `~/.config/opencode/` | Commands, skills, agents, plugins y configuración compatible. |
-| Claude Code | `~/.claude/` | Commands, skills, agents, instrucciones y hooks compatibles. |
+| OpenCode | `~/.config/opencode/` | Commands y agents compatibles; plugins/configuración quedan fuera del alcance genérico. |
+| Claude Code | `~/.claude/` | Commands, skills y agents compatibles. Las instrucciones universales quedan en el store del kit. |
 | Codex CLI | `~/.codex/` | Skills, instrucciones y policies compatibles con Codex. |
-| Gentle Shell | `~/.gentle-shell/agent/` | Prompt templates, skills, agents y configuración Pi/Gentle. |
+| Gentle Shell | `~/.gentle-shell/agent/` | Prompt templates, skills y agents compatibles. |
 
 Los destinos son artefactos generados. No se editan como fuente de verdad. El
 manifest detecta modificaciones locales y permite conservarlas, reemplazarlas
