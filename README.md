@@ -202,8 +202,9 @@ ese manifest creó sin backup. No busca archivos por nombre ni toca otros
 archivos del sistema.
 
 `update --plan` muestra archivos nuevos, modificados, eliminados y con drift.
-`update --apply` crea un backup, genera los adapters, valida hashes, ejecuta
-smoke checks y escribe un manifest de rollback. La aplicación es idempotente:
+`update --apply` crea un backup, valida fuentes y hashes, copia sólo los
+destinos administrados y escribe un manifest de rollback. La aplicación es
+idempotente:
 repetirla con la misma versión no produce cambios adicionales.
 
 `manifests/qz-content-manifest.json` registra hashes de commands, agents,
