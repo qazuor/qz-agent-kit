@@ -76,6 +76,12 @@ try {
   })
   const fallbackWorktree = resolve(fallbackRoot, '../generic-smoke-gen-7')
   if (!existsSync(join(fallbackWorktree, '.git'))) throw new Error('fallback no creó el worktree')
+  const closeOutput = execFileSync(qz, ['close-issue', 'GEN-7'], {
+    cwd: fallbackWorktree,
+    env: { ...process.env, HOME: installHome },
+    encoding: 'utf8'
+  })
+  if (!closeOutput.includes('\"linearClosed\": false')) throw new Error('fallback close-issue no declaró el límite de Linear')
   const rollbackManifest = apply.rollbackManifest
   parse(run('scripts/rollback.mjs', [rollbackManifest]))
   if (existsSync(join(installHome, '.local/bin/qz'))) throw new Error('rollback no eliminó qz creado por la prueba')
