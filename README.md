@@ -188,8 +188,18 @@ También se puede limitar el alcance:
 ```bash
 qz-kit update --client opencode
 qz-kit update --project hospeda
-qz-kit update --rollback <manifest-id>
+qz-kit rollback <install-manifest.json>
 ```
+
+El rollback se ejecuta con el manifest exacto producido por una instalación:
+
+```bash
+qz-kit rollback ~/.local/state/qz-agent-kit/backups/<timestamp>/install-manifest.json
+```
+
+Restaura únicamente los destinos registrados y elimina sólo los destinos que
+ese manifest creó sin backup. No busca archivos por nombre ni toca otros
+archivos del sistema.
 
 `update --plan` muestra archivos nuevos, modificados, eliminados y con drift.
 `update --apply` crea un backup, genera los adapters, valida hashes, ejecuta
