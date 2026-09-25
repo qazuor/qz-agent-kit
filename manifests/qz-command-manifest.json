@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-command-pack",
   "sourceOfTruth": "source/commands",
-  "generatedAt": "2026-09-25T02:00:33.087Z",
+  "generatedAt": "2026-09-25T15:28:29.850Z",
   "clients": [
     "opencode",
     "claude",
@@ -38,7 +38,7 @@
     {
       "id": "qz-start-issue",
       "source": "source/commands/qz-start-issue.md",
-      "sha256": "949b5fbfb6283200444b428c17186985085c6be892ffa6a5e05affa514810459"
+      "sha256": "59ff37637e2b5b2f9061025a76645c16c75be67728cba3defadaec07c79e2451"
     },
     {
       "id": "qz-verify",
