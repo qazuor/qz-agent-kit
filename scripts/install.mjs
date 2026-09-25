@@ -97,6 +97,7 @@ const result = {
   selected,
   clients,
   targets: targets.length,
+  targetDetails: targets.map(({ client, id, target, executable }) => ({ client, id, target, executable })),
   missing,
   drift,
   contentDrift,
