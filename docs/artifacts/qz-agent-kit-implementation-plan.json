@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v2",
-    "number": 2,
-    "createdAt": "2026-09-26T04:56:10.853Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v3",
+    "number": 3,
+    "createdAt": "2026-09-26T05:00:55.851Z",
     "author": "qz-agent-kit",
-    "reason": "actualizar instalador interactivo y manifiesto persistente",
+    "reason": "marcar clean-room validado",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v2"
   },
   "view": {
     "tabs": [
@@ -269,8 +269,8 @@
               "title": "Probar instalación completa en HOME temporal",
               "category": "Validación",
               "description": "Simular una PC nueva desde cero con los cuatro clientes.",
-              "notes": "Pendiente: es el próximo gate principal.",
-              "done": false
+              "notes": "Validado en HOME temporal: 60 destinos, --check current y rollback completo; no se leyeron secretos.",
+              "done": true
             }
           ]
         }
