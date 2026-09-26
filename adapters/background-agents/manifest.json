@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "background-agents",
+  "displayName": "Background agents",
+  "detection": {
+    "command": "opencode",
+    "versionArgs": ["--version"]
+  },
+  "lifecycle": {
+    "preview": [],
+    "readOnly": ["background agent status"],
+    "mutating": ["background agent configuration"],
+    "requiresHumanApproval": true
+  },
+  "secrets": "never-read-or-copied",
+  "source": "declarative pending adapter; disabled by default"
+}

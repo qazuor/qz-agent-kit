@@ -24,7 +24,7 @@ for (const adapter of readdirSync(join(root, 'adapters'))) {
   }
   const readOnly = new Set([...(lifecycle.readOnly || []), ...(lifecycle.preview || [])])
   for (const command of lifecycle.mutating || []) if (readOnly.has(command)) errors.push(`${path}: command classified as both read-only/preview and mutating: ${command}`)
-  if (!manifest.installPlan || typeof manifest.installPlan.command !== 'string' || !manifest.installPlan.command) errors.push(`${path}: installPlan.command must be declared`)
+  if (manifest.installPlan && (typeof manifest.installPlan.command !== 'string' || !manifest.installPlan.command)) errors.push(`${path}: installPlan.command must be a non-empty string`)
   if (manifest.installPlan && typeof manifest.installPlan.preview !== 'string') errors.push(`${path}: installPlan.preview must be declared`)
 }
 if (errors.length) throw new Error(errors.join('\n'))

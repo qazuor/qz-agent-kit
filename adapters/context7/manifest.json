@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "context7",
+  "displayName": "Context7",
+  "detection": {
+    "command": "opencode",
+    "versionArgs": ["--version"]
+  },
+  "lifecycle": {
+    "preview": [],
+    "readOnly": ["MCP status"],
+    "mutating": ["MCP configuration"],
+    "requiresHumanApproval": true
+  },
+  "secrets": "never-read-or-copied",
+  "source": "declarative pending adapter; configuration is not changed automatically"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "rdd-review",
+  "displayName": "RDD / review",
+  "detection": {
+    "command": "gentle-ai",
+    "versionArgs": ["version"]
+  },
+  "lifecycle": {
+    "preview": [],
+    "readOnly": ["review status"],
+    "mutating": ["review configuration"],
+    "requiresHumanApproval": true
+  },
+  "secrets": "never-read-or-copied",
+  "source": "declarative pending adapter; feature remains disabled until explicitly configured"
+}
