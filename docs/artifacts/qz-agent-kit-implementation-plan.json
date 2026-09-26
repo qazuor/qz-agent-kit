@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v38",
-    "number": 38,
-    "createdAt": "2026-09-26T22:05:17.994Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v39",
+    "number": 39,
+    "createdAt": "2026-09-26T22:06:18.966Z",
     "author": "qz-agent-kit",
-    "reason": "endurecer importación del install plan",
+    "reason": "endurecer contratos de adapters",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v37"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v38"
   },
   "view": {
     "tabs": [
@@ -326,6 +326,14 @@
               "category": "Integridad",
               "description": "Comprobar schema, clasificación de comandos y aprobación obligatoria para mutaciones.",
               "notes": "Implementado en validate-adapters.mjs e integrado a check/check:package.",
+              "done": true
+            },
+            {
+              "id": "p1-adapter-contract-schema",
+              "title": "Endurecer contrato de manifests de adapters",
+              "category": "Integridad",
+              "description": "Validar tipos, comandos clasificados y plan de instalación de cada adapter antes de usarlo.",
+              "notes": "Implementado en scripts/validate-adapters.mjs; Gentle AI y Engram pasan la validación.",
               "done": true
             },
             {
