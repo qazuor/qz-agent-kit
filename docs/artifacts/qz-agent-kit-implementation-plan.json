@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v37",
-    "number": 37,
-    "createdAt": "2026-09-26T22:03:13.667Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v38",
+    "number": 38,
+    "createdAt": "2026-09-26T22:05:17.994Z",
     "author": "qz-agent-kit",
-    "reason": "validar schema del install plan",
+    "reason": "endurecer importación del install plan",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v36"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v37"
   },
   "view": {
     "tabs": [
@@ -485,7 +485,7 @@
               "title": "Validar schema del install plan",
               "category": "Integridad",
               "description": "Rechazar planes persistentes malformados antes de ejecutar preflight o generar acciones externas.",
-              "notes": "Implementado en scripts/plan-schema.mjs y cubierto por smoke tests negativos para preflight y external-plan.",
+              "notes": "Implementado en scripts/plan-schema.mjs; preflight, external-plan y el wizard rechazan planes inválidos; cubierto por smoke tests negativos.",
               "done": true
             },
             {
