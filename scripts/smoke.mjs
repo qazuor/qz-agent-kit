@@ -30,6 +30,13 @@ try {
   writeFileSync(externalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['gentle-ai', 'engram'], providers: [] })}\n`)
   const external = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', externalPlan], { cwd: root, encoding: 'utf8' }))
   if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
+  const invalidPlan = join(configRoot, 'invalid-install-plan.json')
+  writeFileSync(invalidPlan, `${JSON.stringify({ schemaVersion: 99, clients: ['unknown-client'], components: 'not-a-list', providers: [] })}\n`)
+  const invalidPreflight = spawnSync(node, [resolve(root, 'scripts/preflight.mjs'), '--from', invalidPlan], { cwd: root, encoding: 'utf8' })
+  const invalidExternal = spawnSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', invalidPlan], { cwd: root, encoding: 'utf8' })
+  if (invalidPreflight.status === 0 || !`${invalidPreflight.stderr}${invalidPreflight.stdout}`.includes('install-plan inválido') || invalidExternal.status === 0 || !`${invalidExternal.stderr}${invalidExternal.stdout}`.includes('install-plan inválido')) {
+    throw new Error('preflight/external-plan aceptaron un install-plan inválido')
+  }
   const backupPlan = parse(execFileSync(node, [resolve(root, 'scripts/backup-plan.mjs'), '--project', fixture], { cwd: root, encoding: 'utf8' }))
   if (backupPlan.mutations !== 'none' || backupPlan.projectRoot !== fixture) throw new Error('backup-plan no respetó project root')
   mkdirSync(join(configRoot, '.qz'), { recursive: true })

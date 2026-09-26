@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { resolve } from 'node:path'
+import { assertValidPlan } from './plan-schema.mjs'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const args = process.argv.slice(2)
@@ -10,7 +11,7 @@ const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i +
 const planPath = resolve(value('--from') || `${process.env.QZ_KIT_HOME || homedir()}/.config/qz-agent-kit/install-plan.json`)
 const strict = args.includes('--strict')
 if (!existsSync(planPath)) throw new Error(`no se encontró el plan: ${planPath}`)
-const plan = JSON.parse(readFileSync(planPath, 'utf8'))
+const plan = assertValidPlan(JSON.parse(readFileSync(planPath, 'utf8')))
 const probe = spawnSync(process.execPath, [resolve(root, 'scripts/ecosystem.mjs')], { encoding: 'utf8' })
 if (probe.status !== 0) throw new Error(probe.stderr || 'falló el inventario del ecosistema')
 const ecosystem = JSON.parse(probe.stdout)

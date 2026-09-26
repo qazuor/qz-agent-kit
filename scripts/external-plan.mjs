@@ -2,13 +2,14 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { resolve } from 'node:path'
+import { assertValidPlan } from './plan-schema.mjs'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const planPath = resolve(value('--from') || `${process.env.QZ_KIT_HOME || homedir()}/.config/qz-agent-kit/install-plan.json`)
 if (!existsSync(planPath)) throw new Error(`no se encontró el plan: ${planPath}`)
-const plan = JSON.parse(readFileSync(planPath, 'utf8'))
+const plan = assertValidPlan(JSON.parse(readFileSync(planPath, 'utf8')))
 const manifests = Object.fromEntries(readdirSync(resolve(root, 'adapters')).flatMap((adapter) => {
   const path = resolve(root, 'adapters', adapter, 'manifest.json')
   if (!existsSync(path)) return []
