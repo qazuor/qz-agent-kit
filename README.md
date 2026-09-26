@@ -201,6 +201,11 @@ CLI, pero sólo informa `present: true/false`; nunca abre ni imprime su contenid
 También enumera rutas conocidas de TUI, themes, plugins y skills para detectar
 qué ya existe. No carga, habilita, deshabilita ni modifica ninguno.
 
+`qz-kit preflight` cruza el plan guardado con ese inventario y separa checks
+correctos, warnings y componentes pendientes. `--strict` devuelve código de
+error si hay algo pendiente o faltante; el modo normal no bloquea la capa qz
+por la ausencia de un CLI o un adapter externo.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash
@@ -228,6 +233,7 @@ qz-kit install --plan --client opencode,claude
 qz-kit install --apply --client none
 qz-kit doctor
 qz-kit ecosystem
+qz-kit preflight
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift

@@ -15,6 +15,7 @@ const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/proje
 const doctor = resolve(new URL('..', import.meta.url).pathname, 'scripts/doctor.mjs')
 const wizard = resolve(new URL('..', import.meta.url).pathname, 'scripts/install-wizard.mjs')
 const ecosystem = resolve(new URL('..', import.meta.url).pathname, 'scripts/ecosystem.mjs')
+const preflight = resolve(new URL('..', import.meta.url).pathname, 'scripts/preflight.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -29,6 +30,10 @@ if (command === 'doctor') {
 }
 if (command === 'ecosystem' || command === 'ecosystem-check') {
   const result = spawnSync(process.execPath, [ecosystem, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'preflight') {
+  const result = spawnSync(process.execPath, [preflight, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
