@@ -13,6 +13,8 @@ const paths = [
   `${home}/.claude`,
   `${home}/.codex`,
   `${home}/.engram`,
+  `${home}/.config/qz-agent-kit`,
+  `${home}/.local/state/qz-agent-kit`,
   `${home}/.local/share/opencode`,
   `${home}/.local/state/hospeda-opencode-migration`,
   join(projectRoot, '.opencode'),
