@@ -242,6 +242,7 @@ qz-kit ecosystem
 qz-kit preflight
 qz-kit backup-plan
 qz-kit external-plan
+qz-kit provenance --manifest /ruta/al/install-manifest.json
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift
@@ -250,6 +251,10 @@ qz-kit verify --drift
 `qz-kit external-plan` genera comandos y precondiciones para instalar o
 configurar Gentle AI y Engram. Es siempre read-only: cada acción requiere
 aprobación explícita y el plan no ejecuta comandos externos.
+
+`qz-kit provenance` compara el hash y commit de la fuente actual con el manifest
+de una instalación anterior. Si difieren, marca `updateReview: required` sin
+modificar archivos.
 
 La instalación también coloca el dispatcher portable `qz` en
 `~/.local/bin/qz` (o bajo el `--home` usado en una prueba). Así cualquier

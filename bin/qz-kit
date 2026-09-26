@@ -18,6 +18,7 @@ const ecosystem = resolve(new URL('..', import.meta.url).pathname, 'scripts/ecos
 const preflight = resolve(new URL('..', import.meta.url).pathname, 'scripts/preflight.mjs')
 const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/backup-plan.mjs')
 const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
+const provenance = resolve(new URL('..', import.meta.url).pathname, 'scripts/provenance-check.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -44,6 +45,10 @@ if (command === 'backup-plan') {
 }
 if (command === 'external-plan') {
   const result = spawnSync(process.execPath, [externalPlan, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'provenance') {
+  const result = spawnSync(process.execPath, [provenance, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
