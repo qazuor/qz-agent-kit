@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v6",
-    "number": 6,
-    "createdAt": "2026-09-26T05:07:24.954Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v7",
+    "number": 7,
+    "createdAt": "2026-09-26T05:25:11.494Z",
     "author": "qz-agent-kit",
-    "reason": "documentar contratos reales y timeout de Engram doctor",
+    "reason": "documentar diagnóstico Engram acotado y timeout del doctor completo",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v5"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v6"
   },
   "view": {
     "tabs": [
@@ -286,6 +286,14 @@
               "category": "Ecosistema",
               "description": "Confirmar subcomandos, versiones, salud, integración MCP y límites antes de automatizar instalación.",
               "notes": "Gentle AI 3.7.0: doctor saludable y Engram MCP conectado. Engram 2.0.0: doctor JSON excedió 15 s y quedó como riesgo pendiente; no hubo mutaciones.",
+              "done": true
+            },
+            {
+              "id": "p1-engram-targeted-diagnostics",
+              "title": "Checks acotados de Engram sin mutaciones",
+              "category": "Memoria",
+              "description": "Usar doctor por check y proyecto, con timeout, para separar salud operativa de curación de memoria.",
+              "notes": "sqlite_lock_contention en hospeda: ok; hay hallazgos históricos que requieren revisión humana. Doctor completo excedió 15 s con MCP concurrente.",
               "done": true
             },
             {

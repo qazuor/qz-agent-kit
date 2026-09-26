@@ -6,6 +6,12 @@ Usá `qz engram --help` para ver las operaciones disponibles y elegí siempre la
 lectura más acotada que responda la pregunta. Preferí `--json` cuando el
 resultado vaya a alimentar otra decisión.
 
+Para revisar salud operativa, empezá por un check acotado y por proyecto, por
+ejemplo `engram doctor --json --check sqlite_lock_contention --project <name>`.
+El doctor completo puede recorrer memoria histórica y tardar o quedar esperando
+si hay una sesión MCP concurrente; si supera el timeout, informalo y no lo
+reintentes en bucle.
+
 No ejecutes operaciones de escritura (`save`, `delete`, `import`, `sync`,
 `setup`, `cloud` u otras equivalentes) sin confirmación explícita y el flag de
 confirmación que exige el wrapper. Nunca muestres valores secretos ni trates la

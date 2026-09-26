@@ -21,6 +21,12 @@ que el handshake MCP de Engram responde desde OpenCode. Antes de automatizar el
 adapter hay que reproducir el doctor en un proceso aislado y determinar si el
 tiempo proviene de un lock/concurrencia de la DB.
 
+Los checks acotados sí responden: `sqlite_lock_contention` para `hospeda` dio
+`ok` con WAL activo, `busy_timeout_ms=5000` y `checkpoint_busy=0`. Los checks de
+integridad también revelaron warnings/errors históricos que no deben corregirse
+automáticamente: sesiones activas ambiguas, observaciones huérfanas, metadatos
+de ownership incompletos y targets cloud antiguos con mutaciones pendientes.
+
 ## Futuro adapter
 
 Debe separar tres operaciones: inventario read-only, backup explícito y
