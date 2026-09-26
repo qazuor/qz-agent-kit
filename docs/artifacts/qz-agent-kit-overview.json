@@ -1,0 +1,262 @@
+{
+  "schemaVersion": "artifact/v1",
+  "artifact": {
+    "id": "art_qz_agent_kit_overview",
+    "project": "qz-agent-kit",
+    "slug": "qz-agent-kit-overview",
+    "title": "qz-agent-kit · cómo funciona",
+    "description": "Mapa operativo del paquete común que mantiene alineados OpenCode, Claude Code, Codex CLI y Gentle Shell, con adapters por proyecto.",
+    "audience": "team"
+  },
+  "version": {
+    "id": "ver_qz-agent-kit-overview",
+    "number": 1,
+    "createdAt": "2026-09-26T00:12:00.446Z",
+    "author": "qz-agent-kit",
+    "reason": "crear artifact de migracion",
+    "sourceHash": "sha256:qz-agent-kit-overview",
+    "rendererVersion": "artifact-app/0.1",
+    "basedOnVersion": null
+  },
+  "view": {
+    "tabs": [
+      "overview"
+    ],
+    "defaultTab": "overview"
+  },
+  "capabilities": [
+    "reviewChecklist.itemToggled",
+    "widget.valueChanged"
+  ],
+  "sources": [],
+  "data": {
+    "sections": [
+      {
+        "id": "hero",
+        "type": "hero",
+        "data": {
+          "eyebrow": "Fuente de verdad portable · cuatro harnesses",
+          "title": "Una capa común para trabajar con agentes",
+          "description": "qz-agent-kit concentra instrucciones, skills, commands, agents y guards. Cada CLI recibe su propia adaptación, pero todos consumen el mismo contenido versionado y el mismo workflow determinista."
+        }
+      },
+      {
+        "id": "metrics",
+        "type": "metricGrid",
+        "title": "Qué aporta el kit",
+        "data": {
+          "metrics": [
+            {
+              "value": "4",
+              "label": "CLI soportados"
+            },
+            {
+              "value": "1",
+              "label": "fuente de verdad"
+            },
+            {
+              "value": "7",
+              "label": "commands qz portables"
+            },
+            {
+              "value": "68",
+              "label": "recursos Hospeda sincronizados"
+            },
+            {
+              "value": "0",
+              "label": "secretos copiados"
+            }
+          ]
+        }
+      },
+      {
+        "id": "mission",
+        "type": "prose",
+        "title": "La idea central",
+        "data": {
+          "text": "El modelo no reimplementa Linear, Git, worktrees, bases, puertos ni closeout. El agente invoca qz-*; el script determinista hace el trabajo pesado; el adapter del proyecto aporta la configuración específica. Así una mejora se versiona una vez y se distribuye a todos los harnesses sin duplicar reglas."
+        }
+      },
+      {
+        "id": "layers",
+        "type": "table",
+        "title": "Capas del sistema",
+        "data": {
+          "columns": [
+            "Capa",
+            "Dónde vive",
+            "Responsabilidad"
+          ],
+          "rows": [
+            [
+              "Fuente global",
+              "qz-agent-kit/source",
+              "Reglas portables, commands, agents, skills y guards."
+            ],
+            [
+              "Adapter de CLI",
+              "qz-agent-kit/adapters + renderer",
+              "Traduce rutas y formatos para OpenCode, Claude, Codex y Gentle Shell."
+            ],
+            [
+              "Adapter de proyecto",
+              ".qz/project.json",
+              "Linear, branches, worktrees, DB, envs, puertos y commands del proyecto."
+            ],
+            [
+              "Implementación Hospeda",
+              "scripts/client-tools + scripts/worktree",
+              "Operaciones reales: hops-*, wt-create, env, template, servers y verificación."
+            ],
+            [
+              "Knowledge local",
+              ".qz/knowledge + AGENTS.md",
+              "Arquitectura y reglas específicas cargadas bajo demanda."
+            ],
+            [
+              "Estado externo",
+              "Linear, Engram, GitHub, PostgreSQL",
+              "Servicios y memoria; el kit no copia secretos ni datos sensibles."
+            ]
+          ]
+        }
+      },
+      {
+        "id": "lifecycle",
+        "type": "timeline",
+        "title": "Ciclo de instalación y uso",
+        "data": {
+          "items": [
+            {
+              "label": "1 · install",
+              "detail": "Instala qz-kit, detecta clientes, hace backup y deja entrypoints globales."
+            },
+            {
+              "label": "2 · project register",
+              "detail": "Registra un proyecto con adapter explícito y valida su contrato."
+            },
+            {
+              "label": "3 · project sync",
+              "detail": "Materializa AGENTS y skills en los destinos de cada CLI con hashes y rollback."
+            },
+            {
+              "label": "4 · qz command",
+              "detail": "El agente invoca un workflow portable; el adapter resuelve el contexto real."
+            },
+            {
+              "label": "5 · verify/update",
+              "detail": "Doctor, drift, guards, backups y actualización idempotente mantienen el sistema reproducible."
+            }
+          ]
+        }
+      },
+      {
+        "id": "commands",
+        "type": "table",
+        "title": "Commands portables qz-*",
+        "data": {
+          "columns": [
+            "Command",
+            "Qué hace",
+            "Resultado esperado"
+          ],
+          "rows": [
+            [
+              "qz-start-issue",
+              "Inicia issue y delega al adapter el worktree/configuración.",
+              "Contexto listo para trabajar."
+            ],
+            [
+              "qz-close-issue",
+              "Preflight de cierre read-only.",
+              "Estado de Git, Linear, PR, env y template."
+            ],
+            [
+              "qz-recap",
+              "Construye contexto compacto del proyecto.",
+              "Salida útil para humano y agente."
+            ],
+            [
+              "qz-handoff",
+              "Arma handoff encuadrado con hallazgos y decisiones.",
+              "Prompt delimitado y reutilizable."
+            ],
+            [
+              "qz-verify",
+              "Planifica/ejecuta verificación según archivos cambiados.",
+              "Evidencia estructurada."
+            ],
+            [
+              "qz-engram",
+              "Expone operaciones seguras de Engram.",
+              "Wrapper descubrible con confirmaciones."
+            ],
+            [
+              "qz-artifact",
+              "Publica/lista snapshots de artifacts locales.",
+              "Reporte visual versionado."
+            ]
+          ]
+        }
+      },
+      {
+        "id": "clients",
+        "type": "checklist",
+        "title": "Qué recibe cada harness",
+        "data": {
+          "items": [
+            {
+              "id": "client-opencode",
+              "title": "OpenCode",
+              "category": "adapter",
+              "description": "AGENTS, skills, commands y agents en su layout; mantiene TUI, providers, MCP y plugins propios.",
+              "notes": "No se fuerza una copia 1:1 de la configuración de otro CLI.",
+              "done": true
+            },
+            {
+              "id": "client-claude",
+              "title": "Claude Code",
+              "category": "adapter",
+              "description": "Commands, skills, agents e instrucciones compatibles durante la convivencia.",
+              "notes": "CLAUDE.md legacy se conserva hasta terminar la auditoría.",
+              "done": true
+            },
+            {
+              "id": "client-codex",
+              "title": "Codex CLI",
+              "category": "adapter",
+              "description": "Skills, AGENTS e instrucciones compatibles con el formato del cliente.",
+              "notes": "El kit no instala credenciales ni providers.",
+              "done": true
+            },
+            {
+              "id": "client-gentle",
+              "title": "Gentle Shell",
+              "category": "adapter",
+              "description": "Skills, prompts, agents e instrucciones en su store local.",
+              "notes": "Gentle-AI/Engram siguen siendo componentes externos administrados aparte.",
+              "done": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "boundary",
+        "type": "callout",
+        "title": "Límite importante",
+        "data": {
+          "tone": "warning",
+          "text": "qz-agent-kit no reemplaza los binarios de los harnesses, no instala modelos automáticamente y no copia auth, .env, DBs ni memoria Engram. Administra la capa versionada encima de ellos. Los plugins y la TUI se incorporan mediante configuración explícita, no por sorpresa."
+        }
+      },
+      {
+        "id": "update",
+        "type": "prose",
+        "title": "Cómo se actualiza",
+        "data": {
+          "text": "Se modifica la fuente en qz-agent-kit, se regenera el manifest, se ejecuta qz-kit check/doctor y cada máquina aplica qz-kit update con backup y rollback. Para un proyecto se usa qz-kit project sync --check y luego --apply; los archivos con drift se bloquean hasta una decisión explícita."
+        }
+      }
+    ]
+  }
+}

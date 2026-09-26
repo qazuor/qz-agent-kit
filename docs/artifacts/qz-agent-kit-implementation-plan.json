@@ -1,0 +1,574 @@
+{
+  "schemaVersion": "artifact/v1",
+  "artifact": {
+    "id": "art_qz_agent_kit_implementation_plan",
+    "project": "qz-agent-kit",
+    "slug": "qz-agent-kit-implementation-plan",
+    "title": "qz-agent-kit · plan de implementación",
+    "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
+    "audience": "team"
+  },
+  "version": {
+    "id": "ver_qz-agent-kit-implementation-plan",
+    "number": 1,
+    "createdAt": "2026-09-26T00:12:00.446Z",
+    "author": "qz-agent-kit",
+    "reason": "crear artifact de migracion",
+    "sourceHash": "sha256:qz-agent-kit-implementation-plan",
+    "rendererVersion": "artifact-app/0.1",
+    "basedOnVersion": null
+  },
+  "view": {
+    "tabs": [
+      "overview"
+    ],
+    "defaultTab": "overview"
+  },
+  "capabilities": [
+    "reviewChecklist.itemToggled",
+    "widget.valueChanged"
+  ],
+  "sources": [],
+  "data": {
+    "sections": [
+      {
+        "id": "plan-hero",
+        "type": "hero",
+        "data": {
+          "eyebrow": "Guía viva · se actualiza por gates",
+          "title": "De la fuente de verdad a una PC lista para trabajar",
+          "description": "Este checklist separa lo terminado de lo que todavía requiere implementación, prueba o decisión humana. Los checks iniciales reflejan el estado validado hasta ahora."
+        }
+      },
+      {
+        "id": "plan-metrics",
+        "type": "metricGrid",
+        "title": "Estado actual",
+        "data": {
+          "metrics": [
+            {
+              "value": "4",
+              "label": "harnesses objetivo"
+            },
+            {
+              "value": "7",
+              "label": "commands qz"
+            },
+            {
+              "value": "431",
+              "label": "tests client-tools"
+            },
+            {
+              "value": "68/68",
+              "label": "knowledge synced"
+            },
+            {
+              "value": "0",
+              "label": "drift de sync"
+            }
+          ]
+        }
+      },
+      {
+        "id": "plan-priority",
+        "type": "callout",
+        "title": "Próximo orden recomendado",
+        "data": {
+          "tone": "warning",
+          "text": "1) prueba clean-room del instalador; 2) registrar Hospeda; 3) E2E real con issue no destructivo; 4) completar Engram y backup; 5) validar plugins/TUI; 6) publicar y decidir retiro de Claude."
+        }
+      },
+      {
+        "id": "plan-phases",
+        "type": "table",
+        "title": "Lectura rápida por fase",
+        "data": {
+          "columns": [
+            "Fase",
+            "Tema",
+            "Estado"
+          ],
+          "rows": [
+            [
+              "0",
+              "Fuente de verdad y seguridad",
+              "completa"
+            ],
+            [
+              "1",
+              "Instalador y ciclo de vida",
+              "avanzada · clean-room pendiente"
+            ],
+            [
+              "2",
+              "Adapters de CLI",
+              "parcial · auth/TUI pendiente"
+            ],
+            [
+              "3",
+              "Proyecto y knowledge",
+              "avanzada · registro y legacy pendiente"
+            ],
+            [
+              "4",
+              "Workflows qz",
+              "implementada"
+            ],
+            [
+              "5",
+              "Adapter Hospeda",
+              "avanzada · E2E pendiente"
+            ],
+            [
+              "6",
+              "Engram y operación",
+              "pendiente"
+            ],
+            [
+              "7",
+              "Cierre y migración",
+              "pendiente"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "plan-timeline",
+        "type": "timeline",
+        "title": "Secuencia desde ahora",
+        "data": {
+          "items": [
+            {
+              "label": "Gate A · Instalación limpia",
+              "detail": "HOME temporal, cuatro clientes, backup, apply, doctor y rollback."
+            },
+            {
+              "label": "Gate B · Proyecto Hospeda",
+              "detail": "register/init/sync, hospeda-staging, env, template y wrappers."
+            },
+            {
+              "label": "Gate C · E2E",
+              "detail": "issue real no destructivo, worktree, DB, servidores, verify y close plan."
+            },
+            {
+              "label": "Gate D · Memoria",
+              "detail": "backup final, curación final y restore test de Engram."
+            },
+            {
+              "label": "Gate E · Publicación",
+              "detail": "push/PR, merge y decisión de retiro de Claude."
+            }
+          ]
+        }
+      },
+      {
+        "id": "p0",
+        "type": "checklist",
+        "title": "Fase 0 · alcance y fuente de verdad",
+        "data": {
+          "items": [
+            {
+              "id": "p0-scope",
+              "title": "Separar lo genérico de lo 100% Hospeda",
+              "category": "Diseño",
+              "description": "Mantener qz-* en el kit y hops-* sólo en el adapter de Hospeda.",
+              "notes": "Decisión tomada y reflejada en README y manifests.",
+              "done": true
+            },
+            {
+              "id": "p0-repo",
+              "title": "Crear repositorio qz-agent-kit",
+              "category": "Repositorio",
+              "description": "Mover la capa común fuera de Hospeda.",
+              "notes": "Repositorio creado y con README.",
+              "done": true
+            },
+            {
+              "id": "p0-manifest",
+              "title": "Definir manifests y hashes",
+              "category": "Integridad",
+              "description": "Registrar procedencia, destinos, versión y drift.",
+              "notes": "Manifests v1 implementados.",
+              "done": true
+            },
+            {
+              "id": "p0-secrets",
+              "title": "Excluir secretos del kit",
+              "category": "Seguridad",
+              "description": "No leer ni copiar credenciales, .env, DB o memoria.",
+              "notes": "Validado por doctor/check-package.",
+              "done": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "p1",
+        "type": "checklist",
+        "title": "Fase 1 · instalador y ciclo de vida",
+        "data": {
+          "items": [
+            {
+              "id": "p1-entrypoints",
+              "title": "Instalar qz-kit y qz globalmente",
+              "category": "Instalador",
+              "description": "Dejar entrypoints disponibles sin copiar la fuente.",
+              "notes": "Instalación global realizada.",
+              "done": true
+            },
+            {
+              "id": "p1-detect",
+              "title": "Detectar OpenCode, Claude, Codex y Gentle Shell",
+              "category": "Instalador",
+              "description": "Detectar clientes disponibles sin asumir que todos existen.",
+              "notes": "Doctor detecta los cuatro clientes.",
+              "done": true
+            },
+            {
+              "id": "p1-plan",
+              "title": "Generar plan antes de aplicar",
+              "category": "Seguridad",
+              "description": "Mostrar cambios, backups y destinos antes de escribir.",
+              "notes": "Plan implementado.",
+              "done": true
+            },
+            {
+              "id": "p1-backup",
+              "title": "Backup y rollback de instalación",
+              "category": "Seguridad",
+              "description": "Respaldar destinos administrados y poder restaurarlos.",
+              "notes": "Manifest de rollback implementado.",
+              "done": true
+            },
+            {
+              "id": "p1-update",
+              "title": "Update idempotente con drift",
+              "category": "Actualización",
+              "description": "Aplicar cambios de la fuente sin sobrescribir drift silenciosamente.",
+              "notes": "Update/check implementados.",
+              "done": true
+            },
+            {
+              "id": "p1-clean-room",
+              "title": "Probar instalación completa en HOME temporal",
+              "category": "Validación",
+              "description": "Simular una PC nueva desde cero con los cuatro clientes.",
+              "notes": "Pendiente: es el próximo gate principal.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "p2",
+        "type": "checklist",
+        "title": "Fase 2 · adapters de CLI",
+        "data": {
+          "items": [
+            {
+              "id": "p2-opencode",
+              "title": "Adapter OpenCode",
+              "category": "CLI",
+              "description": "Instalar AGENTS, skills, commands y agents compatibles.",
+              "notes": "Render/sync operativo; falta prueba clean-room final.",
+              "done": true
+            },
+            {
+              "id": "p2-claude",
+              "title": "Adapter Claude Code",
+              "category": "CLI",
+              "description": "Mantener convivencia sin duplicar la fuente.",
+              "notes": "Render/sync operativo; retiro de CLAUDE sigue pendiente.",
+              "done": true
+            },
+            {
+              "id": "p2-codex",
+              "title": "Adapter Codex CLI",
+              "category": "CLI",
+              "description": "Materializar skills e instrucciones para Codex.",
+              "notes": "Render/sync operativo; falta prueba clean-room final.",
+              "done": true
+            },
+            {
+              "id": "p2-gentle",
+              "title": "Adapter Gentle Shell",
+              "category": "CLI",
+              "description": "Materializar prompts, skills y agents en Gentle Shell.",
+              "notes": "Soportado por sync; falta prueba real desde instalador.",
+              "done": true
+            },
+            {
+              "id": "p2-auth",
+              "title": "Validar auth y providers por cliente",
+              "category": "CLI",
+              "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
+              "notes": "OpenAI OAuth validado en OpenCode; matriz completa pendiente.",
+              "done": false
+            },
+            {
+              "id": "p2-tui",
+              "title": "Incluir TUI y plugins compatibles",
+              "category": "CLI",
+              "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
+              "notes": "OpenCode V1 operativo; política portable de plugins pendiente.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "p3",
+        "type": "checklist",
+        "title": "Fase 3 · proyecto y knowledge layer",
+        "data": {
+          "items": [
+            {
+              "id": "p3-project-schema",
+              "title": "Contrato .qz/project.json",
+              "category": "Proyecto",
+              "description": "Describir adapter, branches, worktrees, DB, envs y commands.",
+              "notes": "Adapter Hospeda válido.",
+              "done": true
+            },
+            {
+              "id": "p3-register",
+              "title": "Registrar proyecto en qz-kit",
+              "category": "Proyecto",
+              "description": "Guardar proyecto detectado en el registro global.",
+              "notes": "El registro global todavía está vacío.",
+              "done": false
+            },
+            {
+              "id": "p3-discover",
+              "title": "Descubrir proyectos automáticamente",
+              "category": "Proyecto",
+              "description": "Buscar adapters sin leer secretos ni modificar repositorios.",
+              "notes": "Implementado y validado.",
+              "done": true
+            },
+            {
+              "id": "p3-sync",
+              "title": "Sincronizar AGENTS y skills a los cuatro clientes",
+              "category": "Knowledge",
+              "description": "Aplicar recursos versionados con hashes y backup externo.",
+              "notes": "Hospeda: 68/68 actuales.",
+              "done": true
+            },
+            {
+              "id": "p3-knowledge-audit",
+              "title": "Completar auditoría de legacy",
+              "category": "Knowledge",
+              "description": "Confirmar que cada regla útil tiene un único hogar.",
+              "notes": "Skills extraídos; CLAUDE legacy aún no se elimina.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "p4",
+        "type": "checklist",
+        "title": "Fase 4 · workflows portables",
+        "data": {
+          "items": [
+            {
+              "id": "p4-start",
+              "title": "qz-start-issue",
+              "category": "Workflow",
+              "description": "Delegar start issue al adapter o usar fallback genérico.",
+              "notes": "Implementado en kit y adapter Hospeda.",
+              "done": true
+            },
+            {
+              "id": "p4-close",
+              "title": "qz-close-issue",
+              "category": "Workflow",
+              "description": "Preflight de cierre con evidencia y sin mutaciones implícitas.",
+              "notes": "Implementado; template drift agregado.",
+              "done": true
+            },
+            {
+              "id": "p4-recap",
+              "title": "qz-recap",
+              "category": "Workflow",
+              "description": "Generar recap estructurado para humano y agente.",
+              "notes": "Implementado.",
+              "done": true
+            },
+            {
+              "id": "p4-handoff",
+              "title": "qz-handoff",
+              "category": "Workflow",
+              "description": "Generar prompt delimitado con contexto, hallazgos y decisiones.",
+              "notes": "Implementado.",
+              "done": true
+            },
+            {
+              "id": "p4-verify",
+              "title": "qz-verify",
+              "category": "Workflow",
+              "description": "Usar verify como gate estándar antes de correr checks manuales.",
+              "notes": "Implementado; limitación FS read-only documentada.",
+              "done": true
+            },
+            {
+              "id": "p4-engram",
+              "title": "qz-engram",
+              "category": "Memoria",
+              "description": "Wrapper seguro y descubrible de Engram.",
+              "notes": "Implementado; limpieza final de memoria pendiente.",
+              "done": true
+            },
+            {
+              "id": "p4-artifact",
+              "title": "qz-artifact",
+              "category": "Reporting",
+              "description": "Publicar y listar snapshots visuales locales.",
+              "notes": "MVP operativo; integración natural con lenguaje del agente pendiente.",
+              "done": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "p5",
+        "type": "checklist",
+        "title": "Fase 5 · adapter Hospeda",
+        "data": {
+          "items": [
+            {
+              "id": "p5-linear",
+              "title": "Linear read/write controlado",
+              "category": "Hospeda",
+              "description": "Mantener Linear como tracking y usar API/CLI determinista.",
+              "notes": "Integración conectada y probada en consultas.",
+              "done": true
+            },
+            {
+              "id": "p5-worktree",
+              "title": "Worktrees con env, DB y puertos",
+              "category": "Hospeda",
+              "description": "Crear worktree desde develop, usar staging como fuente de env y asignar servicios.",
+              "notes": "Suite de client-tools verde.",
+              "done": true
+            },
+            {
+              "id": "p5-env",
+              "title": "Reconciliar env desde hospeda-staging",
+              "category": "Hospeda",
+              "description": "Detectar vars faltantes, obsoletas y drift estructurado.",
+              "notes": "Implementado; falta cerrar política humana de valores nuevos.",
+              "done": true
+            },
+            {
+              "id": "p5-db",
+              "title": "Template DB con fingerprint",
+              "category": "Hospeda",
+              "description": "Reusar template sin ocultar desincronización.",
+              "notes": "Lifecycle y close preflight implementados.",
+              "done": true
+            },
+            {
+              "id": "p5-branches",
+              "title": "Develop → staging → main",
+              "category": "Hospeda",
+              "description": "Promoción y back-merge configurables.",
+              "notes": "Comandos y tests implementados; protección GitHub pendiente.",
+              "done": true
+            },
+            {
+              "id": "p5-e2e",
+              "title": "Corrida E2E real con issue no destructivo",
+              "category": "Hospeda",
+              "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
+              "notes": "Pendiente como gate final.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "p6",
+        "type": "checklist",
+        "title": "Fase 6 · memoria y operación continua",
+        "data": {
+          "items": [
+            {
+              "id": "p6-engram-clean",
+              "title": "Finalizar curación de Engram",
+              "category": "Memoria",
+              "description": "Eliminar lo obsoleto y conservar sólo memorias vigentes.",
+              "notes": "Revisión avanzada; borrado final/backup final pendiente.",
+              "done": false
+            },
+            {
+              "id": "p6-engram-restore",
+              "title": "Probar backup y restore de Engram",
+              "category": "Memoria",
+              "description": "Validar que una reinstalación no pierda memoria.",
+              "notes": "Pendiente.",
+              "done": false
+            },
+            {
+              "id": "p6-cloud",
+              "title": "Definir estrategia de Engram entre PCs",
+              "category": "Memoria",
+              "description": "Elegir backup seguro o almacenamiento sincronizado sin versionar DB viva.",
+              "notes": "Recomendación documentada; automatización pendiente.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "p7",
+        "type": "checklist",
+        "title": "Fase 7 · cierre y migración",
+        "data": {
+          "items": [
+            {
+              "id": "p7-clean-room",
+              "title": "Reinstalación reproducible documentada",
+              "category": "Release",
+              "description": "Ejecutar el procedimiento completo en entorno limpio.",
+              "notes": "Pendiente.",
+              "done": false
+            },
+            {
+              "id": "p7-publish",
+              "title": "Publicar qz-agent-kit y adapter",
+              "category": "Release",
+              "description": "Push, PR y merge de los cambios versionados.",
+              "notes": "Pendiente de revisión humana.",
+              "done": false
+            },
+            {
+              "id": "p7-claude",
+              "title": "Decidir retiro de Claude Code",
+              "category": "Release",
+              "description": "Mantener convivencia o retirar cuando los gates estén verdes.",
+              "notes": "Pendiente.",
+              "done": false
+            },
+            {
+              "id": "p7-retro",
+              "title": "Validación final de los cuatro harnesses",
+              "category": "Release",
+              "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
+              "notes": "Pendiente.",
+              "done": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "plan-open-questions",
+        "type": "prose",
+        "title": "Decisiones humanas que siguen abiertas",
+        "data": {
+          "text": "Debemos aprobar el alcance final de plugins/TUI, la estrategia de Engram entre PCs, el criterio para activar GLM/DeepSeek/OpenKilo y el momento de retirar Claude Code. Ninguna de esas decisiones debe resolverse silenciosamente desde el instalador."
+        }
+      }
+    ]
+  }
+}
