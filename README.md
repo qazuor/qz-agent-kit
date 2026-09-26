@@ -164,6 +164,20 @@ qz-kit install --plan
 qz-kit install --apply
 ```
 
+En una máquina nueva, `qz-kit install` abre un wizard interactivo. Detecta los
+CLI disponibles, permite elegir qué clientes sincronizar y registra las
+selecciones de Gentle AI, Engram, Context7, revisiones, agentes en segundo plano
+y proveedores. El plan queda en
+`~/.config/qz-agent-kit/install-plan.json` para repetirlo o auditarlo. La capa
+qz se aplica con backup; los componentes externos quedan explícitamente como
+selección pendiente hasta que exista un adapter verificable para cada uno. El
+wizard nunca lee, copia, limpia ni migra credenciales, `.env` o la base de
+Engram.
+
+Para automatización se conservan `--plan`, `--check` y `--apply`. La instalación
+interactiva equivale a elegir clientes y luego ejecutar `--apply`; no reemplaza
+el plan read-only ni el rollback.
+
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
 `qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se
@@ -178,6 +192,8 @@ qz-kit install --plan
 qz-kit install --apply
 qz-kit install --apply --client all
 qz-kit install --plan --client opencode,claude
+# sólo la capa central qz, sin instalar destinos de ningún CLI
+qz-kit install --apply --client none
 qz-kit doctor
 qz-kit verify --manifest
 qz-kit verify --clients

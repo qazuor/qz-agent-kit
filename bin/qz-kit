@@ -13,6 +13,7 @@ const script = resolve(new URL('..', import.meta.url).pathname, 'scripts/install
 const rollback = resolve(new URL('..', import.meta.url).pathname, 'scripts/rollback.mjs')
 const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/projects.mjs')
 const doctor = resolve(new URL('..', import.meta.url).pathname, 'scripts/doctor.mjs')
+const wizard = resolve(new URL('..', import.meta.url).pathname, 'scripts/install-wizard.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -23,6 +24,11 @@ if (command === 'rollback') {
 }
 if (command === 'doctor') {
   const result = spawnSync(process.execPath, [doctor, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'install' && (args.length === 0 || args.includes('--interactive'))) {
+  const wizardArgs = args.filter((arg) => arg !== '--interactive')
+  const result = spawnSync(process.execPath, [wizard, ...wizardArgs], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 const mapped = command === 'update' ? (args.includes('--check') ? ['--check', ...args.filter((arg) => arg !== '--check')] : args.includes('--plan') ? ['--plan', ...args.filter((arg) => arg !== '--plan')] : ['--apply', ...args])

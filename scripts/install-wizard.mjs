@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+import { spawnSync } from 'node:child_process'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { dirname, resolve } from 'node:path'
+import { confirm, intro, isCancel, multiselect, outro, cancel } from '@clack/prompts'
+
+const root = resolve(new URL('..', import.meta.url).pathname)
+const defaultHome = homedir()
+const manifestPath = resolve(process.env.QZ_KIT_HOME || defaultHome, '.config/qz-agent-kit/install-plan.json')
+const clients = [
+  { value: 'opencode', label: 'OpenCode', hint: 'comandos, skills y agentes qz' },
+  { value: 'gentle-shell', label: 'Gentle Shell', hint: 'prompts, skills y agentes qz' },
+  { value: 'claude', label: 'Claude Code', hint: 'commands, skills y agents qz' },
+  { value: 'codex', label: 'Codex', hint: 'skills, agentes e instrucciones qz' }
+]
+const components = [
+  { value: 'gentle-ai', label: 'Gentle AI', hint: 'instalación/configuración externa; queda como pendiente hasta automatizarla' },
+  { value: 'engram', label: 'Engram', hint: 'memoria; nunca copia ni modifica la base automáticamente' },
+  { value: 'context7', label: 'Context7', hint: 'MCP/documentación; configuración separada' },
+  { value: 'rdd-review', label: 'RDD / review', hint: 'opcional y actualmente desactivado por defecto' },
+  { value: 'background-agents', label: 'Background agents', hint: 'opcional; no se activa por defecto' }
+]
+const providers = [
+  { value: 'openai', label: 'OpenAI', hint: 'usar login/API existente, sin leer credenciales' },
+  { value: 'glm', label: 'GLM', hint: 'proveedor opcional' },
+  { value: 'deepseek', label: 'DeepSeek', hint: 'proveedor opcional' },
+  { value: 'openkilo', label: 'OpenKilo', hint: 'proveedor/app opcional' },
+  { value: 'ollama', label: 'Ollama local', hint: 'requiere servicio local' }
+]
+
+const detect = (name) => {
+  const result = spawnSync('command', ['-v', name], { shell: true, encoding: 'utf8' })
+  return result.status === 0
+}
+const readPlan = () => {
+  if (!existsSync(manifestPath)) return null
+  try { return JSON.parse(readFileSync(manifestPath, 'utf8')) } catch { return null }
+}
+const choose = async (question, options, initialValues) => {
+  const result = await multiselect({ message: question, options, initialValues, required: false })
+  if (isCancel(result)) { cancel('Instalación cancelada.'); process.exit(130) }
+  return result
+}
+const savePlan = (plan) => {
+  mkdirSync(dirname(manifestPath), { recursive: true })
+  writeFileSync(manifestPath, `${JSON.stringify(plan, null, 2)}\n`)
+}
+
+intro('qz-agent-kit · instalación guiada')
+const previous = readPlan()
+if (previous) console.log(`Plan guardado encontrado: ${manifestPath}`)
+const detectedClients = clients.filter(({ value }) => detect(value)).map(({ value }) => value)
+const selectedClients = await choose('¿Qué CLI/harness querés sincronizar?', clients, previous?.clients || detectedClients)
+const selectedComponents = await choose('¿Qué componentes del ecosistema querés dejar registrados?', components, previous?.components || ['gentle-ai', 'engram', 'context7'])
+const selectedProviders = await choose('¿Qué proveedores querés preparar para una etapa posterior?', providers, previous?.providers || ['openai'])
+const apply = await confirm({ message: '¿Aplicar ahora la capa qz administrada?', initialValue: true })
+if (isCancel(apply)) { cancel('Instalación cancelada.'); process.exit(130) }
+
+const plan = {
+  schemaVersion: 1,
+  kit: '@qz/agent-kit',
+  createdAt: previous?.createdAt || new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  home: defaultHome,
+  clients: selectedClients,
+  components: selectedComponents,
+  providers: selectedProviders,
+  automation: {
+    qzLayer: 'implemented',
+    externalComponents: 'recorded-only-until-explicit-adapters',
+    credentials: 'never-read-or-copied',
+    engramData: 'never-read-or-modified-by-installer'
+  }
+}
+savePlan(plan)
+console.log(`Plan guardado en ${manifestPath}`)
+if (!apply) { outro('Plan guardado; no se aplicaron cambios.'); process.exit(0) }
+const args = ['--apply', '--home', defaultHome, '--client', selectedClients.length ? selectedClients.join(',') : 'none', '--skip-wizard']
+const result = spawnSync(process.execPath, [resolve(root, 'scripts/install.mjs'), ...args], { stdio: 'inherit' })
+if (result.status !== 0) process.exit(result.status ?? 1)
+console.log('Componentes externos registrados como selección pendiente; cada adapter se implementará de forma explícita y verificable.')
+outro('Capa qz instalada.')
