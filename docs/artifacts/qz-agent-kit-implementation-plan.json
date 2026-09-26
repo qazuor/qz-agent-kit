@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v19",
-    "number": 19,
-    "createdAt": "2026-09-26T05:51:09.897Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v20",
+    "number": 20,
+    "createdAt": "2026-09-26T14:35:00.072Z",
     "author": "qz-agent-kit",
-    "reason": "desacoplar preflight de componentes hardcodeados",
+    "reason": "documentar preview oficial de Gentle AI",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v18"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v19"
   },
   "view": {
     "tabs": [
@@ -342,6 +342,14 @@
               "category": "Integridad",
               "description": "Evitar listas hardcodeadas y detectar componentes sin contrato de adapter.",
               "notes": "Implementado: preflight carga adapters/*/manifest.json y advierte componentes desconocidos.",
+              "done": true
+            },
+            {
+              "id": "p1-gentle-dry-run",
+              "title": "Validar preview oficial de Gentle AI",
+              "category": "Ecosistema",
+              "description": "Confirmar parámetros y componentes del instalador oficial sin aplicar cambios.",
+              "notes": "Dry-run verificado con preset full-gentleman, global, SDD single y background agents off; 11 pasos de apply reportados.",
               "done": true
             },
             {
