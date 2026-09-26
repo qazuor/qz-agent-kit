@@ -194,6 +194,15 @@ variables de entorno relacionadas; nunca imprime sus valores. Las integraciones
 de red quedan como `not-probed` hasta que exista una operación explícitamente
 segura para consultarlas.
 
+Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
+
+```bash
+qz-kit ecosystem --engram-check sqlite_lock_contention --project hospeda
+```
+
+El comando no acepta flags de reparación y no ejecuta `import`, `export`,
+`sync`, `delete`, `consolidate` ni `cloud`.
+
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
 `qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se

@@ -5,6 +5,8 @@ import { homedir } from 'node:os'
 import { join } from 'node:path'
 
 const home = homedir()
+const args = process.argv.slice(2)
+const argValue = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const commandPath = (name) => {
   const result = spawnSync('command', ['-v', name], { shell: true, encoding: 'utf8' })
   return result.status === 0 ? result.stdout.trim() : null
@@ -30,6 +32,21 @@ const inspect = (name, candidates, paths) => {
   return { id: name, installed: Boolean(path), executable: path, method: method(path), version: version(path), candidatePaths: candidates, config: paths.map((candidate) => ({ path: candidate, exists: existsSync(candidate) })), mutations: 'none', secretValues: 'not-read' }
 }
 const existingEnvNames = Object.keys(process.env).filter((key) => /^(OPENAI|ANTHROPIC|LINEAR|CONTEXT7|ENGRAM|DEEPSEEK|GLM|ZAI)_/.test(key)).sort()
+const engramCheck = argValue('--engram-check')
+const engramProject = argValue('--project')
+let engramDiagnostic = { requested: false, mutations: 'none', secretValues: 'not-read' }
+if (engramCheck) {
+  const command = commandPath('engram')
+  if (!command) engramDiagnostic = { requested: true, status: 'unavailable', check: engramCheck, mutations: 'none', secretValues: 'not-read' }
+  else {
+    const commandArgs = ['doctor', '--json', '--check', engramCheck]
+    if (engramProject) commandArgs.push('--project', engramProject)
+    const probe = spawnSync(command, commandArgs, { encoding: 'utf8', timeout: 8000 })
+    let parsed = null
+    try { parsed = JSON.parse(probe.stdout) } catch {}
+    engramDiagnostic = { requested: true, status: probe.error?.code === 'ETIMEDOUT' ? 'timeout' : probe.status === 0 ? 'ok-or-warning' : 'error', check: engramCheck, project: engramProject || null, result: parsed, output: parsed ? null : `${probe.stdout || ''}${probe.stderr || ''}`.trim().slice(0, 1000), mutations: 'none', secretValues: 'not-read' }
+  }
+}
 console.log(JSON.stringify({
   schemaVersion: 1,
   checkedAt: new Date().toISOString(),
@@ -41,7 +58,7 @@ console.log(JSON.stringify({
     inspect('claude', ['npm', 'standalone'], [join(home, '.claude')]),
     inspect('codex', ['npm', 'standalone'], [join(home, '.codex')])
   ],
-  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' } },
+  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' }, engramDiagnostic },
   mutations: 'none',
   secretValues: 'not-read'
 }, null, 2))

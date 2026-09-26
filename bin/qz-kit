@@ -28,7 +28,7 @@ if (command === 'doctor') {
   process.exit(result.status ?? 1)
 }
 if (command === 'ecosystem' || command === 'ecosystem-check') {
-  const result = spawnSync(process.execPath, [ecosystem], { stdio: 'inherit' })
+  const result = spawnSync(process.execPath, [ecosystem, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
