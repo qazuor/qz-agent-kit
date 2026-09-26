@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v3",
-    "number": 3,
-    "createdAt": "2026-09-26T05:00:55.851Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v4",
+    "number": 4,
+    "createdAt": "2026-09-26T05:02:27.587Z",
     "author": "qz-agent-kit",
-    "reason": "marcar clean-room validado",
+    "reason": "documentar reinstalación reproducible desde plan",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v2"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v3"
   },
   "view": {
     "tabs": [
@@ -263,6 +263,14 @@
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
               "notes": "Pendiente; el wizard registra la intención pero no ejecuta componentes externos todavía.",
               "done": false
+            },
+            {
+              "id": "p1-reinstall-plan",
+              "title": "Reinstalar desde un plan guardado",
+              "category": "Reinstalación",
+              "description": "Permitir repetir la instalación en otra PC o HOME sin volver a responder el wizard.",
+              "notes": "Implementado con qz-kit install --from <plan> --apply; conserva backup y no instala componentes externos implícitamente.",
+              "done": true
             },
             {
               "id": "p1-clean-room",
