@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v46",
-    "number": 46,
-    "createdAt": "2026-09-26T22:59:59.306Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v47",
+    "number": 47,
+    "createdAt": "2026-09-26T23:21:25.774Z",
     "author": "qz-agent-kit",
-    "reason": "hacer efectivo strict en el preflight de readiness",
+    "reason": "declarar componentes opcionales del ecosistema",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v45"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v46"
   },
   "view": {
     "tabs": [
@@ -334,6 +334,14 @@
               "category": "Integridad",
               "description": "Comprobar schema, clasificación de comandos y aprobación obligatoria para mutaciones.",
               "notes": "Implementado en validate-adapters.mjs e integrado a check/check:package.",
+              "done": true
+            },
+            {
+              "id": "p1-optional-adapters",
+              "title": "Declarar adapters opcionales sin fingir instalación",
+              "category": "Ecosistema",
+              "description": "Representar Context7, RDD/review y background agents como componentes conocidos pero pendientes de adapter ejecutable.",
+              "notes": "Implementado con manifests declarativos y smoke test; external-plan devuelve pending-adapter y no ejecuta cambios.",
               "done": true
             },
             {
