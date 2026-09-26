@@ -19,6 +19,7 @@ const preflight = resolve(new URL('..', import.meta.url).pathname, 'scripts/pref
 const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/backup-plan.mjs')
 const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
 const provenance = resolve(new URL('..', import.meta.url).pathname, 'scripts/provenance-check.mjs')
+const readiness = resolve(new URL('..', import.meta.url).pathname, 'scripts/readiness.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -49,6 +50,10 @@ if (command === 'external-plan') {
 }
 if (command === 'provenance') {
   const result = spawnSync(process.execPath, [provenance, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'readiness') {
+  const result = spawnSync(process.execPath, [readiness, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {

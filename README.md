@@ -243,6 +243,7 @@ qz-kit preflight
 qz-kit backup-plan
 qz-kit external-plan
 qz-kit provenance --manifest /ruta/al/install-manifest.json
+qz-kit readiness --project /ruta/al/proyecto
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift
@@ -255,6 +256,10 @@ aprobación explícita y el plan no ejecuta comandos externos.
 `qz-kit provenance` compara el hash y commit de la fuente actual con el manifest
 de una instalación anterior. Si difieren, marca `updateReview: required` sin
 modificar archivos.
+
+`qz-kit readiness` reúne en un solo JSON el inventario del ecosistema, el
+backup plan del proyecto y el preflight del plan persistente. Es la operación
+recomendada para una revisión inicial o antes de una reinstalación.
 
 La instalación también coloca el dispatcher portable `qz` en
 `~/.local/bin/qz` (o bajo el `--home` usado en una prueba). Así cualquier
