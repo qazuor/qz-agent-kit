@@ -187,6 +187,13 @@ qz-kit install --from ~/.config/qz-agent-kit/install-plan.json --apply
 Ese modo sólo reutiliza selecciones del plan; sigue creando el backup normal y
 no convierte componentes externos pendientes en instalaciones implícitas.
 
+`qz-kit ecosystem` realiza un relevamiento read-only de OpenCode, Gentle AI,
+Gentle Shell, Engram, Claude Code y Codex. Informa ejecutable, método probable,
+versión y existencia de directorios de configuración. Sólo muestra nombres de
+variables de entorno relacionadas; nunca imprime sus valores. Las integraciones
+de red quedan como `not-probed` hasta que exista una operación explícitamente
+segura para consultarlas.
+
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
 `qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se
@@ -204,6 +211,7 @@ qz-kit install --plan --client opencode,claude
 # sólo la capa central qz, sin instalar destinos de ningún CLI
 qz-kit install --apply --client none
 qz-kit doctor
+qz-kit ecosystem
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift
