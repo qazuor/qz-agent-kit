@@ -54,6 +54,7 @@ const importedPlanPath = argValue('--from')
 const previous = readPlan(importedPlanPath ? resolve(importedPlanPath) : manifestPath)
 const nonInteractive = hasArg('--non-interactive') || Boolean(importedPlanPath)
 if (nonInteractive && !previous) throw new Error(`no se encontró un plan válido: ${importedPlanPath || manifestPath}`)
+const targetHome = resolve(argValue('--home') || (importedPlanPath ? defaultHome : previous?.home || defaultHome))
 intro('qz-agent-kit · instalación guiada')
 if (previous) console.log(`Plan guardado encontrado: ${manifestPath}`)
 const detectedClients = clients.filter(({ value }) => detect(value)).map(({ value }) => value)
@@ -68,7 +69,7 @@ const plan = {
   kit: '@qz/agent-kit',
   createdAt: previous?.createdAt || new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  home: previous?.home || defaultHome,
+  home: targetHome,
   clients: selectedClients,
   components: selectedComponents,
   providers: selectedProviders,

@@ -186,6 +186,8 @@ qz-kit install --from ~/.config/qz-agent-kit/install-plan.json --apply
 
 Ese modo sólo reutiliza selecciones del plan; sigue creando el backup normal y
 no convierte componentes externos pendientes en instalaciones implícitas.
+Las rutas absolutas del equipo que creó el plan no se reutilizan: por defecto
+se instala en el `HOME` actual. Se puede indicar otro destino con `--home`.
 
 `qz-kit ecosystem` realiza un relevamiento read-only de OpenCode, Gentle AI,
 Gentle Shell, Engram, Claude Code y Codex. Informa ejecutable, método probable,
