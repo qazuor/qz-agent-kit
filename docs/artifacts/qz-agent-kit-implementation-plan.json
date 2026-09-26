@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v39",
-    "number": 39,
-    "createdAt": "2026-09-26T22:06:18.966Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v40",
+    "number": 40,
+    "createdAt": "2026-09-26T22:25:44.862Z",
     "author": "qz-agent-kit",
-    "reason": "endurecer contratos de adapters",
+    "reason": "hacer update respetuoso del plan persistido",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v38"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v39"
   },
   "view": {
     "tabs": [
@@ -245,7 +245,15 @@
               "title": "Update idempotente con drift",
               "category": "Actualización",
               "description": "Aplicar cambios de la fuente sin sobrescribir drift silenciosamente.",
-              "notes": "Update/check implementados.",
+              "notes": "Implementado: update --check/--plan/--apply respeta la selección persistida del install-plan cuando no se pasa --client.",
+              "done": true
+            },
+            {
+              "id": "p1-update-plan-selection",
+              "title": "Respetar clientes seleccionados al actualizar",
+              "category": "Actualización",
+              "description": "Usar el install-plan persistido como alcance por defecto para no modificar clientes no seleccionados.",
+              "notes": "Implementado en bin/qz-kit y cubierto por smoke test con plan limitado a OpenCode.",
               "done": true
             },
             {
