@@ -210,6 +210,10 @@ por la ausencia de un CLI o un adapter externo.
 `summary.ready`. Con `qz-kit readiness --strict` conserva el JSON completo pero
 devuelve código de error si falta el plan o alguno de los bloques no está listo.
 
+`qz-kit plan` muestra de forma segura los clientes, componentes, proveedores y
+procedencia del plan persistido. No imprime campos desconocidos ni modifica el
+archivo; `qz-kit plan --strict` falla si el plan no existe o es inválido.
+
 `qz-kit external-plan` describe las acciones que todavía requieren aprobación
 para Gentle AI, Engram u otros adapters. `qz-kit external-plan --strict`
 devuelve código de error si queda alguna acción aprobable; nunca ejecuta esas
