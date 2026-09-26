@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v10",
-    "number": 10,
-    "createdAt": "2026-09-26T05:30:00.545Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v11",
+    "number": 11,
+    "createdAt": "2026-09-26T05:30:40.012Z",
     "author": "qz-agent-kit",
-    "reason": "corregir lineage de version del artifact",
+    "reason": "marcar registro reversible de proyectos validado",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v9"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v10"
   },
   "view": {
     "tabs": [
@@ -399,8 +399,8 @@
               "title": "Registrar proyecto en qz-kit",
               "category": "Proyecto",
               "description": "Guardar proyecto detectado en el registro global.",
-              "notes": "El registro global todavía está vacío.",
-              "done": false
+              "notes": "Validado con fixture genérico en registro global temporal: register → list → unregister, sin exponer metadata sensible.",
+              "done": true
             },
             {
               "id": "p3-discover",
