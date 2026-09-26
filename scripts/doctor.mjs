@@ -11,12 +11,14 @@ const parse = (result) => {
 const install = run('scripts/install.mjs', ['--check', ...process.argv.slice(2)])
 const projects = run('scripts/projects.mjs', ['inspect'])
 const packageGuard = run('scripts/check-package.mjs')
+const ecosystem = run('scripts/ecosystem.mjs')
 const result = {
   kitVersion: JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version,
   install: { status: install.status, result: parse(install) },
   projects: { status: projects.status, result: parse(projects) },
   package: { status: packageGuard.status, result: parse(packageGuard) },
-  valid: install.status === 0 && projects.status === 0 && packageGuard.status === 0,
+  ecosystem: { status: ecosystem.status, result: parse(ecosystem) },
+  valid: install.status === 0 && projects.status === 0 && packageGuard.status === 0 && ecosystem.status === 0,
   mutations: 'none',
   secretValues: 'not-read'
 }
