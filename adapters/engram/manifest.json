@@ -7,7 +7,7 @@
     "versionArgs": ["version"]
   },
   "lifecycle": {
-    "preview": ["doctor", "--json", "--check", "sqlite_lock_contention"],
+    "preview": ["doctor --json --check sqlite_lock_contention"],
     "readOnly": ["doctor", "stats", "projects list", "search", "context", "timeline", "conflicts list", "cloud status"],
     "dataExport": ["export", "obsidian-export"],
     "mutating": ["save", "delete", "import", "sync", "setup", "projects consolidate", "projects prune", "cloud enroll", "cloud config"],

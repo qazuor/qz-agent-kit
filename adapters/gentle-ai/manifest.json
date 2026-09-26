@@ -7,7 +7,7 @@
     "versionArgs": ["version"]
   },
   "lifecycle": {
-    "preview": ["install", "--dry-run"],
+    "preview": ["install --dry-run"],
     "mutating": ["install", "sync", "upgrade", "uninstall", "restore"],
     "requiresHumanApproval": true
   },
