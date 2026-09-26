@@ -8,6 +8,9 @@ import { confirm, intro, isCancel, multiselect, outro, cancel } from '@clack/pro
 const root = resolve(new URL('..', import.meta.url).pathname)
 const defaultHome = homedir()
 const manifestPath = resolve(process.env.QZ_KIT_HOME || defaultHome, '.config/qz-agent-kit/install-plan.json')
+const wizardArgs = process.argv.slice(2)
+const hasArg = (flag) => wizardArgs.includes(flag)
+const argValue = (flag) => { const i = wizardArgs.indexOf(flag); return i >= 0 ? wizardArgs[i + 1] : undefined }
 const clients = [
   { value: 'opencode', label: 'OpenCode', hint: 'comandos, skills y agentes qz' },
   { value: 'gentle-shell', label: 'Gentle Shell', hint: 'prompts, skills y agentes qz' },
@@ -33,9 +36,9 @@ const detect = (name) => {
   const result = spawnSync('command', ['-v', name], { shell: true, encoding: 'utf8' })
   return result.status === 0
 }
-const readPlan = () => {
-  if (!existsSync(manifestPath)) return null
-  try { return JSON.parse(readFileSync(manifestPath, 'utf8')) } catch { return null }
+const readPlan = (path = manifestPath) => {
+  if (!existsSync(path)) return null
+  try { return JSON.parse(readFileSync(path, 'utf8')) } catch { return null }
 }
 const choose = async (question, options, initialValues) => {
   const result = await multiselect({ message: question, options, initialValues, required: false })
@@ -47,14 +50,17 @@ const savePlan = (plan) => {
   writeFileSync(manifestPath, `${JSON.stringify(plan, null, 2)}\n`)
 }
 
+const importedPlanPath = argValue('--from')
+const previous = readPlan(importedPlanPath ? resolve(importedPlanPath) : manifestPath)
+const nonInteractive = hasArg('--non-interactive') || Boolean(importedPlanPath)
+if (nonInteractive && !previous) throw new Error(`no se encontró un plan válido: ${importedPlanPath || manifestPath}`)
 intro('qz-agent-kit · instalación guiada')
-const previous = readPlan()
 if (previous) console.log(`Plan guardado encontrado: ${manifestPath}`)
 const detectedClients = clients.filter(({ value }) => detect(value)).map(({ value }) => value)
-const selectedClients = await choose('¿Qué CLI/harness querés sincronizar?', clients, previous?.clients || detectedClients)
-const selectedComponents = await choose('¿Qué componentes del ecosistema querés dejar registrados?', components, previous?.components || ['gentle-ai', 'engram', 'context7'])
-const selectedProviders = await choose('¿Qué proveedores querés preparar para una etapa posterior?', providers, previous?.providers || ['openai'])
-const apply = await confirm({ message: '¿Aplicar ahora la capa qz administrada?', initialValue: true })
+const selectedClients = nonInteractive ? (previous.clients || []) : await choose('¿Qué CLI/harness querés sincronizar?', clients, previous?.clients || detectedClients)
+const selectedComponents = nonInteractive ? (previous.components || []) : await choose('¿Qué componentes del ecosistema querés dejar registrados?', components, previous?.components || ['gentle-ai', 'engram', 'context7'])
+const selectedProviders = nonInteractive ? (previous.providers || []) : await choose('¿Qué proveedores querés preparar para una etapa posterior?', providers, previous?.providers || ['openai'])
+const apply = nonInteractive ? hasArg('--apply') : await confirm({ message: '¿Aplicar ahora la capa qz administrada?', initialValue: true })
 if (isCancel(apply)) { cancel('Instalación cancelada.'); process.exit(130) }
 
 const plan = {
@@ -62,7 +68,7 @@ const plan = {
   kit: '@qz/agent-kit',
   createdAt: previous?.createdAt || new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  home: defaultHome,
+  home: previous?.home || defaultHome,
   clients: selectedClients,
   components: selectedComponents,
   providers: selectedProviders,
@@ -76,7 +82,7 @@ const plan = {
 savePlan(plan)
 console.log(`Plan guardado en ${manifestPath}`)
 if (!apply) { outro('Plan guardado; no se aplicaron cambios.'); process.exit(0) }
-const args = ['--apply', '--home', defaultHome, '--client', selectedClients.length ? selectedClients.join(',') : 'none', '--skip-wizard']
+const args = ['--apply', '--home', plan.home, '--client', selectedClients.length ? selectedClients.join(',') : 'none', '--skip-wizard']
 const result = spawnSync(process.execPath, [resolve(root, 'scripts/install.mjs'), ...args], { stdio: 'inherit' })
 if (result.status !== 0) process.exit(result.status ?? 1)
 console.log('Componentes externos registrados como selección pendiente; cada adapter se implementará de forma explícita y verificable.')

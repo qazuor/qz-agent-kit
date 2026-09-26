@@ -178,6 +178,15 @@ Para automatización se conservan `--plan`, `--check` y `--apply`. La instalaci�
 interactiva equivale a elegir clientes y luego ejecutar `--apply`; no reemplaza
 el plan read-only ni el rollback.
 
+Una reinstalación puede reutilizar el plan sin abrir el wizard:
+
+```bash
+qz-kit install --from ~/.config/qz-agent-kit/install-plan.json --apply
+```
+
+Ese modo sólo reutiliza selecciones del plan; sigue creando el backup normal y
+no convierte componentes externos pendientes en instalaciones implícitas.
+
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
 `qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se

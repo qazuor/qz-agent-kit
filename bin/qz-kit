@@ -26,7 +26,7 @@ if (command === 'doctor') {
   const result = spawnSync(process.execPath, [doctor, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
-if (command === 'install' && (args.length === 0 || args.includes('--interactive'))) {
+if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
   const wizardArgs = args.filter((arg) => arg !== '--interactive')
   const result = spawnSync(process.execPath, [wizard, ...wizardArgs], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
