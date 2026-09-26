@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v24",
-    "number": 24,
-    "createdAt": "2026-09-26T15:48:53.371Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v25",
+    "number": 25,
+    "createdAt": "2026-09-26T15:52:39.931Z",
     "author": "qz-agent-kit",
-    "reason": "hacer external-plan manifest-driven",
+    "reason": "agregar cobertura smoke de adapters",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v23"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v24"
   },
   "view": {
     "tabs": [
@@ -382,6 +382,14 @@
               "category": "Integridad",
               "description": "Eliminar comandos duplicados del orquestador y mantenerlos en cada adapter.",
               "notes": "Implementado: external-plan consume installPlan de adapters/*/manifest.json.",
+              "done": true
+            },
+            {
+              "id": "p1-smoke-adapters",
+              "title": "Cubrir adapters en smoke tests",
+              "category": "Testing",
+              "description": "Evitar regresiones en manifests, external-plan y backup-plan por proyecto.",
+              "notes": "Implementado en scripts/smoke.mjs; suite completa OK.",
               "done": true
             },
             {
