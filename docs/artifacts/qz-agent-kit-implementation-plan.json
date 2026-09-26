@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v16",
-    "number": 16,
-    "createdAt": "2026-09-26T05:43:55.360Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v17",
+    "number": 17,
+    "createdAt": "2026-09-26T05:48:15.769Z",
     "author": "qz-agent-kit",
-    "reason": "agregar contratos declarativos de adapters externos",
+    "reason": "agregar validación de manifests externos",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v15"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v16"
   },
   "view": {
     "tabs": [
@@ -318,6 +318,14 @@
               "category": "Ecosistema",
               "description": "Clasificar detección, previews, lecturas, exportaciones y mutaciones de Gentle AI y Engram.",
               "notes": "Implementado en adapters/*/manifest.json. La ejecución de mutaciones y la instalación real siguen requiriendo un plan y aprobación explícitos.",
+              "done": true
+            },
+            {
+              "id": "p1-adapter-validation",
+              "title": "Validar manifests de adapters",
+              "category": "Integridad",
+              "description": "Comprobar schema, clasificación de comandos y aprobación obligatoria para mutaciones.",
+              "notes": "Implementado en validate-adapters.mjs e integrado a check/check:package.",
               "done": true
             },
             {
