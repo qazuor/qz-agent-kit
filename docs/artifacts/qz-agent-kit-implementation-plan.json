@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v21",
-    "number": 21,
-    "createdAt": "2026-09-26T15:02:37.861Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v22",
+    "number": 22,
+    "createdAt": "2026-09-26T15:03:47.647Z",
     "author": "qz-agent-kit",
-    "reason": "exponer backup-plan como comando qz",
+    "reason": "hacer backup-plan configurable por proyecto",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v20"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v21"
   },
   "view": {
     "tabs": [
@@ -358,6 +358,14 @@
               "category": "Seguridad",
               "description": "Auditar rutas de memoria, configuraciones y tooling antes de una instalación o migración.",
               "notes": "Implementado con qz-kit backup-plan; read-only y sin leer contenidos sensibles.",
+              "done": true
+            },
+            {
+              "id": "p1-project-backup-scope",
+              "title": "Auditar backup por proyecto",
+              "category": "Seguridad",
+              "description": "Separar rutas globales de las rutas específicas de cada repositorio.",
+              "notes": "Implementado: qz-kit backup-plan --project <ruta>; validado con fixture genérico.",
               "done": true
             },
             {
