@@ -234,6 +234,7 @@ qz-kit install --apply --client none
 qz-kit doctor
 qz-kit ecosystem
 qz-kit preflight
+qz-kit backup-plan
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift
