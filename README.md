@@ -354,6 +354,12 @@ qz-kit update --client opencode
 qz-kit rollback <install-manifest.json>
 ```
 
+Cuando no se pasa `--client`, `qz-kit update` reutiliza los clientes guardados
+en `~/.config/qz-agent-kit/install-plan.json`. Si todavía no existe un plan,
+mantiene el comportamiento de detectar los clientes disponibles. El plan se
+valida antes de usarlo; un archivo incompleto o alterado se rechaza sin aplicar
+cambios.
+
 El rollback se ejecuta con el manifest exacto producido por una instalación:
 
 ```bash
