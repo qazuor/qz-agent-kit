@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, resolve } from 'node:path'
 import { confirm, intro, isCancel, multiselect, outro, cancel } from '@clack/prompts'
+import { assertValidPlan } from './plan-schema.mjs'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const defaultHome = homedir()
@@ -41,7 +42,7 @@ const detect = (name) => {
 }
 const readPlan = (path = manifestPath) => {
   if (!existsSync(path)) return null
-  try { return JSON.parse(readFileSync(path, 'utf8')) } catch { return null }
+  try { return assertValidPlan(JSON.parse(readFileSync(path, 'utf8'))) } catch (error) { throw new Error(`no se pudo cargar el install-plan ${path}: ${error.message}`) }
 }
 const choose = async (question, options, initialValues) => {
   const result = await multiselect({ message: question, options, initialValues, required: false })
