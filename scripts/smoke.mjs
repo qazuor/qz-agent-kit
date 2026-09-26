@@ -26,6 +26,7 @@ const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 const externalPlan = join(configRoot, 'install-plan.json')
 try {
   parse(run('scripts/validate-adapters.mjs', []))
+  parse(run('scripts/check-manifests.mjs', []))
   const readiness = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' }))
   if (readiness.mutations !== 'none' || readiness.summary.ready || !readiness.ecosystem.result?.components || !readiness.backup.result?.entries || readiness.preflight.skipped !== 'plan-not-found') throw new Error('readiness incompleto')
   const readinessStrict = spawnSync(node, [resolve(root, 'scripts/readiness.mjs'), '--strict', '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' })
