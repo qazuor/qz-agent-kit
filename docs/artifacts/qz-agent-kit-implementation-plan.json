@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v45",
-    "number": 45,
-    "createdAt": "2026-09-26T22:57:59.059Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v46",
+    "number": 46,
+    "createdAt": "2026-09-26T22:59:59.306Z",
     "author": "qz-agent-kit",
-    "reason": "agregar modo estricto al plan externo",
+    "reason": "hacer efectivo strict en el preflight de readiness",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v44"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v45"
   },
   "view": {
     "tabs": [
@@ -501,7 +501,7 @@
               "title": "Bloquear readiness incompleto en modo estricto",
               "category": "Diagnóstico",
               "description": "Permitir que CI o un instalador detengan el flujo con un código de salida cuando el entorno no está listo.",
-              "notes": "Implementado: qz-kit readiness --strict; conserva el JSON diagnóstico y está cubierto en smoke.",
+              "notes": "Implementado: --strict propaga el modo estricto a preflight y mantiene JSON diagnóstico; smoke cubre plan sin componentes externos.",
               "done": true
             },
             {
