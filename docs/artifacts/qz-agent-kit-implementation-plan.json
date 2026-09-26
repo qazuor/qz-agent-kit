@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v8",
-    "number": 8,
-    "createdAt": "2026-09-26T05:27:42.088Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v9",
+    "number": 9,
+    "createdAt": "2026-09-26T05:29:54.056Z",
     "author": "qz-agent-kit",
-    "reason": "agregar check acotado de Engram al inventario",
+    "reason": "agregar inventario seguro de autenticación",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v7"
+    "basedOnVersion": "ver_qz-agent_kit-implementation-plan-v8"
   },
   "view": {
     "tabs": [
@@ -351,6 +351,14 @@
               "category": "CLI",
               "description": "Materializar prompts, skills y agents en Gentle Shell.",
               "notes": "Soportado por sync; falta prueba real desde instalador.",
+              "done": true
+            },
+            {
+              "id": "p2-auth-inventory",
+              "title": "Inventariar presencia de auth sin leer credenciales",
+              "category": "CLI",
+              "description": "Detectar rutas de credenciales y variables configuradas para saber qué CLI requiere login.",
+              "notes": "Implementado en qz-kit ecosystem; sólo informa presencia y nombres, nunca contenidos.",
               "done": true
             },
             {
