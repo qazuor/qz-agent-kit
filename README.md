@@ -194,6 +194,9 @@ variables de entorno relacionadas; nunca imprime sus valores. Las integraciones
 de red quedan como `not-probed` hasta que exista una operación explícitamente
 segura para consultarlas.
 
+El inventario también indica si existen los archivos de auth conocidos de cada
+CLI, pero sólo informa `present: true/false`; nunca abre ni imprime su contenido.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash

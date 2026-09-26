@@ -32,6 +32,12 @@ const inspect = (name, candidates, paths) => {
   return { id: name, installed: Boolean(path), executable: path, method: method(path), version: version(path), candidatePaths: candidates, config: paths.map((candidate) => ({ path: candidate, exists: existsSync(candidate) })), mutations: 'none', secretValues: 'not-read' }
 }
 const existingEnvNames = Object.keys(process.env).filter((key) => /^(OPENAI|ANTHROPIC|LINEAR|CONTEXT7|ENGRAM|DEEPSEEK|GLM|ZAI)_/.test(key)).sort()
+const authPaths = {
+  opencode: join(home, '.local/share/opencode/auth.json'),
+  'gentle-shell': join(home, '.gentle-shell/agent/auth.json'),
+  claude: join(home, '.claude/.credentials.json'),
+  codex: join(home, '.codex/auth.json')
+}
 const engramCheck = argValue('--engram-check')
 const engramProject = argValue('--project')
 let engramDiagnostic = { requested: false, mutations: 'none', secretValues: 'not-read' }
@@ -58,7 +64,7 @@ console.log(JSON.stringify({
     inspect('claude', ['npm', 'standalone'], [join(home, '.claude')]),
     inspect('codex', ['npm', 'standalone'], [join(home, '.codex')])
   ],
-  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' }, engramDiagnostic },
+  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' }, auth: Object.fromEntries(Object.entries(authPaths).map(([id, path]) => [id, { path, present: existsSync(path), contents: 'not-read' }])), engramDiagnostic },
   mutations: 'none',
   secretValues: 'not-read'
 }, null, 2))
