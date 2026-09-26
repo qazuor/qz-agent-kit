@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v20",
-    "number": 20,
-    "createdAt": "2026-09-26T14:35:00.072Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v21",
+    "number": 21,
+    "createdAt": "2026-09-26T15:02:37.861Z",
     "author": "qz-agent-kit",
-    "reason": "documentar preview oficial de Gentle AI",
+    "reason": "exponer backup-plan como comando qz",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v19"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v20"
   },
   "view": {
     "tabs": [
@@ -350,6 +350,14 @@
               "category": "Ecosistema",
               "description": "Confirmar parámetros y componentes del instalador oficial sin aplicar cambios.",
               "notes": "Dry-run verificado con preset full-gentleman, global, SDD single y background agents off; 11 pasos de apply reportados.",
+              "done": true
+            },
+            {
+              "id": "p1-backup-plan-command",
+              "title": "Exponer inventario de backup",
+              "category": "Seguridad",
+              "description": "Auditar rutas de memoria, configuraciones y tooling antes de una instalación o migración.",
+              "notes": "Implementado con qz-kit backup-plan; read-only y sin leer contenidos sensibles.",
               "done": true
             },
             {
