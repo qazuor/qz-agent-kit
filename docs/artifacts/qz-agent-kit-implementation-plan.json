@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v11",
-    "number": 11,
-    "createdAt": "2026-09-26T05:30:40.012Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v12",
+    "number": 12,
+    "createdAt": "2026-09-26T05:31:45.307Z",
     "author": "qz-agent-kit",
-    "reason": "marcar registro reversible de proyectos validado",
+    "reason": "corregir rutas absolutas al importar planes",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v10"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v11"
   },
   "view": {
     "tabs": [
@@ -270,6 +270,14 @@
               "category": "Reinstalación",
               "description": "Permitir repetir la instalación en otra PC o HOME sin volver a responder el wizard.",
               "notes": "Implementado con qz-kit install --from <plan> --apply; conserva backup y no instala componentes externos implícitamente.",
+              "done": true
+            },
+            {
+              "id": "p1-cross-machine-home",
+              "title": "Reinstalación segura entre máquinas",
+              "category": "Seguridad",
+              "description": "No reutilizar rutas absolutas del equipo anterior al importar un plan.",
+              "notes": "Corregido: --from usa el HOME actual por defecto y --home permite elegir otro destino.",
               "done": true
             },
             {
