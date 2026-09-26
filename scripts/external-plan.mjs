@@ -6,6 +6,7 @@ import { assertValidPlan } from './plan-schema.mjs'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const args = process.argv.slice(2)
+const strict = args.includes('--strict')
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const planPath = resolve(value('--from') || `${process.env.QZ_KIT_HOME || homedir()}/.config/qz-agent-kit/install-plan.json`)
 if (!existsSync(planPath)) throw new Error(`no se encontró el plan: ${planPath}`)
@@ -27,4 +28,5 @@ for (const component of plan.components || []) {
   }
   else actions.push({ component, status: 'pending-adapter', requiresApproval: true, prerequisites: ['adapter específico'], forbiddenWithoutApproval: manifest.lifecycle?.mutating || [] })
 }
-console.log(JSON.stringify({ schemaVersion: 1, plan: planPath, actions, approval: 'required-per-action', mutations: 'none', secretValues: 'not-read' }, null, 2))
+console.log(JSON.stringify({ schemaVersion: 1, plan: planPath, actions, approval: 'required-per-action', summary: { strict, ready: actions.every((action) => action.requiresApproval !== true) }, mutations: 'none', secretValues: 'not-read' }, null, 2))
+if (strict && actions.some((action) => action.requiresApproval === true)) process.exit(1)

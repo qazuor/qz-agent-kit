@@ -37,6 +37,8 @@ try {
   if (!readyStrict.summary.ready) throw new Error('readiness --strict rechazó un plan válido')
   const external = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', externalPlan], { cwd: root, encoding: 'utf8' }))
   if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
+  const externalStrict = spawnSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--strict', '--from', externalPlan], { cwd: root, encoding: 'utf8' })
+  if (externalStrict.status === 0 || JSON.parse(externalStrict.stdout).summary.ready || !externalStrict.stdout.includes('"strict": true')) throw new Error('external-plan --strict no bloqueó acciones pendientes')
   const invalidPlan = join(configRoot, 'invalid-install-plan.json')
   writeFileSync(invalidPlan, `${JSON.stringify({ schemaVersion: 99, clients: ['unknown-client'], components: 'not-a-list', providers: [] })}\n`)
   const incompletePlan = join(configRoot, 'incomplete-install-plan.json')
