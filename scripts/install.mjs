@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
+const packageSourceHash = createHash('sha256').update(readFileSync(join(root, 'package.json'))).digest('hex')
 const manifest = JSON.parse(readFileSync(join(root, 'manifests/qz-command-manifest.json'), 'utf8'))
 const contentManifestPath = join(root, 'manifests/qz-content-manifest.json')
 const contentManifest = existsSync(contentManifestPath) ? JSON.parse(readFileSync(contentManifestPath, 'utf8')) : null
@@ -138,5 +139,8 @@ for (const item of targets) {
   if (item.executable) chmodSync(item.target, 0o755)
 }
 const installManifest = { kit: manifest.manifestId, kitVersion: packageJson.version, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, rollback: backupRoot, secrets: 'values-not-read' }
+const gitRevision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
+installManifest.sourcePackageHash = packageSourceHash
+installManifest.sourceCommit = gitRevision.status === 0 ? gitRevision.stdout.trim() : null
 writeFileSync(join(backupRoot, 'install-manifest.json'), `${JSON.stringify(installManifest, null, 2)}\n`)
 console.log(JSON.stringify({ ...result, backup: backupRoot, installed: targets.length, rollbackManifest: join(backupRoot, 'install-manifest.json') }, null, 2))
