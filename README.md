@@ -345,6 +345,11 @@ El instalador nunca copia credenciales, tokens, `.env`, bases de datos ni
 memoria Engram. Esos recursos se detectan y validan localmente, pero sus
 valores permanecen fuera del repositorio y del manifest.
 
+Los componentes opcionales que aparecen en el wizard también tienen un
+contrato declarativo. Context7, RDD/review y background agents se informan como
+`pending-adapter` hasta que exista una integración ejecutable y verificada; no
+se tratan como componentes desconocidos ni se habilitan automáticamente.
+
 ## Actualización y sincronización
 
 Una modificación de `source/` se distribuye a todos los clientes con un único
