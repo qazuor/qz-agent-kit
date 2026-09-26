@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, resolve } from 'node:path'
@@ -7,6 +8,8 @@ import { confirm, intro, isCancel, multiselect, outro, cancel } from '@clack/pro
 
 const root = resolve(new URL('..', import.meta.url).pathname)
 const defaultHome = homedir()
+const packageSourceHash = createHash('sha256').update(readFileSync(resolve(root, 'package.json'))).digest('hex')
+const gitRevision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
 const manifestPath = resolve(process.env.QZ_KIT_HOME || defaultHome, '.config/qz-agent-kit/install-plan.json')
 const wizardArgs = process.argv.slice(2)
 const hasArg = (flag) => wizardArgs.includes(flag)
@@ -69,6 +72,8 @@ const plan = {
   kit: '@qz/agent-kit',
   createdAt: previous?.createdAt || new Date().toISOString(),
   updatedAt: new Date().toISOString(),
+  sourcePackageHash,
+  sourceCommit: gitRevision.status === 0 ? gitRevision.stdout.trim() : null,
   home: targetHome,
   clients: selectedClients,
   components: selectedComponents,
