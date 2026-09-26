@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "gentle-ai",
+  "displayName": "Gentle AI",
+  "detection": {
+    "command": "gentle-ai",
+    "versionArgs": ["version"]
+  },
+  "lifecycle": {
+    "preview": ["install", "--dry-run"],
+    "mutating": ["install", "sync", "upgrade", "uninstall", "restore"],
+    "requiresHumanApproval": true
+  },
+  "defaults": {
+    "scope": "global",
+    "channel": "stable",
+    "backgroundSubagents": "off",
+    "sddMode": "single"
+  },
+  "secrets": "never-read-or-copied",
+  "source": "adapter-contract; exact versions resolved only during an explicit plan"
+}

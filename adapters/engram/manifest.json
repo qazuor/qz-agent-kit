@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "engram",
+  "displayName": "Engram",
+  "detection": {
+    "command": "engram",
+    "versionArgs": ["version"]
+  },
+  "lifecycle": {
+    "preview": ["doctor", "--json", "--check", "sqlite_lock_contention"],
+    "readOnly": ["doctor", "stats", "projects list", "search", "context", "timeline", "conflicts list", "cloud status"],
+    "dataExport": ["export", "obsidian-export"],
+    "mutating": ["save", "delete", "import", "sync", "setup", "projects consolidate", "projects prune", "cloud enroll", "cloud config"],
+    "requiresHumanApproval": true
+  },
+  "backupPolicy": {
+    "database": "external-backup-required-before-any-mutation",
+    "installer": "never-copies-or-modifies-db",
+    "export": "never-implicit"
+  },
+  "secrets": "never-read-or-copied",
+  "source": "adapter-contract; exact versions resolved only during an explicit plan"
+}
