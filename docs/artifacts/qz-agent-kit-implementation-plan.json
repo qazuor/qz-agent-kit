@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v25",
-    "number": 25,
-    "createdAt": "2026-09-26T15:52:39.931Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v26",
+    "number": 26,
+    "createdAt": "2026-09-26T16:02:15.681Z",
     "author": "qz-agent-kit",
-    "reason": "agregar cobertura smoke de adapters",
+    "reason": "proteger selección de agentes Gentle AI",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v24"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v25"
   },
   "view": {
     "tabs": [
@@ -390,6 +390,14 @@
               "category": "Testing",
               "description": "Evitar regresiones en manifests, external-plan y backup-plan por proyecto.",
               "notes": "Implementado en scripts/smoke.mjs; suite completa OK.",
+              "done": true
+            },
+            {
+              "id": "p1-gentle-agent-mismatch",
+              "title": "Detectar targets Gentle AI no cubiertos",
+              "category": "Ecosistema",
+              "description": "No sugerir silenciosamente un comando OpenCode cuando el plan selecciona otros clientes.",
+              "notes": "Implementado: external-plan marca review-required si la selección no es sólo OpenCode.",
               "done": true
             },
             {
