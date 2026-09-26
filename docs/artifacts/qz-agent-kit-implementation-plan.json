@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v48",
-    "number": 48,
-    "createdAt": "2026-09-26T23:25:37.097Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v49",
+    "number": 49,
+    "createdAt": "2026-09-26T23:32:21.442Z",
     "author": "qz-agent-kit",
-    "reason": "agregar guard de manifests generados",
+    "reason": "agregar inspección segura del plan persistido",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v47"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v48"
   },
   "view": {
     "tabs": [
@@ -542,6 +542,14 @@
               "category": "Integridad",
               "description": "Rechazar planes persistentes malformados antes de ejecutar preflight o generar acciones externas.",
               "notes": "Implementado en scripts/plan-schema.mjs; schemaVersion, clients, components y providers son obligatorios y se rechazan planes incompletos en todos los consumidores.",
+              "done": true
+            },
+            {
+              "id": "p1-plan-inspect",
+              "title": "Agregar inspección segura del install plan",
+              "category": "Descubribilidad",
+              "description": "Mostrar selecciones y procedencia del plan sin abrir el archivo ni exponer campos desconocidos.",
+              "notes": "Implementado como qz-kit plan; --strict falla si el plan falta o es inválido.",
               "done": true
             },
             {
