@@ -215,6 +215,12 @@ qz-kit ecosystem --engram-check sqlite_lock_contention --project hospeda
 El comando no acepta flags de reparación y no ejecuta `import`, `export`,
 `sync`, `delete`, `consolidate` ni `cloud`.
 
+Para auditar un proyecto concreto, pasá su raíz explícitamente:
+
+```bash
+qz-kit backup-plan --project /ruta/al/proyecto
+```
+
 Para una reinstalación reproducible, primero se clona una revisión concreta y
 se ejecuta el mismo flujo. `npm install --global .` instala sólo los entrypoints
 `qz-kit`, `qz` y los shims `qz-*`; los commands, agents, skills, instrucciones y guards se
