@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v15",
-    "number": 15,
-    "createdAt": "2026-09-26T05:36:44.465Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v16",
+    "number": 16,
+    "createdAt": "2026-09-26T05:43:55.360Z",
     "author": "qz-agent-kit",
-    "reason": "agregar preflight read-only del instalador",
+    "reason": "agregar contratos declarativos de adapters externos",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v14"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v15"
   },
   "view": {
     "tabs": [
@@ -310,6 +310,14 @@
               "category": "Instalador",
               "description": "Cruzar clientes, componentes y auth detectados con el plan guardado antes de aplicar.",
               "notes": "Implementado con qz-kit preflight; --strict falla ante faltantes o componentes externos pendientes, sin mutaciones.",
+              "done": true
+            },
+            {
+              "id": "p1-external-contracts",
+              "title": "Contratos declarativos para adapters externos",
+              "category": "Ecosistema",
+              "description": "Clasificar detección, previews, lecturas, exportaciones y mutaciones de Gentle AI y Engram.",
+              "notes": "Implementado en adapters/*/manifest.json. La ejecución de mutaciones y la instalación real siguen requiriendo un plan y aprobación explícitos.",
               "done": true
             },
             {
