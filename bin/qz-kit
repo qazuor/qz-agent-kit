@@ -22,6 +22,7 @@ const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/bac
 const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
 const provenance = resolve(new URL('..', import.meta.url).pathname, 'scripts/provenance-check.mjs')
 const readiness = resolve(new URL('..', import.meta.url).pathname, 'scripts/readiness.mjs')
+const planScript = resolve(new URL('..', import.meta.url).pathname, 'scripts/plan.mjs')
 const argValue = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
@@ -59,6 +60,10 @@ if (command === 'readiness') {
   const result = spawnSync(process.execPath, [readiness, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
+if (command === 'plan') {
+  const result = spawnSync(process.execPath, [planScript, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
   const wizardArgs = args.filter((arg) => arg !== '--interactive')
   const result = spawnSync(process.execPath, [wizard, ...wizardArgs], { stdio: 'inherit' })
@@ -78,11 +83,11 @@ const mapped = command === 'update' ? (updateArgs.includes('--check') ? ['--chec
     : command === 'install' ? args
       : []
 if (!mapped.length && !['help', '--help', '-h'].includes(command)) {
-  console.error('Uso: qz-kit install|update|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|provenance|verify|rollback [opciones]')
+  console.error('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|provenance|verify|rollback [opciones]')
   process.exit(2)
 }
 if (!mapped.length) {
-  console.log('Uso: qz-kit install|update|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|provenance|verify [opciones] | rollback <install-manifest.json>')
+  console.log('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|provenance|verify [opciones] | rollback <install-manifest.json>')
   process.exit(0)
 }
 const result = spawnSync(process.execPath, [script, ...mapped], { stdio: 'inherit' })
