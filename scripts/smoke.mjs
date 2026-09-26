@@ -25,6 +25,8 @@ const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 const externalPlan = join(configRoot, 'install-plan.json')
 try {
   parse(run('scripts/validate-adapters.mjs', []))
+  const readiness = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' }))
+  if (readiness.mutations !== 'none' || !readiness.ecosystem.result?.components || !readiness.backup.result?.entries || readiness.preflight.skipped !== 'plan-not-found') throw new Error('readiness incompleto')
   writeFileSync(externalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['gentle-ai', 'engram'], providers: [] })}\n`)
   const external = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', externalPlan], { cwd: root, encoding: 'utf8' }))
   if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
