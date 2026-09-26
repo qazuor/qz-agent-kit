@@ -17,6 +17,7 @@ const wizard = resolve(new URL('..', import.meta.url).pathname, 'scripts/install
 const ecosystem = resolve(new URL('..', import.meta.url).pathname, 'scripts/ecosystem.mjs')
 const preflight = resolve(new URL('..', import.meta.url).pathname, 'scripts/preflight.mjs')
 const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/backup-plan.mjs')
+const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -39,6 +40,10 @@ if (command === 'preflight') {
 }
 if (command === 'backup-plan') {
   const result = spawnSync(process.execPath, [backupPlan, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'external-plan') {
+  const result = spawnSync(process.execPath, [externalPlan, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {

@@ -241,10 +241,15 @@ qz-kit doctor
 qz-kit ecosystem
 qz-kit preflight
 qz-kit backup-plan
+qz-kit external-plan
 qz-kit verify --manifest
 qz-kit verify --clients
 qz-kit verify --drift
 ```
+
+`qz-kit external-plan` genera comandos y precondiciones para instalar o
+configurar Gentle AI y Engram. Es siempre read-only: cada acción requiere
+aprobación explícita y el plan no ejecuta comandos externos.
 
 La instalación también coloca el dispatcher portable `qz` en
 `~/.local/bin/qz` (o bajo el `--home` usado en una prueba). Así cualquier
