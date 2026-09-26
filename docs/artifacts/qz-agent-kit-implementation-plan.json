@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v5",
-    "number": 5,
-    "createdAt": "2026-09-26T05:05:25.320Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v6",
+    "number": 6,
+    "createdAt": "2026-09-26T05:07:24.954Z",
     "author": "qz-agent-kit",
-    "reason": "documentar inventario read-only del ecosistema",
+    "reason": "documentar contratos reales y timeout de Engram doctor",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v4"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v5"
   },
   "view": {
     "tabs": [
@@ -278,6 +278,14 @@
               "category": "Ecosistema",
               "description": "Detectar ejecutables, método probable, versiones y rutas de configuración sin tocar instalaciones ni secretos.",
               "notes": "Implementado con qz-kit ecosystem; en esta máquina detectó OpenCode 1.18.32, Gentle AI 3.7.0, Gentle Shell 3.7.0, Engram 2.0.0, Claude Code 2.1.283 y Codex 0.155.0.",
+              "done": true
+            },
+            {
+              "id": "p1-contracts",
+              "title": "Relevar contratos reales de Gentle AI y Engram",
+              "category": "Ecosistema",
+              "description": "Confirmar subcomandos, versiones, salud, integración MCP y límites antes de automatizar instalación.",
+              "notes": "Gentle AI 3.7.0: doctor saludable y Engram MCP conectado. Engram 2.0.0: doctor JSON excedió 15 s y quedó como riesgo pendiente; no hubo mutaciones.",
               "done": true
             },
             {
