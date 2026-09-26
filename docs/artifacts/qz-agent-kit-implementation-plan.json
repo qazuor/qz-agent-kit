@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v35",
-    "number": 35,
-    "createdAt": "2026-09-26T21:58:26.146Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v36",
+    "number": 36,
+    "createdAt": "2026-09-26T22:01:02.694Z",
     "author": "qz-agent-kit",
-    "reason": "actualizar ayuda de qz-kit",
+    "reason": "agregar smoke de readiness",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v34"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v35"
   },
   "view": {
     "tabs": [
@@ -470,6 +470,14 @@
               "category": "Ergonomía",
               "description": "Mostrar todos los comandos del kit en la ayuda principal.",
               "notes": "Implementado: help incluye install, update, doctor, ecosystem, preflight, readiness, backup-plan, external-plan, provenance, verify y rollback.",
+              "done": true
+            },
+            {
+              "id": "p1-readiness-smoke",
+              "title": "Cubrir readiness en smoke tests",
+              "category": "Testing",
+              "description": "Verificar ecosistema, backup y ausencia explícita de plan en el reporte unificado.",
+              "notes": "Implementado y validado en scripts/smoke.mjs.",
               "done": true
             },
             {
