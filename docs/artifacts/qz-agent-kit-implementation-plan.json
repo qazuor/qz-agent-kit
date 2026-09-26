@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v18",
-    "number": 18,
-    "createdAt": "2026-09-26T05:49:45.640Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v19",
+    "number": 19,
+    "createdAt": "2026-09-26T05:51:09.897Z",
     "author": "qz-agent-kit",
-    "reason": "marcar distribución desde tarball validada",
+    "reason": "desacoplar preflight de componentes hardcodeados",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v17"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v18"
   },
   "view": {
     "tabs": [
@@ -334,6 +334,14 @@
               "category": "Distribución",
               "description": "Instalar el paquete empaquetado en un prefix temporal y verificar sus entrypoints.",
               "notes": "Validado con npm pack + instalación global en prefix temporal: qz-kit 0.1.0 y qz dispatcher funcionan.",
+              "done": true
+            },
+            {
+              "id": "p1-preflight-manifests",
+              "title": "Preflight basado en manifests declarativos",
+              "category": "Integridad",
+              "description": "Evitar listas hardcodeadas y detectar componentes sin contrato de adapter.",
+              "notes": "Implementado: preflight carga adapters/*/manifest.json y advierte componentes desconocidos.",
               "done": true
             },
             {
