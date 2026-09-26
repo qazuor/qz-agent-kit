@@ -13,6 +13,16 @@ actualiza Gentle AI por sí mismo.
 - política del kit: no ejecutar `install`, `sync` o `upgrade` desde el wizard sin
   una aprobación y un adapter de versión explícito.
 
+## Preview verificado
+
+El preview oficial con `--dry-run` y los defaults acordados (`global`, preset
+`full-gentleman`, persona `gentleman`, SDD `single`, background agents off)
+respondió correctamente en Linux/Ubuntu. Para OpenCode declaró los componentes
+`claude-theme`, `context7`, `persona`, `engram`, `gga`, `opencode-gentle-logo`,
+`permissions`, `sdd` y `skills`, sin dependencias autoagregadas. El adapter puede
+delegar la planificación al comando oficial, pero debe conservar el preview y
+pedir aprobación antes de ejecutar sus 11 pasos de apply.
+
 ## Límites
 
 El kit sólo registra la selección y detecta la versión. No pisa profiles,

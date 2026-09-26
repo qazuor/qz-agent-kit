@@ -17,6 +17,12 @@
     "backgroundSubagents": "off",
     "sddMode": "single"
   },
+  "previewVerified": {
+    "command": "gentle-ai install --dry-run",
+    "platform": "linux/ubuntu",
+    "components": ["claude-theme", "context7", "persona", "engram", "gga", "opencode-gentle-logo", "permissions", "sdd", "skills"],
+    "applySteps": 11
+  },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"
 }
