@@ -206,6 +206,10 @@ correctos, warnings y componentes pendientes. `--strict` devuelve código de
 error si hay algo pendiente o faltante; el modo normal no bloquea la capa qz
 por la ausencia de un CLI o un adapter externo.
 
+`qz-kit readiness` reúne ecosistema, backup y preflight, e incluye
+`summary.ready`. Con `qz-kit readiness --strict` conserva el JSON completo pero
+devuelve código de error si falta el plan o alguno de los bloques no está listo.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash
