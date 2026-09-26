@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v22",
-    "number": 22,
-    "createdAt": "2026-09-26T15:03:47.647Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v23",
+    "number": 23,
+    "createdAt": "2026-09-26T15:35:30.511Z",
     "author": "qz-agent-kit",
-    "reason": "hacer backup-plan configurable por proyecto",
+    "reason": "agregar plan explícito de instalación externa",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v21"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v22"
   },
   "view": {
     "tabs": [
@@ -366,6 +366,14 @@
               "category": "Seguridad",
               "description": "Separar rutas globales de las rutas específicas de cada repositorio.",
               "notes": "Implementado: qz-kit backup-plan --project <ruta>; validado con fixture genérico.",
+              "done": true
+            },
+            {
+              "id": "p1-external-plan",
+              "title": "Generar plan explícito de componentes externos",
+              "category": "Ecosistema",
+              "description": "Mostrar comandos, previews, precondiciones y aprobaciones para Gentle AI y Engram sin ejecutarlos.",
+              "notes": "Implementado con qz-kit external-plan; acciones siempre requieren aprobación.",
               "done": true
             },
             {
