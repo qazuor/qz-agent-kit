@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan",
-    "number": 1,
-    "createdAt": "2026-09-26T00:12:00.446Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v2",
+    "number": 2,
+    "createdAt": "2026-09-26T04:56:10.853Z",
     "author": "qz-agent-kit",
-    "reason": "crear artifact de migracion",
+    "reason": "actualizar instalador interactivo y manifiesto persistente",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": null
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan"
   },
   "view": {
     "tabs": [
@@ -247,6 +247,22 @@
               "description": "Aplicar cambios de la fuente sin sobrescribir drift silenciosamente.",
               "notes": "Update/check implementados.",
               "done": true
+            },
+            {
+              "id": "p1-wizard",
+              "title": "Instalador interactivo con plan persistente",
+              "category": "Instalador",
+              "description": "Guiar la selección de clientes, componentes y proveedores, guardar el plan local y repetirlo sin volver a decidir todo.",
+              "notes": "Implementado en qz-kit install; componentes externos quedan registrados como pendientes y nunca se leen credenciales ni memoria.",
+              "done": true
+            },
+            {
+              "id": "p1-ecosystem-adapters",
+              "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
+              "category": "Ecosistema",
+              "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
+              "notes": "Pendiente; el wizard registra la intención pero no ejecuta componentes externos todavía.",
+              "done": false
             },
             {
               "id": "p1-clean-room",
