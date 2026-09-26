@@ -82,6 +82,13 @@ const plan = {
 }
 savePlan(plan)
 console.log(`Plan guardado en ${manifestPath}`)
+const externalPlan = spawnSync(process.execPath, [resolve(root, 'scripts/external-plan.mjs'), '--from', manifestPath], { encoding: 'utf8' })
+if (externalPlan.status === 0) {
+  try {
+    const external = JSON.parse(externalPlan.stdout)
+    if (external.actions.length) console.log(`Acciones externas pendientes: ${external.actions.map((action) => `${action.component}=${action.status}`).join(', ')}`)
+  } catch { console.log('No se pudo resumir el plan externo; revisar qz-kit external-plan.') }
+}
 if (!apply) { outro('Plan guardado; no se aplicaron cambios.'); process.exit(0) }
 const args = ['--apply', '--home', plan.home, '--client', selectedClients.length ? selectedClients.join(',') : 'none', '--skip-wizard']
 const result = spawnSync(process.execPath, [resolve(root, 'scripts/install.mjs'), ...args], { stdio: 'inherit' })
