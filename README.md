@@ -210,6 +210,11 @@ por la ausencia de un CLI o un adapter externo.
 `summary.ready`. Con `qz-kit readiness --strict` conserva el JSON completo pero
 devuelve código de error si falta el plan o alguno de los bloques no está listo.
 
+`qz-kit external-plan` describe las acciones que todavía requieren aprobación
+para Gentle AI, Engram u otros adapters. `qz-kit external-plan --strict`
+devuelve código de error si queda alguna acción aprobable; nunca ejecuta esas
+acciones.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash
