@@ -6,6 +6,10 @@ Usá `qz engram --help` para ver las operaciones disponibles y elegí siempre la
 lectura más acotada que responda la pregunta. Preferí `--json` cuando el
 resultado vaya a alimentar otra decisión.
 
+Antes de una migración o cambio de instalación, consultá `qz-kit ecosystem`,
+`qz-kit preflight` y `qz-kit backup-plan --project <ruta>`. Esas operaciones
+relevan versiones, selección y rutas de backup sin modificar Engram.
+
 Para revisar salud operativa, empezá por un check acotado y por proyecto, por
 ejemplo `engram doctor --json --check sqlite_lock_contention --project <name>`.
 El doctor completo puede recorrer memoria histórica y tardar o quedar esperando
