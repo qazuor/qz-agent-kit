@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
+import { assertValidPlan } from '../scripts/plan-schema.mjs'
 
 const [command = 'help', ...args] = process.argv.slice(2)
 const packageJson = JSON.parse(readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'package.json'), 'utf8'))
@@ -20,6 +22,7 @@ const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/bac
 const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
 const provenance = resolve(new URL('..', import.meta.url).pathname, 'scripts/provenance-check.mjs')
 const readiness = resolve(new URL('..', import.meta.url).pathname, 'scripts/readiness.mjs')
+const argValue = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
@@ -61,7 +64,16 @@ if (command === 'install' && (args.length === 0 || args.includes('--interactive'
   const result = spawnSync(process.execPath, [wizard, ...wizardArgs], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
-const mapped = command === 'update' ? (args.includes('--check') ? ['--check', ...args.filter((arg) => arg !== '--check')] : args.includes('--plan') ? ['--plan', ...args.filter((arg) => arg !== '--plan')] : ['--apply', ...args])
+let updateArgs = args
+if (command === 'update' && !args.includes('--client')) {
+  const updateHome = resolve(argValue('--home') || homedir())
+  const planPath = join(updateHome, '.config/qz-agent-kit/install-plan.json')
+  if (existsSync(planPath)) {
+    const plan = assertValidPlan(JSON.parse(readFileSync(planPath, 'utf8')))
+    updateArgs = [...args, '--client', plan.clients.length ? plan.clients.join(',') : 'none']
+  }
+}
+const mapped = command === 'update' ? (updateArgs.includes('--check') ? ['--check', ...updateArgs.filter((arg) => arg !== '--check')] : updateArgs.includes('--plan') ? ['--plan', ...updateArgs.filter((arg) => arg !== '--plan')] : ['--apply', ...updateArgs])
   : command === 'verify' ? ['--check', ...args]
     : command === 'install' ? args
       : []

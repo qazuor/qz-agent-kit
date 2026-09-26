@@ -94,8 +94,10 @@ try {
   if (synchronized.targetDetails.some((target) => target.state !== 'current')) {
     throw new Error('el plan no marcó como current una instalación recién aplicada')
   }
+  mkdirSync(join(installHome, '.config/qz-agent-kit'), { recursive: true })
+  writeFileSync(join(installHome, '.config/qz-agent-kit/install-plan.json'), `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: [], providers: [] })}\n`)
   const updateCheck = parse(execFileSync(resolve(root, 'bin/qz-kit'), ['update', '--check', '--home', installHome], { cwd: root, encoding: 'utf8' }))
-  if (updateCheck.mode !== 'check' || updateCheck.mutations !== 'none') {
+  if (updateCheck.mode !== 'check' || updateCheck.mutations !== 'none' || updateCheck.selected.join(',') !== 'opencode' || updateCheck.selected.includes('gentle-shell')) {
     throw new Error('qz-kit update --check no fue read-only')
   }
   const shimTarget = join(installHome, '.local/bin/qz-start-issue')
