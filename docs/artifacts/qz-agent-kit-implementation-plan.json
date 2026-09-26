@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v47",
-    "number": 47,
-    "createdAt": "2026-09-26T23:21:25.774Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v48",
+    "number": 48,
+    "createdAt": "2026-09-26T23:25:37.097Z",
     "author": "qz-agent-kit",
-    "reason": "declarar componentes opcionales del ecosistema",
+    "reason": "agregar guard de manifests generados",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v46"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v47"
   },
   "view": {
     "tabs": [
@@ -334,6 +334,14 @@
               "category": "Integridad",
               "description": "Comprobar schema, clasificación de comandos y aprobación obligatoria para mutaciones.",
               "notes": "Implementado en validate-adapters.mjs e integrado a check/check:package.",
+              "done": true
+            },
+            {
+              "id": "p1-manifest-check",
+              "title": "Detectar manifests generados desactualizados",
+              "category": "Mantenimiento",
+              "description": "Comparar hashes de la fuente contra los manifests sin regenerarlos ni modificar archivos.",
+              "notes": "Implementado en scripts/check-manifests.mjs e integrado a npm run check y smoke.",
               "done": true
             },
             {
