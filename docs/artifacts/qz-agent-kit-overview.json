@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-overview",
-    "number": 1,
-    "createdAt": "2026-09-26T00:12:00.446Z",
+    "id": "ver_qz-agent-kit-overview-v2",
+    "number": 2,
+    "createdAt": "2026-09-26T22:30:15.018Z",
     "author": "qz-agent-kit",
-    "reason": "crear artifact de migracion",
+    "reason": "documentar alcance persistido de update",
     "sourceHash": "sha256:qz-agent-kit-overview",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": null
+    "basedOnVersion": "ver_qz-agent-kit-overview"
   },
   "view": {
     "tabs": [
@@ -254,7 +254,7 @@
         "type": "prose",
         "title": "Cómo se actualiza",
         "data": {
-          "text": "Se modifica la fuente en qz-agent-kit, se regenera el manifest, se ejecuta qz-kit check/doctor y cada máquina aplica qz-kit update con backup y rollback. Para un proyecto se usa qz-kit project sync --check y luego --apply; los archivos con drift se bloquean hasta una decisión explícita."
+          "text": "Se modifica la fuente en qz-agent-kit, se regenera el manifest, se ejecuta qz-kit check/doctor y cada máquina aplica qz-kit update con backup y rollback. Sin --client, update respeta los clientes del install-plan persistido; --client explícito limita el alcance. Para un proyecto se usa qz-kit project sync --check y luego --apply; los archivos con drift se bloquean hasta una decisión explícita."
         }
       }
     ]
