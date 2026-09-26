@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v32",
-    "number": 32,
-    "createdAt": "2026-09-26T18:38:24.447Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v33",
+    "number": 33,
+    "createdAt": "2026-09-26T18:39:54.243Z",
     "author": "qz-agent-kit",
-    "reason": "agregar verificación de provenance pre-update",
+    "reason": "incluir estado del kit en backup plan",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v31"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v32"
   },
   "view": {
     "tabs": [
@@ -446,6 +446,14 @@
               "category": "Actualización",
               "description": "Detectar si el manifest instalado proviene de otro commit o hash antes de aplicar updates.",
               "notes": "Implementado con qz-kit provenance --manifest; read-only y validado en instalación temporal.",
+              "done": true
+            },
+            {
+              "id": "p1-kit-state-backup",
+              "title": "Incluir estado del kit en backup plan",
+              "category": "Reinstalación",
+              "description": "Preservar install-plan, manifests locales y backups de rollback del propio qz-agent-kit.",
+              "notes": "Implementado y validado: ~/.config/qz-agent-kit y ~/.local/state/qz-agent-kit aparecen como rutas read-only.",
               "done": true
             },
             {
