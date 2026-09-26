@@ -39,12 +39,15 @@ try {
   if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
   const invalidPlan = join(configRoot, 'invalid-install-plan.json')
   writeFileSync(invalidPlan, `${JSON.stringify({ schemaVersion: 99, clients: ['unknown-client'], components: 'not-a-list', providers: [] })}\n`)
+  const incompletePlan = join(configRoot, 'incomplete-install-plan.json')
+  writeFileSync(incompletePlan, `${JSON.stringify({ schemaVersion: 1 })}\n`)
   mkdirSync(join(invalidUpdateHome, '.config/qz-agent-kit'), { recursive: true })
   cpSync(invalidPlan, join(invalidUpdateHome, '.config/qz-agent-kit/install-plan.json'))
   const invalidPreflight = spawnSync(node, [resolve(root, 'scripts/preflight.mjs'), '--from', invalidPlan], { cwd: root, encoding: 'utf8' })
   const invalidExternal = spawnSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', invalidPlan], { cwd: root, encoding: 'utf8' })
+  const incompleteExternal = spawnSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', incompletePlan], { cwd: root, encoding: 'utf8' })
   const invalidUpdate = spawnSync(node, [resolve(root, 'bin/qz-kit'), 'update', '--check', '--home', invalidUpdateHome], { cwd: root, encoding: 'utf8' })
-  if (invalidPreflight.status === 0 || !`${invalidPreflight.stderr}${invalidPreflight.stdout}`.includes('install-plan inválido') || invalidExternal.status === 0 || !`${invalidExternal.stderr}${invalidExternal.stdout}`.includes('install-plan inválido') || invalidUpdate.status === 0 || !`${invalidUpdate.stderr}${invalidUpdate.stdout}`.includes('install-plan inválido')) {
+  if (invalidPreflight.status === 0 || !`${invalidPreflight.stderr}${invalidPreflight.stdout}`.includes('install-plan inválido') || invalidExternal.status === 0 || !`${invalidExternal.stderr}${invalidExternal.stdout}`.includes('install-plan inválido') || incompleteExternal.status === 0 || !`${incompleteExternal.stderr}${incompleteExternal.stdout}`.includes('install-plan inválido') || invalidUpdate.status === 0 || !`${invalidUpdate.stderr}${invalidUpdate.stdout}`.includes('install-plan inválido')) {
     throw new Error('preflight/external-plan aceptaron un install-plan inválido')
   }
   const backupPlan = parse(execFileSync(node, [resolve(root, 'scripts/backup-plan.mjs'), '--project', fixture], { cwd: root, encoding: 'utf8' }))
