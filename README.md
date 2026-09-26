@@ -198,6 +198,8 @@ segura para consultarlas.
 
 El inventario también indica si existen los archivos de auth conocidos de cada
 CLI, pero sólo informa `present: true/false`; nunca abre ni imprime su contenido.
+También enumera rutas conocidas de TUI, themes, plugins y skills para detectar
+qué ya existe. No carga, habilita, deshabilita ni modifica ninguno.
 
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 

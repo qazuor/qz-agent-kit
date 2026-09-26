@@ -38,6 +38,12 @@ const authPaths = {
   claude: join(home, '.claude/.credentials.json'),
   codex: join(home, '.codex/auth.json')
 }
+const uiPaths = {
+  opencode: [join(home, '.config/opencode/tui.json'), join(home, '.config/opencode/plugins')],
+  'gentle-shell': [join(home, '.gentle-shell/agent/settings.json'), join(home, '.gentle-shell/agent/themes')],
+  claude: [join(home, '.claude/settings.json'), join(home, '.claude/plugins')],
+  codex: [join(home, '.codex/config.toml'), join(home, '.codex/skills')]
+}
 const engramCheck = argValue('--engram-check')
 const engramProject = argValue('--project')
 let engramDiagnostic = { requested: false, mutations: 'none', secretValues: 'not-read' }
@@ -64,7 +70,7 @@ console.log(JSON.stringify({
     inspect('claude', ['npm', 'standalone'], [join(home, '.claude')]),
     inspect('codex', ['npm', 'standalone'], [join(home, '.codex')])
   ],
-  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' }, auth: Object.fromEntries(Object.entries(authPaths).map(([id, path]) => [id, { path, present: existsSync(path), contents: 'not-read' }])), engramDiagnostic },
+  integrations: { context7: { status: 'not-probed', reason: 'no network or credential contents read' }, providers: { environmentVariableNames: existingEnvNames, values: 'not-read' }, auth: Object.fromEntries(Object.entries(authPaths).map(([id, path]) => [id, { path, present: existsSync(path), contents: 'not-read' }])), tuiAndPlugins: Object.fromEntries(Object.entries(uiPaths).map(([id, paths]) => [id, paths.map((path) => ({ path, present: existsSync(path), contents: 'not-read' }))])), engramDiagnostic },
   mutations: 'none',
   secretValues: 'not-read'
 }, null, 2))
