@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v13",
-    "number": 13,
-    "createdAt": "2026-09-26T05:33:06.644Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v14",
+    "number": 14,
+    "createdAt": "2026-09-26T05:33:56.237Z",
     "author": "qz-agent-kit",
-    "reason": "marcar auditoría de knowledge layer del kit",
+    "reason": "documentar inventario seguro de TUI y plugins",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v12"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v13"
   },
   "view": {
     "tabs": [
@@ -376,6 +376,14 @@
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
               "notes": "OpenAI OAuth validado en OpenCode; matriz completa pendiente.",
               "done": false
+            },
+            {
+              "id": "p2-tui-inventory",
+              "title": "Inventariar TUI, themes, plugins y skills",
+              "category": "CLI",
+              "description": "Detectar rutas y presencia por CLI sin cargar ni modificar configuraciones.",
+              "notes": "Implementado en qz-kit ecosystem; la administración de plugins/TUI sigue separada y pendiente.",
+              "done": true
             },
             {
               "id": "p2-tui",
