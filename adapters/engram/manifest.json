@@ -18,6 +18,11 @@
     "installer": "never-copies-or-modifies-db",
     "export": "never-implicit"
   },
+  "installPlan": {
+    "command": "engram setup opencode",
+    "preview": "engram doctor --json --check sqlite_lock_contention --project <project>",
+    "prerequisites": ["backup externo de ~/.engram", "check SQLite por proyecto", "decidir integración MCP"]
+  },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"
 }

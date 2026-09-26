@@ -23,6 +23,11 @@
     "components": ["claude-theme", "context7", "persona", "engram", "gga", "opencode-gentle-logo", "permissions", "sdd", "skills"],
     "applySteps": 11
   },
+  "installPlan": {
+    "command": "gentle-ai install --agent opencode --scope global --preset full-gentleman --persona gentleman --sdd-mode single --opencode-background-subagents=off --pi-background-subagents=off",
+    "preview": "gentle-ai install --dry-run --agent opencode --scope global --preset full-gentleman --persona gentleman --sdd-mode single --opencode-background-subagents=off --pi-background-subagents=off",
+    "prerequisites": ["preflight aprobado", "preview sin drift", "backup de configuraciones administradas"]
+  },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"
 }

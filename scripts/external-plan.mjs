@@ -19,8 +19,7 @@ const actions = []
 for (const component of plan.components || []) {
   const manifest = manifests[component]
   if (!manifest) { actions.push({ component, status: 'unknown', requiresApproval: true, reason: 'no existe manifest declarativo' }); continue }
-  if (component === 'gentle-ai') actions.push({ component, status: 'planned', requiresApproval: true, command: 'gentle-ai install --agent opencode --scope global --preset full-gentleman --persona gentleman --sdd-mode single --opencode-background-subagents=off --pi-background-subagents=off', preview: 'gentle-ai install --dry-run --agent opencode --scope global --preset full-gentleman --persona gentleman --sdd-mode single --opencode-background-subagents=off --pi-background-subagents=off', prerequisites: ['preflight aprobado', 'preview sin drift', 'backup de configuraciones administradas'], forbiddenWithoutApproval: manifest.lifecycle.mutating })
-  else if (component === 'engram') actions.push({ component, status: 'planned', requiresApproval: true, command: 'engram setup opencode', preview: 'engram doctor --json --check sqlite_lock_contention --project <project>', prerequisites: ['backup externo de ~/.engram', 'check SQLite por proyecto', 'decidir integración MCP'], forbiddenWithoutApproval: manifest.lifecycle.mutating })
+  if (manifest.installPlan) actions.push({ component, status: 'planned', requiresApproval: true, ...manifest.installPlan, forbiddenWithoutApproval: manifest.lifecycle.mutating })
   else actions.push({ component, status: 'pending-adapter', requiresApproval: true, prerequisites: ['adapter específico'], forbiddenWithoutApproval: manifest.lifecycle?.mutating || [] })
 }
 console.log(JSON.stringify({ schemaVersion: 1, plan: planPath, actions, approval: 'required-per-action', mutations: 'none', secretValues: 'not-read' }, null, 2))
