@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v40",
-    "number": 40,
-    "createdAt": "2026-09-26T22:25:44.862Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v41",
+    "number": 41,
+    "createdAt": "2026-09-26T22:31:15.374Z",
     "author": "qz-agent-kit",
-    "reason": "hacer update respetuoso del plan persistido",
+    "reason": "agregar resumen booleano de readiness",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v39"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v40"
   },
   "view": {
     "tabs": [
@@ -477,7 +477,15 @@
               "title": "Reporte unificado de readiness",
               "category": "Diagnóstico",
               "description": "Combinar ecosistema, backup plan y preflight en una única operación read-only.",
-              "notes": "Implementado: qz-kit readiness --project <ruta>; omite preflight si no existe plan.",
+              "notes": "Implementado: qz-kit readiness combina inventario, backup y preflight y ahora expone summary.ready y estados por bloque.",
+              "done": true
+            },
+            {
+              "id": "p1-readiness-summary",
+              "title": "Exponer decisión única de readiness",
+              "category": "Diagnóstico",
+              "description": "Devolver una conclusión ready y estados resumidos para que un agente no deba interpretar varios bloques manualmente.",
+              "notes": "Implementado en scripts/readiness.mjs y cubierto con smoke para plan ausente y plan válido.",
               "done": true
             },
             {
