@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v27",
-    "number": 27,
-    "createdAt": "2026-09-26T16:03:10.998Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v28",
+    "number": 28,
+    "createdAt": "2026-09-26T16:04:14.842Z",
     "author": "qz-agent-kit",
-    "reason": "integrar inventario externo al doctor",
+    "reason": "documentar flujo seguro en qz-engram",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v26"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v27"
   },
   "view": {
     "tabs": [
@@ -406,6 +406,14 @@
               "category": "Diagnóstico",
               "description": "Mostrar salud de CLI, versiones y rutas junto con instalación, proyectos y package checks.",
               "notes": "Implementado: qz-kit doctor agrega sección ecosystem read-only; una falla de instalación local sigue marcando doctor inválido.",
+              "done": true
+            },
+            {
+              "id": "p1-engram-command-guidance",
+              "title": "Conectar qz-engram con el flujo de preflight",
+              "category": "Memoria",
+              "description": "Indicar inventario, preflight y backup antes de operar sobre Engram.",
+              "notes": "Documentado en source/commands/qz-engram.md y manifest regenerado.",
               "done": true
             },
             {
