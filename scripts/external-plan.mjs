@@ -19,7 +19,11 @@ const actions = []
 for (const component of plan.components || []) {
   const manifest = manifests[component]
   if (!manifest) { actions.push({ component, status: 'unknown', requiresApproval: true, reason: 'no existe manifest declarativo' }); continue }
-  if (manifest.installPlan) actions.push({ component, status: 'planned', requiresApproval: true, ...manifest.installPlan, forbiddenWithoutApproval: manifest.lifecycle.mutating })
+  if (manifest.installPlan) {
+    const selectedClients = plan.clients || []
+    const targetMismatch = component === 'gentle-ai' && (selectedClients.length !== 1 || selectedClients[0] !== 'opencode')
+    actions.push({ component, status: targetMismatch ? 'review-required' : 'planned', requiresApproval: true, ...manifest.installPlan, selectedClients, targetMismatch, note: targetMismatch ? 'El comando verificado cubre OpenCode; revisar agentes adicionales antes de ejecutar.' : null, forbiddenWithoutApproval: manifest.lifecycle.mutating })
+  }
   else actions.push({ component, status: 'pending-adapter', requiresApproval: true, prerequisites: ['adapter específico'], forbiddenWithoutApproval: manifest.lifecycle?.mutating || [] })
 }
 console.log(JSON.stringify({ schemaVersion: 1, plan: planPath, actions, approval: 'required-per-action', mutations: 'none', secretValues: 'not-read' }, null, 2))
