@@ -257,9 +257,8 @@ qz-kit backup-plan
 qz-kit external-plan
 qz-kit provenance --manifest /ruta/al/install-manifest.json
 qz-kit readiness --project /ruta/al/proyecto
-qz-kit verify --manifest
-qz-kit verify --clients
-qz-kit verify --drift
+qz-kit plan
+qz-kit verify --client opencode
 ```
 
 `qz-kit external-plan` genera comandos y precondiciones para instalar o
@@ -460,13 +459,14 @@ modificar el proyecto:
 
 ```bash
 qz-kit doctor
-qz-kit verify --manifest
-qz-kit verify --clients
-qz-kit verify --drift
+qz-kit verify
+qz-kit verify --client opencode
 ```
 
 El resultado indica qué clientes están instalados, qué versión tienen, qué
-archivos coinciden con la fuente y qué destinos necesitan revisión.
+archivos coinciden con la fuente y qué destinos necesitan revisión. `verify`
+es el alias read-only de `install --check`; el alcance se limita con
+`--client` o `--home`.
 
 ## Principios
 
