@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v51",
-    "number": 51,
-    "createdAt": "2026-09-27T00:06:35.255Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v52",
+    "number": 52,
+    "createdAt": "2026-09-27T00:12:41.009Z",
     "author": "qz-agent-kit",
-    "reason": "registrar auditoría read-only de harnesses",
+    "reason": "ampliar evidencia read-only de providers",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v50"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v51"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "Relevamiento read-only actualizado: OpenCode 1.18.32, Gentle AI/Shell 3.7.0, Engram 2.0.0, Claude 2.1.283 y Codex 0.155.0; auth sólo se verificó por presencia, sin leer valores. Falta matriz completa de providers.",
+              "notes": "OpenCode providers list read-only verificado: OpenAI OAuth y GitHub Copilot por GITHUB_TOKEN; Gentle Shell expone auth vía Pi pero no provider-list no interactivo; Codex expone login/doctor pero no provider-list. No se leyeron credenciales.",
               "done": false
             },
             {
