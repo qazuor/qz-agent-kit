@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-overview-v3",
-    "number": 3,
-    "createdAt": "2026-09-27T06:40:31.018Z",
+    "id": "ver_qz-agent-kit-overview-v4",
+    "number": 4,
+    "createdAt": "2026-09-27T22:32:06.006Z",
     "author": "qz-agent-kit",
-    "reason": "corregir comando de validación documentado",
+    "reason": "corregir ejemplos de verify",
     "sourceHash": "sha256:qz-agent-kit-overview",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-overview-v2"
+    "basedOnVersion": "ver_qz-agent-kit-overview-v3"
   },
   "view": {
     "tabs": [
