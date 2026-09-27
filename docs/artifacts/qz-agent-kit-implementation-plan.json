@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v50",
-    "number": 50,
-    "createdAt": "2026-09-26T23:33:53.765Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v51",
+    "number": 51,
+    "createdAt": "2026-09-27T00:06:35.255Z",
     "author": "qz-agent-kit",
-    "reason": "actualizar estadísticas vivas del plan",
+    "reason": "registrar auditoría read-only de harnesses",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v49"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v50"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "OpenAI OAuth validado en OpenCode; matriz completa pendiente.",
+              "notes": "Relevamiento read-only actualizado: OpenCode 1.18.32, Gentle AI/Shell 3.7.0, Engram 2.0.0, Claude 2.1.283 y Codex 0.155.0; auth sólo se verificó por presencia, sin leer valores. Falta matriz completa de providers.",
               "done": false
             },
             {
@@ -650,7 +650,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "OpenCode V1 operativo; política portable de plugins pendiente.",
+              "notes": "Rutas read-only verificadas para OpenCode, Gentle Shell, Claude y Codex; política portable de plugins/TUI sigue pendiente.",
               "done": false
             }
           ]
