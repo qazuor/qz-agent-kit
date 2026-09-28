@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v61",
-    "number": 61,
-    "createdAt": "2026-09-28T16:20:14.171Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v62",
+    "number": 62,
+    "createdAt": "2026-09-28T16:35:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "registrar validación parcial real de HOS-635",
+    "reason": "precisar límite de la validación E2E de HOS-635",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v60"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v61"
   },
   "view": {
     "tabs": [
@@ -821,7 +821,7 @@
               "title": "Corrida E2E real con issue no destructivo",
               "category": "Hospeda",
               "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
-              "notes": "Validación parcial real HOS-635: start-issue reutilizó un worktree existente; context y DB funcionaron, env ejecutó 6/6 checks con 1 partial no bloqueante, sin servers. El worktree ya estaba dirty por scripts/worktree/, por lo que la E2E limpia de creación/preparación/cleanup sigue pendiente.",
+              "notes": "Validación parcial real HOS-635: start-issue reutilizó un worktree existente; context y DB funcionaron, env ejecutó 6/6 checks con 1 partial no bloqueante, sin servers. El worktree ya estaba dirty por scripts/worktree/. La comparación read-only confirmó que esos scripts son copias antiguas: 3 coinciden con el adapter actual y 9 difieren (configuración legacy, fallback qz y rutas de logs). No se modificó ni limpió el worktree; la E2E limpia de creación/preparación/servidores/cleanup sigue pendiente.",
               "done": false
             }
           ]
