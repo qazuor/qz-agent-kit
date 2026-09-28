@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v56",
-    "number": 56,
-    "createdAt": "2026-09-28T15:11:37.071Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v57",
+    "number": 57,
+    "createdAt": "2026-09-28T15:20:20.725Z",
     "author": "qz-agent-kit",
-    "reason": "documentar límites de auth y providers",
+    "reason": "documentar política portable de TUI y plugins",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v55"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v56"
   },
   "view": {
     "tabs": [
@@ -650,7 +650,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Rutas read-only verificadas para OpenCode, Gentle Shell, Claude y Codex; política portable de plugins/TUI sigue pendiente.",
+              "notes": "Política portable documentada en docs/harness-tui-policy.md: TUI separada de workflows, plugins explícitos, backups y validación por versión. Falta probar y versionar la configuración concreta de cada harness.",
               "done": false
             }
           ]
