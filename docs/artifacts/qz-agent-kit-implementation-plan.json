@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 108,
+  "version": 109,
   "view": {
     "tabs": [
       "overview"
@@ -58,7 +58,7 @@
               "label": "drift de sync"
             },
             {
-              "value": "75/83",
+              "value": "77/85",
               "label": "tareas completadas"
             },
             {
