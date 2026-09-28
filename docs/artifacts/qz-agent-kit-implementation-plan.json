@@ -644,14 +644,6 @@
               "notes": "Validación estática actualizada: tui.json de OpenCode y settings.json de Gentle Shell existen y son JSON válidos; Codex config.toml existe. Se confirmaron rutas sin leer contenidos sensibles. La semántica física de Home/End, scroll y mouse todavía requiere prueba interactiva por harness.",
               "done": false
             },
-            {
-              "id": "p2-model-selector",
-              "title": "Selector común de modelos",
-              "category": "Providers",
-              "description": "Cambiar los defaults de OpenCode y Gentle Shell mediante qz-kit sin editar configuración manualmente.",
-              "notes": "Implementado y probado con HOME temporal. Hace backup antes de escribir y no toca credenciales, Codex ni Claude Code. Uso: qz-kit model status|list|use provider/model.",
-              "done": true
-            }
           ]
         }
       },
