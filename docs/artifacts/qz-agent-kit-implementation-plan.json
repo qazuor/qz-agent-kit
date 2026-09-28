@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v91",
-    "number": 91,
-    "createdAt": "2026-09-29T01:30:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v92",
+    "number": 92,
+    "createdAt": "2026-09-29T02:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "cerrar E2E limpia real de Hospeda",
+    "reason": "cerrar diagnóstico integral del entorno instalado",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v90"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v91"
   },
   "view": {
     "tabs": [
@@ -903,7 +903,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Validación básica read-only completada: OpenCode, Claude Code, Codex CLI y Gentle Shell responden `--help` con exit=0 y exponen opciones de versión/configuración. La validación final de sesiones reales, modelos y flujos de proyecto permanece pendiente.",
+              "notes": "Diagnóstico integral read-only OK: instalación qz sin drift en 60 targets, package seguro, adapters/manifests válidos y ecosystem detectado sin leer secretos. La validación final de sesiones/modelos por harness continúa pendiente.",
               "done": false
             }
           ]
