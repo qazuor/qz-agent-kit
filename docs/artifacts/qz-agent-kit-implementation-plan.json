@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v53",
-    "number": 53,
-    "createdAt": "2026-09-28T14:59:44.628Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v54",
+    "number": 54,
+    "createdAt": "2026-09-28T15:08:07.915Z",
     "author": "qz-agent-kit",
-    "reason": "agregar gate read-only de release",
+    "reason": "documentar procedimiento clean-room reproducible",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v52"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v53"
   },
   "view": {
     "tabs": [
@@ -871,7 +871,7 @@
               "title": "Reinstalación reproducible documentada",
               "category": "Release",
               "description": "Ejecutar el procedimiento completo en entorno limpio.",
-              "notes": "Pendiente.",
+              "notes": "Runbook documentado en docs/clean-room-install.md; ejecución real en HOME/máquina limpia todavía pendiente.",
               "done": false
             },
             {
