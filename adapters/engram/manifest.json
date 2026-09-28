@@ -8,7 +8,7 @@
   },
   "lifecycle": {
     "preview": ["doctor --json --check sqlite_lock_contention"],
-    "readOnly": ["doctor", "stats", "projects list", "search", "context", "timeline", "conflicts list", "cloud status"],
+    "readOnly": ["doctor", "stats", "projects list", "search", "context", "timeline", "conflicts list", "cloud status", "test --quick --json"],
     "dataExport": ["export", "obsidian-export"],
     "mutating": ["save", "delete", "import", "sync", "setup", "projects consolidate", "projects prune", "cloud enroll", "cloud config"],
     "requiresHumanApproval": true
@@ -19,9 +19,9 @@
     "export": "never-implicit"
   },
   "installPlan": {
-    "command": "engram setup opencode",
+    "command": "engram setup opencode --protocol=full",
     "preview": "engram doctor --json --check sqlite_lock_contention --project <project>",
-    "prerequisites": ["backup externo de ~/.engram", "check SQLite por proyecto", "decidir integración MCP"]
+    "prerequisites": ["backup externo de ~/.engram", "check SQLite por proyecto", "decidir integración MCP", "confirmar protocolo full"]
   },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"

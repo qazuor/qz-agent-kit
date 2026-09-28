@@ -8,6 +8,8 @@ actualiza Gentle AI por sí mismo.
 - versión relevada: `3.7.0`;
 - diagnóstico: `gentle-ai doctor` saludable en la máquina relevada;
 - comandos de ciclo de vida: `install`, `sync`, `upgrade`, `restore`, `doctor`;
+- `install` acepta `--scope global|workspace`, `--component`, `--skill`,
+  `--dry-run` y políticas separadas de background agents;
 - integración detectada: Engram MCP por la configuración de OpenCode;
 - estado administrado: el doctor informa dos agentes instalados, OpenCode y Pi;
 - política del kit: no ejecutar `install`, `sync` o `upgrade` desde el wizard sin

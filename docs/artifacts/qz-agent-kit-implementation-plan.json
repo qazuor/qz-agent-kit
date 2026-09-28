@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v66",
-    "number": 66,
-    "createdAt": "2026-09-28T17:15:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v67",
+    "number": 67,
+    "createdAt": "2026-09-28T17:25:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "endurecer preview de Engram con proyecto explícito",
+    "reason": "alinear manifests con las ayudas actuales de Gentle AI y Engram",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v65"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v66"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ya ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Siguen pendientes backup verificable, aprobación separada, apply, receipt, verify y rollback externo.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ya ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Los manifests ahora reflejan `engram setup --protocol=full`, `test --quick --json` y las flags actuales de Gentle AI. Siguen pendientes backup verificable, aprobación separada, apply, receipt, verify y rollback externo.",
               "done": false
             },
             {

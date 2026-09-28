@@ -13,7 +13,7 @@ aprobación concreta. No convierte `export` en una acción automática.
 - ejecutable: detectado por `qz-kit ecosystem`;
 - integración: `engram mcp --tools=agent` es la forma documentada para los CLI;
 - interfaces disponibles: `doctor`, `stats`, `projects list`, `export`, `tui`,
-  `sync` y `cloud`;
+  `test --quick --json`, `sync` y `cloud`;
 - política del kit: nunca copiar, importar, exportar, limpiar, consolidar ni
   modificar la DB automáticamente.
 
@@ -39,4 +39,7 @@ de ownership incompletos y targets cloud antiguos con mutaciones pendientes.
 
 Debe separar tres operaciones: inventario read-only, backup explícito y
 restauración verificada. Los wrappers `qz-engram` pueden exponer las interfaces
-humanas, pero no deben convertir operaciones destructivas en defaults.
+humanas, pero no deben convertir operaciones destructivas en defaults. La ayuda
+actual confirma que `engram setup <agent> --protocol=full|slim` instala la
+integración del agente; el adapter conserva `full` como default porque `slim`
+tiene restricciones de compatibilidad específicas de Claude Code.
