@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v90",
-    "number": 90,
-    "createdAt": "2026-09-29T00:45:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v91",
+    "number": 91,
+    "createdAt": "2026-09-29T01:30:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "confirmar gate de release después de validaciones",
+    "reason": "cerrar E2E limpia real de Hospeda",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v89"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v90"
   },
   "view": {
     "tabs": [
@@ -67,11 +67,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "74/83",
+              "value": "75/83",
               "label": "tareas completadas"
             },
             {
-              "value": "9",
+              "value": "8",
               "label": "pendientes"
             },
             {
@@ -821,8 +821,8 @@
               "title": "Corrida E2E real con issue no destructivo",
               "category": "Hospeda",
               "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
-              "notes": "Validación parcial real HOS-635: start-issue reutilizó un worktree existente; context y DB funcionaron, env ejecutó 6/6 checks con 1 partial no bloqueante, sin servers. El worktree ya estaba dirty por scripts/worktree/. La comparación read-only confirmó que esos scripts son copias antiguas: 3 coinciden con el adapter actual y 9 difieren (configuración legacy, fallback qz y rutas de logs). No se modificó ni limpió el worktree; la E2E limpia de creación/preparación/servidores/cleanup sigue pendiente.",
-              "done": false
+              "notes": "E2E limpia completada en worktree temporal desde develop: template DB vigente y clonado, envs completos desde hospeda-staging, pnpm install, build de 18 paquetes, seis chequeos de env OK (2 parciales no bloqueantes), DB auto-healed y seeded, API/admin/web levantados en puertos 3101/3100/4421, health checks OK, hops context/recap reflejaron DB y servidores. Cleanup detuvo procesos, eliminó DB, worktree y branch temporal. Durante la corrida se detectó y corrigió en worktree separado el bug de ADAPTER_CFG no inicializado en wt-create.sh.",
+              "done": true
             }
           ]
         }
