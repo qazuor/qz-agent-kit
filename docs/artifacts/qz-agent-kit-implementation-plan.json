@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v86",
-    "number": 86,
-    "createdAt": "2026-09-28T23:10:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v87",
+    "number": 87,
+    "createdAt": "2026-09-28T23:35:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar previews reales de Gentle AI y Engram",
+    "reason": "validar sintaxis y presencia de configuración TUI",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v85"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v86"
   },
   "view": {
     "tabs": [
@@ -650,7 +650,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Política portable documentada en docs/harness-tui-policy.md. Relevamiento real: OpenCode 1.18.32 con tui.json y binds acordados; Gentle Shell 3.7.0, Claude Code 2.1.283 y Codex CLI 0.155.0 presentes. La configuración se versionó/documentó sin leer auth, pero la semántica física de Home/End, scroll y mouse todavía requiere prueba TUI interactiva por harness.",
+              "notes": "Validación estática actualizada: tui.json de OpenCode y settings.json de Gentle Shell existen y son JSON válidos; Codex config.toml existe. Se confirmaron rutas sin leer contenidos sensibles. La semántica física de Home/End, scroll y mouse todavía requiere prueba interactiva por harness.",
               "done": false
             }
           ]
