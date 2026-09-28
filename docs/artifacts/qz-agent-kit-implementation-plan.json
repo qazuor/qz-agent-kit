@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 102,
+  "version": 103,
   "view": {
     "tabs": [
       "overview"
@@ -878,7 +878,7 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Pendiente. Debe usar APIs oficiales cuando existan, separar credenciales de datos, mostrar última actualización y distinguir datos verificados de estimados.",
+              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md. MVP local: NaN automatizado; OpenAI/Claude sólo con APIs/permisos oficiales o captura manual. Implementación pendiente.",
               "done": false
             },
             {
