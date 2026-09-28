@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v81",
-    "number": 81,
-    "createdAt": "2026-09-28T21:10:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v82",
+    "number": 82,
+    "createdAt": "2026-09-28T21:35:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "relevar límites operativos de Engram para restore seguro",
+    "reason": "validar export/import aislado de Engram",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v80"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v81"
   },
   "view": {
     "tabs": [
@@ -67,11 +67,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "73/83",
+              "value": "74/83",
               "label": "tareas completadas"
             },
             {
-              "value": "10",
+              "value": "9",
               "label": "pendientes"
             },
             {
@@ -846,8 +846,8 @@
               "title": "Probar backup y restore de Engram",
               "category": "Memoria",
               "description": "Validar que una reinstalación no pierda memoria.",
-              "notes": "Pendiente: Engram 2.0.0 no tiene comando restore dedicado; `engram export` produce un JSON importable y su invocación incluso con `--help` ejecutó la exportación por defecto en el directorio actual. El relevamiento creó un archivo vacío accidentalmente, ya eliminado. Para cerrar este punto hace falta probar export/import en un HOME y base temporales, nunca sobre la DB real.",
-              "done": false
+              "notes": "Validado en entorno aislado: Engram 2.0.0 creó una base temporal, exportó una observación sintética a JSON (864 bytes) e importó el archivo en otra base temporal, recuperando 1 observación. No se tocó la DB real. La copia binaria consistente del triplete SQLite queda como procedimiento adicional documentado, no como reemplazo del export lógico.",
+              "done": true
             },
             {
               "id": "p6-cloud",
