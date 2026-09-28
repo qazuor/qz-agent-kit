@@ -10,6 +10,12 @@ if (command === '--version' || command === 'version') {
   console.log('qz dispatcher 1')
   process.exit(0)
 }
+if (command === 'engram') {
+  const installedWrapper = join(homedir(), '.config/qz-agent-kit/bin/qz-engram.mjs')
+  const wrapper = existsSync(installedWrapper) ? installedWrapper : resolve(new URL('../scripts/qz-engram.mjs', import.meta.url).pathname)
+  const result = spawnSync(process.execPath, [wrapper, ...args], { stdio: 'inherit', shell: false })
+  process.exit(result.status ?? 1)
+}
 const findRoot = (start) => {
   let current = resolve(start)
   while (true) {
@@ -43,6 +49,7 @@ if (command === 'help' || command === '--help') {
   console.log(`qz — dispatcher portable del adapter ${config.adapter || '(sin adapter)'}
 
 Uso:
+  qz engram <operación>    consulta read-only de Engram, incluso fuera de un proyecto
   qz doctor                 valida el contrato del proyecto
   qz config [--json]        muestra configuración no secreta
   qz <comando> [args...]    delega en el adapter declarado

@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 109,
+  "version": 110,
   "view": {
     "tabs": [
       "overview"
@@ -755,7 +755,7 @@
               "title": "qz-engram",
               "category": "Memoria",
               "description": "Wrapper seguro y descubrible de Engram.",
-              "notes": "Implementado; limpieza final de memoria pendiente.",
+              "notes": "Implementado como wrapper global `qz engram`: permite consultas read-only aun fuera de un proyecto y bloquea save/delete/import/export/sync/setup/consolidate/prune y mutaciones cloud. La limpieza final de memoria sigue pendiente.",
               "done": true
             },
             {
