@@ -219,6 +219,20 @@ para Gentle AI, Engram u otros adapters. `qz-kit external-plan --strict`
 devuelve código de error si queda alguna acción aprobable; nunca ejecuta esas
 acciones.
 
+`qz-kit external-preview` ejecuta sólo el preview seguro declarado por el
+manifest del adapter, sin shell y sin incluir la salida del proceso. Devuelve
+estado, código de salida y una huella del resultado. Para Engram se debe pasar
+el proyecto explícitamente:
+
+```bash
+qz-kit external-preview --component gentle-ai
+qz-kit external-preview --component engram --project hospeda
+qz-kit external-preview --strict
+```
+
+Un preview exitoso no instala, actualiza ni configura nada y no habilita el
+`apply` del adapter.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash
@@ -255,6 +269,7 @@ qz-kit ecosystem
 qz-kit preflight
 qz-kit backup-plan
 qz-kit external-plan
+qz-kit external-preview
 qz-kit provenance --manifest /ruta/al/install-manifest.json
 qz-kit readiness --project /ruta/al/proyecto
 qz-kit plan

@@ -43,4 +43,7 @@ plan → preview → backup → aprobación → apply → receipt → verify →
 ```
 
 Hasta completar estos requisitos, `external-plan` sólo describe acciones y
-`external-plan --strict` debe bloquearlas.
+`external-plan --strict` debe bloquearlas. `external-preview` puede ejecutar
+únicamente el preview declarado por el manifest, sin shell y sin mostrar su
+salida; devuelve estado, código de salida y una huella del resultado. No es un
+`apply` y no convierte un preview exitoso en una instalación aplicada.

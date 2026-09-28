@@ -50,6 +50,8 @@ try {
   writeFileSync(optionalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['context7', 'rdd-review', 'background-agents'], providers: [] })}\n`)
   const optionalExternal = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', optionalPlan], { cwd: root, encoding: 'utf8' }))
   if (optionalExternal.actions.length !== 3 || optionalExternal.actions.some((action) => action.status !== 'pending-adapter')) throw new Error('adapters opcionales no quedaron declarados como pending-adapter')
+  const optionalPreview = parse(execFileSync(node, [resolve(root, 'scripts/external-preview.mjs'), '--from', optionalPlan], { cwd: root, encoding: 'utf8' }))
+  if (optionalPreview.mutations !== 'none' || optionalPreview.results.length !== 3 || optionalPreview.results.some((result) => result.status !== 'pending-adapter')) throw new Error('external-preview ejecutó un adapter sin preview')
   const externalStrict = spawnSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--strict', '--from', externalPlan], { cwd: root, encoding: 'utf8' })
   if (externalStrict.status === 0 || JSON.parse(externalStrict.stdout).summary.ready || !externalStrict.stdout.includes('"strict": true')) throw new Error('external-plan --strict no bloqueó acciones pendientes')
   const invalidPlan = join(configRoot, 'invalid-install-plan.json')
