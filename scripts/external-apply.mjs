@@ -41,7 +41,9 @@ const backupStatus = (phase) => {
 const before = backupStatus('before')
 const apply = spawnSync(tokens[0], tokens.slice(1), { stdio: 'inherit', timeout: 10 * 60 * 1000, windowsHide: true })
 const after = backupStatus('after')
-const verification = spawnSync('gentle-ai', ['doctor'], { stdio: 'ignore', timeout: 30000, windowsHide: true })
+// Mantener el mismo HOME/PATH del apply evita validar accidentalmente otra instalación
+// global y permite que el receipt sea reproducible en un entorno aislado.
+const verification = spawnSync('gentle-ai', ['doctor'], { stdio: 'ignore', timeout: 30000, windowsHide: true, env: process.env })
 const output = { schemaVersion: 1, type: 'qz-external-apply-receipt', component, plan: planPath, previewReceipt: resolve(receiptPath), command: tokens, before, apply: { exitCode: apply.status ?? null, status: apply.error?.code === 'ETIMEDOUT' ? 'timeout' : apply.status === 0 ? 'ok' : 'failed' }, after, nativeSnapshotChanged: Boolean(after.latestSnapshot && after.latestSnapshot !== before.latestSnapshot), verification: { doctorExitCode: verification.status ?? null, status: verification.status === 0 ? 'ok' : 'failed' }, mutations: 'external-apply', secretValues: 'not-read' }
 console.log(JSON.stringify(output, null, 2))
 if (apply.status !== 0 || verification.status !== 0) process.exit(1)

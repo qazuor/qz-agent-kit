@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -67,6 +67,15 @@ try {
   if (engramStatus.mutations !== 'none' || engramStatus.dataDir.files !== 2 || engramStatus.dataDir.databaseLike !== 1 || engramStatus.dataDir.wal !== 1 || engramStatus.backup.required !== true) throw new Error('external-backup-status no relevó Engram de forma agregada')
   const blockedApply = spawnSync(node, [resolve(root, 'scripts/external-apply.mjs'), '--component', 'gentle-ai'], { cwd: root, encoding: 'utf8' })
   if (blockedApply.status !== 2 || !blockedApply.stderr.includes('falta --approve GENTLE_AI_APPLY')) throw new Error('external-apply no bloqueó la falta de aprobación')
+  const fakeBin = join(configRoot, 'fake-bin')
+  mkdirSync(fakeBin, { recursive: true })
+  const fakeGentle = join(fakeBin, 'gentle-ai')
+  writeFileSync(fakeGentle, '#!/usr/bin/env bash\nif [ "$1" = install ]; then mkdir -p "$HOME/.gentle-ai/backups/zzz-after"; printf \'%s\\n\' \'{"id":"zzz-after","created_at":"2026-01-01T00:00:01Z","checksum":"fixture"}\' > "$HOME/.gentle-ai/backups/zzz-after/manifest.json"; printf fixture > "$HOME/.gentle-ai/backups/zzz-after/snapshot.tar.gz"; exit 0; fi\nif [ "$1" = doctor ]; then exit 0; fi\nexit 0\n')
+  chmodSync(fakeGentle, 0o755)
+  const applied = spawnSync(node, [resolve(root, 'scripts/external-apply.mjs'), '--component', 'gentle-ai', '--receipt', receiptPath, '--from', externalPlan, '--home', gentleHome, '--approve', 'GENTLE_AI_APPLY'], { cwd: root, env: { ...process.env, HOME: gentleHome, PATH: `${fakeBin}:${process.env.PATH}` }, encoding: 'utf8' })
+  if (applied.status !== 0) throw new Error(`external-apply fixture falló: ${applied.stderr}`)
+  const appliedResult = parse(applied.stdout)
+  if (appliedResult.apply.status !== 'ok' || appliedResult.verification.status !== 'ok' || !appliedResult.nativeSnapshotChanged) throw new Error('external-apply fixture no verificó snapshot/doctor')
   const optionalPlan = join(configRoot, 'optional-install-plan.json')
   writeFileSync(optionalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['context7', 'rdd-review', 'background-agents'], providers: [] })}\n`)
   const optionalExternal = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', optionalPlan], { cwd: root, encoding: 'utf8' }))
