@@ -52,7 +52,10 @@ que contiene la huella y el resultado resumido; si el archivo ya existe exige
 `--force-receipt`. `external-receipt --check <ruta>` valida ese documento sin
 ejecutar nuevamente el preview y sin aceptar salida completa ni secretos.
 `external-backup-status --component gentle-ai` releva los snapshots nativos y
-su scope sin abrir archivos archivados ni copiarlos.
+su scope sin abrir archivos archivados ni copiarlos. Con
+`--component engram --project <project>` sólo releva conteos/tamaños agregados
+de la carpeta de datos y ejecuta el check read-only de lock contention; no lee
+observaciones ni produce un backup.
 
 Un adapter no puede pasar a `apply` si la herramienta externa no expone una
 lista fiable de destinos o un mecanismo nativo de snapshot/restore verificable.

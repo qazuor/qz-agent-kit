@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -7,7 +8,36 @@ const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const component = value('--component') || 'gentle-ai'
 const home = resolve(value('--home') || homedir())
-if (component !== 'gentle-ai') throw new Error(`backup status no implementado para ${component}; Engram requiere procedimiento separado`)
+if (component === 'engram') {
+  const root = join(home, '.engram')
+  const totals = { files: 0, bytes: 0, databaseLike: 0, wal: 0, shm: 0 }
+  const walk = (directory) => {
+    if (!existsSync(directory)) return
+    for (const name of readdirSync(directory)) {
+      const path = join(directory, name)
+      let stat
+      try { stat = statSync(path) } catch { continue }
+      if (stat.isDirectory()) walk(path)
+      else {
+        totals.files += 1
+        totals.bytes += stat.size
+        if (/\.(db|sqlite|sqlite3)$/i.test(name)) totals.databaseLike += 1
+        if (/(?:\.|-)wal$/i.test(name)) totals.wal += 1
+        if (/(?:\.|-)shm$/i.test(name)) totals.shm += 1
+      }
+    }
+  }
+  walk(root)
+  const project = value('--project')
+  let diagnostic = { requested: false, status: 'not-requested' }
+  if (project) {
+    const probe = spawnSync('engram', ['doctor', '--json', '--check', 'sqlite_lock_contention', '--project', project], { encoding: 'utf8', timeout: 8000, stdio: ['ignore', 'pipe', 'pipe'] })
+    diagnostic = { requested: true, project, status: probe.error?.code === 'ETIMEDOUT' ? 'timeout' : probe.error ? 'unavailable' : probe.status === 0 ? 'ok-or-warning' : 'error', output: 'not-included' }
+  }
+  console.log(JSON.stringify({ schemaVersion: 1, component, home, dataDir: { present: existsSync(root), ...totals }, backup: { required: true, strategy: 'consistent-sqlite-snapshot-with-wal-handling', installerCopies: false }, diagnostic, mutations: 'none', secretValues: 'not-read' }, null, 2))
+  process.exit(0)
+}
+if (component !== 'gentle-ai') throw new Error(`backup status no implementado para ${component}`)
 const root = join(home, '.gentle-ai')
 const statePath = join(root, 'state.json')
 const backupRoot = join(root, 'backups')

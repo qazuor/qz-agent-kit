@@ -231,6 +231,7 @@ qz-kit external-preview --strict --project hospeda
 qz-kit external-preview --strict --project hospeda --receipt /tmp/qz-preview.json
 qz-kit external-receipt --check /tmp/qz-preview.json
 qz-kit external-backup-status --component gentle-ai
+qz-kit external-backup-status --component engram --project hospeda
 ```
 
 Un preview exitoso no instala, actualiza ni configura nada y no habilita el
@@ -240,7 +241,9 @@ explícitamente la ruta.
 `external-backup-status` sólo releva el estado estructural de los snapshots
 nativos de Gentle AI: agentes registrados, cantidad de snapshots, versión,
 checksum y tamaño. Nunca abre archivos del snapshot ni copia credenciales,
-Engram o `.env`.
+Engram o `.env`. Para Engram informa únicamente conteos/tamaños agregados,
+presencia de archivos SQLite/WAL/SHM y, si se pasa `--project`, el estado
+resumido del check de lock contention.
 
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
