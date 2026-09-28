@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v78",
-    "number": 78,
-    "createdAt": "2026-09-28T20:25:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v79",
+    "number": 79,
+    "createdAt": "2026-09-28T20:40:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "revalidar contrato Gentle AI con dry-run actual",
+    "reason": "relevar auth y providers reales sin leer credenciales",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v77"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v78"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "Matriz portable documentada en docs/harness-auth-matrix.md. La presencia y los nombres de providers están relevados; login funcional y pruebas de modelos siguen pendientes.",
+              "notes": "Relevamiento read-only actualizado: OpenCode 1.18.32 muestra OpenAI OAuth y GitHub Copilot por variable de entorno; MCP Context7 y Engram conectados. Gentle AI/Shell 3.7.0, Claude Code 2.1.284 y Codex CLI 0.155.0 arrancan y reportan versión. No se leyeron valores de auth. Login/model smoke funcional por harness todavía pendiente.",
               "done": false
             },
             {
