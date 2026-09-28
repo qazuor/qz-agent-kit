@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v76",
-    "number": 76,
-    "createdAt": "2026-09-28T20:00:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v77",
+    "number": 77,
+    "createdAt": "2026-09-28T20:10:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar apply protegido en entorno aislado",
+    "reason": "validar reinstalación clean-room del paquete",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v75"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v76"
   },
   "view": {
     "tabs": [
@@ -67,11 +67,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "72/83",
+              "value": "73/83",
               "label": "tareas completadas"
             },
             {
-              "value": "11",
+              "value": "10",
               "label": "pendientes"
             },
             {
@@ -871,8 +871,8 @@
               "title": "Reinstalación reproducible documentada",
               "category": "Release",
               "description": "Ejecutar el procedimiento completo en entorno limpio.",
-              "notes": "Runbook documentado en docs/clean-room-install.md; ejecución real en HOME/máquina limpia todavía pendiente.",
-              "done": false
+              "notes": "Validado en HOME temporal: install --apply para los cuatro clientes instaló 60 targets, creó backup y install-manifest; install --check posterior reportó drift=0, missing=0 y contentDrift=0. No se leyeron secretos ni se instalaron componentes externos.",
+              "done": true
             },
             {
               "id": "p7-release-check",
