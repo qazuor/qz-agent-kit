@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 100,
+  "version": 101,
   "view": {
     "tabs": [
       "overview"
@@ -837,7 +837,7 @@
               "title": "Finalizar curación de Engram",
               "category": "Memoria",
               "description": "Eliminar lo obsoleto y conservar sólo memorias vigentes.",
-              "notes": "Self-tests locales de Engram 2.0.0 pasan: reliability quick (database_save_search_context y concurrent_local_writes) y performance quick (20 operaciones, 417 ops/s). Esto valida el motor, no decide qué memorias conservar o eliminar; la curación humana sigue pendiente.",
+              "notes": "Diagnóstico read-only completado: 203 proyectos registrados; hospeda, hospeda2, qz-agent-kit y tmp tienen sqlite_lock_contention OK. La curación/eliminación de proyectos y memorias sigue pendiente y no fue ejecutada.",
               "done": false
             },
             {
