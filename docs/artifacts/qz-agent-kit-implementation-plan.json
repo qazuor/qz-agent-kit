@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v87",
-    "number": 87,
-    "createdAt": "2026-09-28T23:35:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v88",
+    "number": 88,
+    "createdAt": "2026-09-29T00:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar sintaxis y presencia de configuración TUI",
+    "reason": "validar contenido distribuible antes de publicar",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v86"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v87"
   },
   "view": {
     "tabs": [
@@ -887,7 +887,7 @@
               "title": "Publicar qz-agent-kit y adapter",
               "category": "Release",
               "description": "Push, PR y merge de los cambios versionados.",
-              "notes": "Pendiente de revisión humana.",
+              "notes": "`npm pack --dry-run --json` validó un tarball de 67.8 KB/83 archivos, sin `.env`, auth, DB, caches ni bundles inesperados. La publicación externa todavía no se ejecutó; falta decidir canal, tag y push.",
               "done": false
             },
             {
