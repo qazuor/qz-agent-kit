@@ -51,6 +51,8 @@ salida; devuelve estado, código de salida y una huella del resultado. No es un
 que contiene la huella y el resultado resumido; si el archivo ya existe exige
 `--force-receipt`. `external-receipt --check <ruta>` valida ese documento sin
 ejecutar nuevamente el preview y sin aceptar salida completa ni secretos.
+`external-backup-status --component gentle-ai` releva los snapshots nativos y
+su scope sin abrir archivos archivados ni copiarlos.
 
 Un adapter no puede pasar a `apply` si la herramienta externa no expone una
 lista fiable de destinos o un mecanismo nativo de snapshot/restore verificable.
