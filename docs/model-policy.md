@@ -1,23 +1,24 @@
-# Política de modelos económicos
+# Política de modelos
 
-La configuración de referencia usa modelos compatibles con la suscripción OpenAI
-actual. Los nombres se validaron con smoke tests read-only el 29-09-2026.
+La suscripción económica de referencia para OpenCode y Gentle Shell es **NaN Builders**. Su API es compatible con OpenAI y usa `https://api.nan.builders/v1`.
 
-| Harness | Modelo principal | Modelo liviano | Estado |
-| --- | --- | --- | --- |
-| OpenCode | `openai/gpt-5.6-sol` | `openai/gpt-5.6-luna` | probado |
-| Codex CLI | `gpt-5.6-sol` | selección explícita por invocación | probado |
-| Gentle Shell | `gpt-5.6-sol` | selección explícita por invocación | probado |
-| Claude Code | sin cambio | sin cambio | no usa estos modelos OpenAI |
+## Modelos iniciales
 
-También funcionan en OpenCode `openai/gpt-5.6-sol-fast`, `openai/gpt-5.6-luna-fast`,
-`openai/gpt-5.5-fast` y `openai/gpt-6-luna-fast`. Los sufijos `fast` no son
-intercambiables entre harnesses: Codex y Gentle Shell aceptan los nombres base
-`gpt-5.6-luna` y `gpt-5.6-sol`, pero rechazaron los `fast` probados.
+- `nan/glm5.3-flash`: modelo principal para coding.
+- `nan/deepseek-v4-flash`: análisis general y lectura de imágenes.
+- `nan/qwen3.8-flash`: respuestas rápidas y tareas simples.
+- `nan/mimo-v2.6-flash`: alternativa rápida, sujeta a disponibilidad en la cuenta.
+- `nan/gemma4` y `nan/qwen3.6`: alternativas para probar.
+- `nan/glm5.3`: sólo si la cuenta tiene tier premium.
 
-El catálogo puede mostrar modelos que una cuenta ChatGPT no puede usar. En la
-cuenta probada, `gpt-5.4-mini`, `gpt-5.3-codex-spark` y `gpt-5.4-fast` fueron
-rechazados por el proveedor. No deben configurarse como defaults sólo porque
-aparezcan en `opencode models`.
+Los IDs se mantienen exactamente como los publica NaN. No se deben sustituir por nombres aproximados.
 
-Los valores de autenticación nunca forman parte de esta política ni del repositorio.
+## Alcance por harness
+
+- **OpenCode**: provider custom `nan` mediante `@ai-sdk/openai-compatible`; credencial fuera del repositorio.
+- **Gentle Shell**: provider `nan` con API `openai-completions`; credencial fuera del repositorio.
+- **Codex y Claude Code**: no se modifican en esta etapa. Su compatibilidad con NaN se evaluará posteriormente mediante adapters o router, sin cambiar sus defaults actuales.
+
+## Seguridad
+
+La API key vive en un archivo externo con permisos restrictivos y nunca se copia a repositorios, artifacts, logs ni documentación.

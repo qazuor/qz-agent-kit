@@ -8,16 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v97",
-    "number": 97,
-    "createdAt": "2026-09-29T05:00:00.000Z",
-    "author": "qz-agent-kit",
-    "reason": "configurar defaults de modelos económicos compatibles",
-    "sourceHash": "sha256:qz-agent-kit-implementation-plan",
-    "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v96"
-  },
+  "version": 98,
   "view": {
     "tabs": [
       "overview"
@@ -875,6 +866,14 @@
               "done": true
             },
             {
+              "id": "p7-subscription-dashboard",
+              "title": "Dashboard de suscripciones y consumo",
+              "category": "Observabilidad",
+              "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
+              "notes": "Pendiente. Debe usar APIs oficiales cuando existan, separar credenciales de datos, mostrar última actualización y distinguir datos verificados de estimados.",
+              "done": false
+            },
+            {
               "id": "p7-release-check",
               "title": "Gate reproducible de release",
               "category": "Release",
@@ -914,7 +913,7 @@
         "type": "prose",
         "title": "Decisiones humanas que siguen abiertas",
         "data": {
-          "text": "Debemos aprobar el alcance final de plugins/TUI, la estrategia de Engram entre PCs, el criterio para activar GLM/DeepSeek/OpenKilo y el momento de retirar Claude Code. Ninguna de esas decisiones debe resolverse silenciosamente desde el instalador."
+          "text": "Debemos aprobar el alcance final de plugins/TUI, la estrategia de Engram entre PCs, el criterio para activar modelos NaN/OpenAI, el router opcional para Codex/Claude y el momento de retirar Claude Code. El dashboard de suscripciones queda planificado como tarea pendiente."
         }
       }
     ]
