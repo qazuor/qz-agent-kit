@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 103,
+  "version": 104,
   "view": {
     "tabs": [
       "overview"
@@ -853,7 +853,7 @@
               "title": "Definir estrategia de Engram entre PCs",
               "category": "Memoria",
               "description": "Elegir backup seguro o almacenamiento sincronizado sin versionar DB viva.",
-              "notes": "Relevamiento read-only: `engram sync --status` muestra 0 chunks locales/remotos y `engram cloud status` confirma cloud no configurado, sin URL efectiva ni token. No se activó cloud. La recomendación permanece: DB local como fuente, snapshots cifrados fuera de Git y restore aislado; proveedor, cifrado y retención todavía requieren decisión.",
+              "notes": "Estado read-only: engram cloud status = not configured; no server URL, token ni proyectos enrolados. Recomendación: DB local + snapshots cifrados externos; cloud opt-in después de definir proveedor, retención y restore aislado.",
               "done": false
             }
           ]

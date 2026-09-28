@@ -79,3 +79,9 @@ La estrategia recomendada es:
 La implementación concreta del almacenamiento queda deliberadamente abierta
 hasta elegir proveedor, cifrado y política de retención. El instalador sólo
 debe orquestar el procedimiento después de una aprobación explícita.
+
+## Estado de cloud y recomendación
+
+El 2026-09-28 `engram cloud status` informó `not configured`: no hay server URL efectivo, el sync está bloqueado y ningún proyecto fue enrolado. Esto es una condición segura para el estado actual.
+
+La estrategia recomendada sigue siendo conservar la DB viva local y usar snapshots cifrados externos. La sincronización cloud de Engram debe evaluarse después de elegir servidor, autenticación, retención y aislamiento por proyecto. No se debe activar `cloud enroll`, `cloud config`, `sync --cloud` ni `ENGRAM_CLOUD_AUTOSYNC=1` como parte de una instalación automática sin una decisión explícita y un restore aislado validado.
