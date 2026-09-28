@@ -4,6 +4,14 @@ La DB viva de Engram no forma parte de Git ni del repositorio de un proyecto.
 El objetivo es poder reinstalar una máquina sin perder memoria y poder
 verificar un restore antes de volver a usarlo.
 
+La referencia técnica actual de Engram mantiene SQLite en WAL y considera la
+DB local la fuente de verdad. El backup binario debe incluir juntos
+`engram.db`, `engram.db-wal` y `engram.db-shm`; los filesystems de red no son
+seguros para ese triplete. `engram export` produce además un backup JSON
+versionado con observaciones, prompts, pins y metadata de relaciones, por lo
+que el procedimiento futuro debe conservar ambas capas sin convertir el
+export en una acción implícita.
+
 ## Reglas
 
 - El instalador qz nunca lee, copia, importa, exporta, limpia ni actualiza la

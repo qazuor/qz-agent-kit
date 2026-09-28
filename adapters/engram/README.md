@@ -12,6 +12,12 @@ seleccionar el agente y el protocolo. El adapter debe descubrir y respaldar sus
 destinos por separado antes de ejecutar setup, o mantener esa operación fuera
 del instalador qz.
 
+La DB local es la fuente de verdad y usa el triplete SQLite `engram.db`,
+`engram.db-wal` y `engram.db-shm`. Una copia binaria consistente debe tratar
+los tres archivos juntos y sólo sobre filesystem local. `engram export` es una
+segunda copia lógica versionada (observations, prompts, pins y relaciones),
+pero sigue siendo una operación explícita y no se ejecuta desde el instalador.
+
 ## Contrato verificado
 
 - versión relevada: `2.0.0`;

@@ -34,7 +34,7 @@ if (component === 'engram') {
     const probe = spawnSync('engram', ['doctor', '--json', '--check', 'sqlite_lock_contention', '--project', project], { encoding: 'utf8', timeout: 8000, stdio: ['ignore', 'pipe', 'pipe'] })
     diagnostic = { requested: true, project, status: probe.error?.code === 'ETIMEDOUT' ? 'timeout' : probe.error ? 'unavailable' : probe.status === 0 ? 'ok-or-warning' : 'error', output: 'not-included' }
   }
-  console.log(JSON.stringify({ schemaVersion: 1, component, home, dataDir: { present: existsSync(root), ...totals }, backup: { required: true, strategy: 'consistent-sqlite-snapshot-with-wal-handling', installerCopies: false }, diagnostic, mutations: 'none', secretValues: 'not-read' }, null, 2))
+  console.log(JSON.stringify({ schemaVersion: 1, component, home, dataDir: { present: existsSync(root), ...totals }, backup: { required: true, strategy: 'consistent-sqlite-triplet-local-filesystem', logicalSecondCopy: 'engram export (explicit only)', installerCopies: false }, diagnostic, mutations: 'none', secretValues: 'not-read' }, null, 2))
   process.exit(0)
 }
 if (component !== 'gentle-ai') throw new Error(`backup status no implementado para ${component}`)

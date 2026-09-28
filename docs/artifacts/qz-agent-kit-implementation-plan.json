@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v73",
-    "number": 73,
-    "createdAt": "2026-09-28T18:55:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v74",
+    "number": 74,
+    "createdAt": "2026-09-28T19:10:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "agregar relevamiento read-only de datos Engram",
+    "reason": "documentar backup SQLite triplete y export lógico de Engram",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v72"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v73"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, `qz-kit external-receipt --check` lo valida, `qz-kit external-backup-status --component gentle-ai` releva state.json/snapshots y `--component engram` releva sólo conteos/tamaños agregados, WAL/SHM y lock contention opcional. Gentle AI tiene snapshots nativos; Engram sigue requiriendo backup SQLite consistente separado. apply/verify/rollback qz aún no están implementados.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, `qz-kit external-receipt --check` lo valida, y `qz-kit external-backup-status` releva snapshots Gentle o conteos/tamaños agregados de Engram, incluyendo WAL/SHM y lock contention opcional. La estrategia Engram queda definida como backup consistente del triplete SQLite en filesystem local más `engram export` como segunda copia lógica explícita. Gentle AI tiene snapshots nativos; apply/verify/rollback qz aún no están implementados.",
               "done": false
             },
             {
