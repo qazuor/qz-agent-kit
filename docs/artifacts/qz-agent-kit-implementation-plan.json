@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v62",
-    "number": 62,
-    "createdAt": "2026-09-28T16:35:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v63",
+    "number": 63,
+    "createdAt": "2026-09-28T16:45:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "precisar límite de la validación E2E de HOS-635",
+    "reason": "registrar matriz de harnesses y límite de validación TUI",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v61"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v62"
   },
   "view": {
     "tabs": [
@@ -650,7 +650,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Política portable documentada en docs/harness-tui-policy.md: TUI separada de workflows, plugins explícitos, backups y validación por versión. Falta probar y versionar la configuración concreta de cada harness.",
+              "notes": "Política portable documentada en docs/harness-tui-policy.md. Relevamiento real: OpenCode 1.18.32 con tui.json y binds acordados; Gentle Shell 3.7.0, Claude Code 2.1.283 y Codex CLI 0.155.0 presentes. La configuración se versionó/documentó sin leer auth, pero la semántica física de Home/End, scroll y mouse todavía requiere prueba TUI interactiva por harness.",
               "done": false
             }
           ]

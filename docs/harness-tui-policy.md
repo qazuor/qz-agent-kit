@@ -56,6 +56,23 @@ La política acordada para la migración es:
 La semántica exacta de los binds se valida en la versión instalada antes de
 versionar una configuración global.
 
+## Relevamiento de la máquina de referencia
+
+El 28-09-2026 se verificaron las versiones instaladas sin leer credenciales:
+
+| Harness | Versión observada | Configuración TUI relevante |
+| --- | --- | --- |
+| OpenCode | `1.18.32` | `~/.config/opencode/tui.json`, `mouse: false`, tema oscuro, atención visual sin sonido y binds Home/End separados del buffer |
+| Gentle Shell | `3.7.0` | `~/.gentle-shell/agent/settings.json`; tema administrado por Gentle Shell, sin equivalente portable de los binds de OpenCode verificado |
+| Claude Code | `2.1.283` | configuración y atajos propios del cliente; no se copia desde OpenCode |
+| Codex CLI | `0.155.0` | configuración TUI propia; no se copia desde OpenCode |
+
+La configuración de OpenCode se pudo parsear y contiene los binds acordados,
+pero la validación automatizada de la semántica física de Home/End, scroll y
+mouse todavía requiere una sesión TUI interactiva. Por eso esta evidencia no
+marca completa la tarea de compatibilidad TUI: confirma la configuración
+versionada y deja pendiente la prueba de comportamiento por harness.
+
 ## Gate antes de agregar un plugin
 
 1. identificar el problema concreto;
