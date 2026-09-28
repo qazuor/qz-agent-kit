@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v79",
-    "number": 79,
-    "createdAt": "2026-09-28T20:40:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v80",
+    "number": 80,
+    "createdAt": "2026-09-28T20:55:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "relevar auth y providers reales sin leer credenciales",
+    "reason": "hacer reproducible el gate de release con Gentle AI",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v78"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v79"
   },
   "view": {
     "tabs": [
@@ -879,7 +879,7 @@
               "title": "Gate reproducible de release",
               "category": "Release",
               "description": "Ejecutar todas las validaciones, seguridad del package y limpieza de Git antes de publicar.",
-              "notes": "Implementado como npm run release:check; es read-only y no hace push ni publica.",
+              "notes": "Gate completo: smoke, validación de proyecto, adapters, manifests y package pasan. `.atl/` queda ignorado porque Gentle AI lo genera como índice local regenerable; release:check vuelve a reportar git clean=true.",
               "done": true
             },
             {
