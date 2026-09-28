@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v74",
-    "number": 74,
-    "createdAt": "2026-09-28T19:10:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v75",
+    "number": 75,
+    "createdAt": "2026-09-28T19:30:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "documentar backup SQLite triplete y export lógico de Engram",
+    "reason": "agregar apply protegido de Gentle AI sin ejecutarlo",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v73"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v74"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, `qz-kit external-receipt --check` lo valida, y `qz-kit external-backup-status` releva snapshots Gentle o conteos/tamaños agregados de Engram, incluyendo WAL/SHM y lock contention opcional. La estrategia Engram queda definida como backup consistente del triplete SQLite en filesystem local más `engram export` como segunda copia lógica explícita. Gentle AI tiene snapshots nativos; apply/verify/rollback qz aún no están implementados.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados; receipts y backup-status son read-only. La estrategia Engram queda definida como backup consistente del triplete SQLite en filesystem local más `engram export` como segunda copia lógica explícita. Se implementó `qz-kit external-apply` sólo para Gentle AI: exige receipt ok, token explícito, comando allowlisted, snapshot nativo antes/después y doctor posterior. No se ejecutó; Engram apply sigue bloqueado hasta disponer de restore aislado verificable.",
               "done": false
             },
             {
