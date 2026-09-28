@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v55",
-    "number": 55,
-    "createdAt": "2026-09-28T15:09:55.951Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v56",
+    "number": 56,
+    "createdAt": "2026-09-28T15:11:37.071Z",
     "author": "qz-agent-kit",
-    "reason": "documentar continuidad segura de Engram",
+    "reason": "documentar límites de auth y providers",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v54"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v55"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "OpenCode providers list read-only verificado: OpenAI OAuth y GitHub Copilot por GITHUB_TOKEN; Gentle Shell expone auth vía Pi pero no provider-list no interactivo; Codex expone login/doctor pero no provider-list. No se leyeron credenciales.",
+              "notes": "Matriz portable documentada en docs/harness-auth-matrix.md. La presencia y los nombres de providers están relevados; login funcional y pruebas de modelos siguen pendientes.",
               "done": false
             },
             {
