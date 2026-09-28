@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v93",
-    "number": 93,
-    "createdAt": "2026-09-29T02:30:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v94",
+    "number": 94,
+    "createdAt": "2026-09-29T03:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "probar modelos autenticados de OpenCode y Gentle Shell",
+    "reason": "completar smoke autenticado de Codex y Claude",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v92"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v93"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "Smoke funcional read-only: OpenCode `run --pure --format json` respondió OK con OpenAI OAuth; Gentle Shell aislado/no-session respondió OK con openai-codex/gpt-5.5. No se usaron herramientas ni se leyeron archivos. Claude/Codex aún requieren smoke equivalente si se los mantiene como harness operativo.",
+              "notes": "Smoke read-only actualizado: OpenCode y Gentle Shell respondieron OK con OpenAI; Codex CLI 0.155.0 respondió OK en modo ephemeral/read-only con gpt-6-astra. Claude Code 2.1.284 no pudo ejecutar el prompt porque la sesión local devolvió `Not logged in`; no se intentó login ni se tocaron credenciales.",
               "done": false
             },
             {
