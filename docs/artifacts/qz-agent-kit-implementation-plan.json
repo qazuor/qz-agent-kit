@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 101,
+  "version": 102,
   "view": {
     "tabs": [
       "overview"
@@ -641,7 +641,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Validación estática actualizada: tui.json de OpenCode y settings.json de Gentle Shell existen y son JSON válidos; Codex config.toml existe. Se confirmaron rutas sin leer contenidos sensibles. La semántica física de Home/End, scroll y mouse todavía requiere prueba interactiva por harness.",
+              "notes": "Configuración OpenCode documentada: mouse=false, diff auto, atención sin sonido, Home/End y navegación de mensajes. Gentle Shell usa fullscreen y Gentleman-Cute. La semántica de scroll y atajos de Pi requiere prueba interactiva; Codex y Claude no se modificaron.",
               "done": false
             },
             {
