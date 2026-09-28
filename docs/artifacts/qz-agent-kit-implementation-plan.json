@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v82",
-    "number": 82,
-    "createdAt": "2026-09-28T21:35:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v83",
+    "number": 83,
+    "createdAt": "2026-09-28T22:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar export/import aislado de Engram",
+    "reason": "relevar estado cloud de Engram sin activar sincronización",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v81"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v82"
   },
   "view": {
     "tabs": [
@@ -854,7 +854,7 @@
               "title": "Definir estrategia de Engram entre PCs",
               "category": "Memoria",
               "description": "Elegir backup seguro o almacenamiento sincronizado sin versionar DB viva.",
-              "notes": "Estrategia recomendada documentada: DB local, snapshots cifrados fuera de Git, retención y restore aislado; proveedor/cifrado aún pendientes.",
+              "notes": "Relevamiento read-only: `engram sync --status` muestra 0 chunks locales/remotos y `engram cloud status` confirma cloud no configurado, sin URL efectiva ni token. No se activó cloud. La recomendación permanece: DB local como fuente, snapshots cifrados fuera de Git y restore aislado; proveedor, cifrado y retención todavía requieren decisión.",
               "done": false
             }
           ]
