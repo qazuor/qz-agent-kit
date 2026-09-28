@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v54",
-    "number": 54,
-    "createdAt": "2026-09-28T15:08:07.915Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v55",
+    "number": 55,
+    "createdAt": "2026-09-28T15:09:55.951Z",
     "author": "qz-agent-kit",
-    "reason": "documentar procedimiento clean-room reproducible",
+    "reason": "documentar continuidad segura de Engram",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v53"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v54"
   },
   "view": {
     "tabs": [
@@ -846,7 +846,7 @@
               "title": "Probar backup y restore de Engram",
               "category": "Memoria",
               "description": "Validar que una reinstalación no pierda memoria.",
-              "notes": "Pendiente.",
+              "notes": "Procedimiento documentado en docs/engram-continuity.md; backup/restore real todavía pendiente.",
               "done": false
             },
             {
@@ -854,7 +854,7 @@
               "title": "Definir estrategia de Engram entre PCs",
               "category": "Memoria",
               "description": "Elegir backup seguro o almacenamiento sincronizado sin versionar DB viva.",
-              "notes": "Recomendación documentada; automatización pendiente.",
+              "notes": "Estrategia recomendada documentada: DB local, snapshots cifrados fuera de Git, retención y restore aislado; proveedor/cifrado aún pendientes.",
               "done": false
             }
           ]
