@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v77",
-    "number": 77,
-    "createdAt": "2026-09-28T20:10:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v78",
+    "number": 78,
+    "createdAt": "2026-09-28T20:25:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar reinstalación clean-room del paquete",
+    "reason": "revalidar contrato Gentle AI con dry-run actual",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v76"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v77"
   },
   "view": {
     "tabs": [
@@ -313,7 +313,7 @@
               "title": "Relevar contratos reales de Gentle AI y Engram",
               "category": "Ecosistema",
               "description": "Confirmar subcomandos, versiones, salud, integración MCP y límites antes de automatizar instalación.",
-              "notes": "Gentle AI 3.7.0: doctor saludable y Engram MCP conectado. Engram 2.0.0: doctor JSON excedió 15 s y quedó como riesgo pendiente; no hubo mutaciones.",
+              "notes": "Gentle AI 3.7.0: `gentle-ai install --dry-run` actual confirmó agente OpenCode soportado, preset full-gentleman, 11 pasos de apply, Engram/context7/GGA/SDD/skills y background subagents off efectivo. Doctor previamente saludable y Engram MCP conectado. Engram 2.0.0: doctor JSON completo excedió 15 s y quedó como riesgo pendiente; no hubo mutaciones.",
               "done": true
             },
             {
