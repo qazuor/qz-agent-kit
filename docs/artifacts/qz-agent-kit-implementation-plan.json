@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v89",
-    "number": 89,
-    "createdAt": "2026-09-29T00:20:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v90",
+    "number": 90,
+    "createdAt": "2026-09-29T00:45:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "verificar procedencia y necesidad de update instalado",
+    "reason": "confirmar gate de release después de validaciones",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v88"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v89"
   },
   "view": {
     "tabs": [
@@ -879,7 +879,7 @@
               "title": "Gate reproducible de release",
               "category": "Release",
               "description": "Ejecutar todas las validaciones, seguridad del package y limpieza de Git antes de publicar.",
-              "notes": "Gate completo: smoke, validación de proyecto, adapters, manifests y package pasan. `.atl/` queda ignorado porque Gentle AI lo genera como índice local regenerable; release:check vuelve a reportar git clean=true.",
+              "notes": "Gate reproducible confirmado nuevamente: smoke, proyecto, adapters, manifests y package OK; `.atl/` ignorado; git clean=true y valid=true.",
               "done": true
             },
             {
