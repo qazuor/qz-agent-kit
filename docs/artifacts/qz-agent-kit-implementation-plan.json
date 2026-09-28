@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 106,
+  "version": 107,
   "view": {
     "tabs": [
       "overview"
@@ -272,7 +272,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato y apply protegido implementados. Preview real con el plan local: Gentle AI 3.7.0 `install --dry-run` OK; Engram 2.0.0 requiere proyecto y con `--project hospeda` ejecuta doctor acotado OK. Ambos resultados fueron read-only, con hashes de salida y sin incluir output sensible. El apply ahora exige receipt seguro, snapshot nativo verificable previo (si ya existe estado), ejecuta con HOME explícito, verifica snapshot con checksum y corre `gentle-ai doctor` después; el smoke test cubre también el bloqueo de estado previo sin snapshot. Apply real continúa deliberadamente sin ejecutar; Engram apply requiere restore aislado adicional.",
+              "notes": "Contrato y apply protegido implementados. Preview real con el plan local: Gentle AI 3.7.0 `install --dry-run` OK; Engram 2.0.0 requiere proyecto y con `--project hospeda` ejecuta doctor acotado OK. Ambos resultados fueron read-only, con hashes de salida y sin incluir output sensible. El apply de Gentle AI exige receipt seguro, snapshot nativo verificable previo (si ya existe estado), HOME explícito, snapshot con checksum y `gentle-ai doctor` posterior; el smoke test cubre también el bloqueo de estado previo sin snapshot. Engram queda declarado `pending-adapter` aunque tenga plan de setup: no se ofrece apply hasta disponer de backup SQLite consistente y restore aislado verificable.",
               "done": false
             },
             {

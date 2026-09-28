@@ -15,6 +15,7 @@ const approval = value('--approve')
 const planPath = resolve(value('--from') || `${process.env.QZ_KIT_HOME || homedir()}/.config/qz-agent-kit/install-plan.json`)
 const home = resolve(value('--home') || homedir())
 const fail = (message) => { console.error(`external-apply bloqueado: ${message}`); process.exit(2) }
+if (component === 'engram') fail('Engram queda bloqueado hasta disponer de backup SQLite consistente y restore aislado verificable')
 if (component !== 'gentle-ai') fail('por ahora sólo existe el apply explícito de Gentle AI')
 if (approval !== 'GENTLE_AI_APPLY') fail('falta --approve GENTLE_AI_APPLY')
 if (!receiptPath) fail('falta --receipt <preview-receipt.json>')

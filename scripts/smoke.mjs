@@ -45,7 +45,7 @@ try {
   const readyStrict = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--strict', '--project', fixture, '--from', strictPlan], { cwd: root, encoding: 'utf8' }))
   if (!readyStrict.summary.ready) throw new Error('readiness --strict rechazó un plan válido')
   const external = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', externalPlan], { cwd: root, encoding: 'utf8' }))
-  if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
+  if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true) || external.actions.find((action) => action.component === 'engram')?.status !== 'pending-adapter' || external.actions.find((action) => action.component === 'engram')?.applySupported !== false) throw new Error('external-plan no aplicó límites de Engram')
   const missingPreviewProject = spawnSync(node, [resolve(root, 'scripts/external-preview.mjs'), '--strict', '--from', externalPlan], { cwd: root, encoding: 'utf8' })
   if (missingPreviewProject.status === 0 || !missingPreviewProject.stdout.includes('needs-project') || !missingPreviewProject.stdout.includes('mutations')) throw new Error('external-preview no bloqueó Engram sin proyecto')
   const receiptPath = join(configRoot, 'preview-receipt.json')

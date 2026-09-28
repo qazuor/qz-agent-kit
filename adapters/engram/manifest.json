@@ -18,6 +18,10 @@
     "installer": "never-copies-or-modifies-db",
     "export": "never-implicit"
   },
+  "apply": {
+    "supported": false,
+    "reason": "requiere backup SQLite consistente y restauración aislada verificable antes de automatizar cualquier mutación"
+  },
   "installPlan": {
     "command": "engram setup opencode --protocol=full",
     "preview": "engram doctor --json --check sqlite_lock_contention --project <project>",

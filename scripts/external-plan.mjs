@@ -37,7 +37,8 @@ for (const component of plan.components || []) {
   if (manifest.installPlan) {
     const selectedClients = plan.clients || []
     const targetMismatch = component === 'gentle-ai' && (selectedClients.length !== 1 || selectedClients[0] !== 'opencode')
-    actions.push({ component, status: !runtime.detected ? 'unavailable' : targetMismatch ? 'review-required' : 'planned', requiresApproval: true, ...runtime, ...manifest.installPlan, selectedClients, targetMismatch, note: !runtime.detected ? 'No se encontró el ejecutable; instalarlo queda fuera de este plan read-only.' : targetMismatch ? 'El comando verificado cubre OpenCode; revisar agentes adicionales antes de ejecutar.' : null, forbiddenWithoutApproval: manifest.lifecycle.mutating })
+    const applySupported = manifest.apply?.supported !== false
+    actions.push({ component, status: !runtime.detected ? 'unavailable' : !applySupported ? 'pending-adapter' : targetMismatch ? 'review-required' : 'planned', requiresApproval: true, ...runtime, ...manifest.installPlan, selectedClients, targetMismatch, applySupported, note: !runtime.detected ? 'No se encontró el ejecutable; instalarlo queda fuera de este plan read-only.' : !applySupported ? manifest.apply.reason : targetMismatch ? 'El comando verificado cubre OpenCode; revisar agentes adicionales antes de ejecutar.' : null, forbiddenWithoutApproval: manifest.lifecycle.mutating })
   }
   else actions.push({ component, status: !runtime.detected ? 'unavailable' : 'pending-adapter', requiresApproval: true, ...runtime, prerequisites: ['adapter específico'], forbiddenWithoutApproval: manifest.lifecycle?.mutating || [] })
 }
