@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v84",
-    "number": 84,
-    "createdAt": "2026-09-28T22:30:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v85",
+    "number": 85,
+    "createdAt": "2026-09-28T22:50:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "sincronizar drift real de qz-engram en los cuatro clientes",
+    "reason": "validar arranque básico de los cuatro harnesses",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v83"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v84"
   },
   "view": {
     "tabs": [
@@ -903,7 +903,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Pendiente.",
+              "notes": "Validación básica read-only completada: OpenCode, Claude Code, Codex CLI y Gentle Shell responden `--help` con exit=0 y exponen opciones de versión/configuración. La validación final de sesiones reales, modelos y flujos de proyecto permanece pendiente.",
               "done": false
             }
           ]
