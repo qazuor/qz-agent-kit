@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v70",
-    "number": 70,
-    "createdAt": "2026-09-28T18:10:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v71",
+    "number": 71,
+    "createdAt": "2026-09-28T18:25:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "documentar límites reales de backup y apply externos",
+    "reason": "incorporar snapshots nativos de Gentle AI al contrato de backup",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v69"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v70"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, y `qz-kit external-receipt --check` lo valida sin reejecutar nada. La evidencia actual confirma que Gentle AI no lista todos sus destinos administrados y Engram setup no ofrece dry-run; por eso ambos siguen correctamente en `pending-adapter` hasta poder construir backup/rollback confiables.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, y `qz-kit external-receipt --check` lo valida sin reejecutar nada. La documentación oficial actual confirma que Gentle AI crea snapshots nativos antes de install/sync/upgrade y restaura con `gentle-ai restore latest`, limitados a agentes registrados en state.json. Esto habilita diseñar el adapter sobre ese snapshot, pero Engram sigue sin dry-run y su DB requiere backup separado; apply/verify/rollback qz aún no están implementados.",
               "done": false
             },
             {

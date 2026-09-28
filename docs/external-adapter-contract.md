@@ -53,6 +53,8 @@ que contiene la huella y el resultado resumido; si el archivo ya existe exige
 ejecutar nuevamente el preview y sin aceptar salida completa ni secretos.
 
 Un adapter no puede pasar a `apply` si la herramienta externa no expone una
-lista fiable de destinos o un preview suficiente para construir el backup. En
-ese caso el estado correcto es `pending-adapter`, aunque el binario y el
-preview estén disponibles.
+lista fiable de destinos o un mecanismo nativo de snapshot/restore verificable.
+Un backup nativo puede satisfacer este requisito cuando el adapter registra su
+scope, identificador y resultado; nunca debe asumirse que cubre agentes o
+datos fuera de ese scope. En caso contrario el estado correcto es
+`pending-adapter`, aunque el binario y el preview estén disponibles.

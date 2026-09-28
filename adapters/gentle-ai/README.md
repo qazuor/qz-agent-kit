@@ -25,14 +25,20 @@ respondió correctamente en Linux/Ubuntu. Para OpenCode declaró los componentes
 delegar la planificación al comando oficial, pero debe conservar el preview y
 pedir aprobación antes de ejecutar sus 11 pasos de apply.
 
-El preview observado informa componentes, dependencias y el launcher de
-background agents, pero no expone una lista completa de archivos administrados.
-Por eso el adapter no puede inferir destinos de backup a partir del texto del
-preview.
+La documentación oficial actual aclara que Gentle AI crea snapshots
+comprimidos antes de `install`, `sync` y `upgrade`, conserva los cinco más
+recientes y permite restaurar con `gentle-ai restore latest`. El alcance se
+determina por los agentes registrados en `~/.gentle-ai/state.json`, no por
+todas las carpetas que existan en el home. El adapter qz debe delegar ese
+backup nativo y registrar su manifest/identificador; no debe duplicar la copia
+ni asumir cobertura de agentes no registrados.
 
 ## Límites
 
 El kit sólo registra la selección y detecta la versión. No pisa profiles,
 personas, permisos, telemetry, auth, SDD/ODD, review/RDD ni archivos manejados
-por Gentle AI. Un futuro adapter debe hacer primero `--plan` o equivalente,
-registrar versión exacta y ofrecer rollback.
+por Gentle AI. Un futuro adapter debe hacer primero `--dry-run`, comprobar el
+scope de `state.json`, registrar la versión y snapshot nativos, y usar
+`gentle-ai restore latest` como rollback documentado. El backup nativo cubre
+configuración administrada, no paquetes instalados por el sistema ni la DB de
+Engram.
