@@ -49,7 +49,7 @@ try {
   const missingPreviewProject = spawnSync(node, [resolve(root, 'scripts/external-preview.mjs'), '--strict', '--from', externalPlan], { cwd: root, encoding: 'utf8' })
   if (missingPreviewProject.status === 0 || !missingPreviewProject.stdout.includes('needs-project') || !missingPreviewProject.stdout.includes('mutations')) throw new Error('external-preview no bloqueó Engram sin proyecto')
   const receiptPath = join(configRoot, 'preview-receipt.json')
-  writeFileSync(receiptPath, `${JSON.stringify({ schemaVersion: 1, type: 'qz-external-preview-receipt', createdAt: new Date().toISOString(), plan: externalPlan, results: [{ component: 'gentle-ai', status: 'ok', outputSha256: 'a'.repeat(64), output: 'not-included', mutations: 'none' }], summary: { selected: 1, ok: 1, failed: 0 }, mutations: [receiptPath], secretValues: 'not-read' })}\n`)
+  writeFileSync(receiptPath, `${JSON.stringify({ schemaVersion: 1, type: 'qz-external-preview-receipt', createdAt: new Date().toISOString(), plan: externalPlan, results: [{ component: 'gentle-ai', status: 'ok', outputSha256: 'a'.repeat(64), output: 'not-included', mutations: 'none', secretValues: 'not-read' }], summary: { selected: 1, ok: 1, failed: 0 }, mutations: [receiptPath], secretValues: 'not-read' })}\n`)
   const receiptCheck = parse(execFileSync(node, [resolve(root, 'scripts/external-receipt.mjs'), '--check', receiptPath], { cwd: root, encoding: 'utf8' }))
   if (!receiptCheck.valid || receiptCheck.mutations !== 'none' || receiptCheck.secretValues !== 'not-read') throw new Error('external-receipt no validó un receipt seguro')
   const gentleHome = join(configRoot, 'gentle-home')

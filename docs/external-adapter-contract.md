@@ -65,7 +65,9 @@ datos fuera de ese scope. En caso contrario el estado correcto es
 `pending-adapter`, aunque el binario y el preview estén disponibles.
 
 El apply de Gentle AI delega en el snapshot nativo de la herramienta. Requiere
-receipt `ok`, token de aprobación explícito, comando allowlisted, snapshot de
-estado antes/después y `gentle-ai doctor` posterior. El apply de Engram queda
-separado hasta disponer de un backup SQLite consistente y una restauración
-aislada verificable.
+receipt `ok` con salida no incluida y sin mutaciones, token de aprobación
+explícito, comando allowlisted, snapshot de estado antes/después con checksum,
+HOME explícito para evitar aplicar sobre otro perfil y `gentle-ai doctor`
+posterior. Si ya existe estado administrado pero no hay snapshot verificable,
+el apply se bloquea. El apply de Engram queda separado hasta disponer de un
+backup SQLite consistente y una restauración aislada verificable.
