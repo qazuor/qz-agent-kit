@@ -37,3 +37,7 @@ Se verificó `opencode/mimo-v2.6-flash-free` con una ejecución read-only; respo
 ## Seguridad
 
 La API key vive en un archivo externo con permisos restrictivos y nunca se copia a repositorios, artifacts, logs ni documentación.
+
+## Selector común
+
+`qz-kit model status` muestra el default de OpenCode y Gentle Shell. `qz-kit model use provider/model` cambia ambos y guarda un backup reversible en `~/.local/state/qz-agent-kit/model-switch-backups/`. No modifica credenciales, Codex ni Claude Code.
