@@ -64,7 +64,7 @@ El 28-09-2026 se verificaron las versiones instaladas sin leer credenciales:
 | --- | --- | --- |
 | OpenCode | `1.18.32` | `~/.config/opencode/tui.json`, `mouse: false`, tema oscuro, atención visual sin sonido y binds Home/End separados del buffer |
 | Gentle Shell | `3.7.0` | `~/.gentle-shell/agent/settings.json`; tema administrado por Gentle Shell, sin equivalente portable de los binds de OpenCode verificado |
-| Claude Code | `2.1.283` | configuración y atajos propios del cliente; no se copia desde OpenCode |
+| Claude Code | `2.1.284` | configuración y atajos propios del cliente; no se copia desde OpenCode |
 | Codex CLI | `0.155.0` | configuración TUI propia; no se copia desde OpenCode |
 
 La configuración de OpenCode se pudo parsear y contiene los binds acordados,
