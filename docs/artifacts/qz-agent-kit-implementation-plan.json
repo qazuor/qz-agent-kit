@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v96",
-    "number": 96,
-    "createdAt": "2026-09-29T04:00:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v97",
+    "number": 97,
+    "createdAt": "2026-09-29T05:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "probar matriz de modelos económicos disponibles",
+    "reason": "configurar defaults de modelos económicos compatibles",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v95"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v96"
   },
   "view": {
     "tabs": [
@@ -634,7 +634,7 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "Matriz actualizada con pruebas reales read-only en OpenCode: funcionan `openai/gpt-5.6-luna`, `openai/gpt-5.6-sol`, `openai/gpt-5.5-fast`, `openai/gpt-5.6-luna-fast` y `openai/gpt-6-luna-fast`. La cuenta ChatGPT rechaza `openai/gpt-5.4-mini`, `openai/gpt-5.3-codex-spark` y `openai/gpt-5.4-fast` como modelos no soportados para ese tipo de cuenta, aunque aparecen en el catálogo. No se leyeron credenciales.",
+              "notes": "Configuración aplicada con backup en ~/.local/state/qz-agent-kit/model-config-backups/: OpenCode usa openai/gpt-5.6-sol y small_model openai/gpt-5.6-luna; Codex y Gentle Shell usan gpt-5.6-sol. Smoke sin modelo explícito respondió OK en los tres. Claude queda sin cambio porque no usa estos modelos OpenAI y su sesión no está autenticada.",
               "done": false
             },
             {
