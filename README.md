@@ -229,6 +229,7 @@ qz-kit external-preview --component gentle-ai
 qz-kit external-preview --component engram --project hospeda
 qz-kit external-preview --strict --project hospeda
 qz-kit external-preview --strict --project hospeda --receipt /tmp/qz-preview.json
+qz-kit external-receipt --check /tmp/qz-preview.json
 ```
 
 Un preview exitoso no instala, actualiza ni configura nada y no habilita el

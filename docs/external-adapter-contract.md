@@ -49,4 +49,5 @@ salida; devuelve estado, código de salida y una huella del resultado. No es un
 `apply` y no convierte un preview exitoso en una instalación aplicada. Con
 `--receipt <ruta>` puede escribir, sólo por pedido explícito, un receipt JSON
 que contiene la huella y el resultado resumido; si el archivo ya existe exige
-`--force-receipt`.
+`--force-receipt`. `external-receipt --check <ruta>` valida ese documento sin
+ejecutar nuevamente el preview y sin aceptar salida completa ni secretos.
