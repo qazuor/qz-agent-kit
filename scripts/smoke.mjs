@@ -65,6 +65,8 @@ try {
   writeFileSync(join(engramHome, '.engram', 'memory.sqlite-wal'), 'fixture')
   const engramStatus = parse(execFileSync(node, [resolve(root, 'scripts/external-backup-status.mjs'), '--component', 'engram', '--home', engramHome], { cwd: root, encoding: 'utf8' }))
   if (engramStatus.mutations !== 'none' || engramStatus.dataDir.files !== 2 || engramStatus.dataDir.databaseLike !== 1 || engramStatus.dataDir.wal !== 1 || engramStatus.backup.required !== true) throw new Error('external-backup-status no relevó Engram de forma agregada')
+  const blockedApply = spawnSync(node, [resolve(root, 'scripts/external-apply.mjs'), '--component', 'gentle-ai'], { cwd: root, encoding: 'utf8' })
+  if (blockedApply.status !== 2 || !blockedApply.stderr.includes('falta --approve GENTLE_AI_APPLY')) throw new Error('external-apply no bloqueó la falta de aprobación')
   const optionalPlan = join(configRoot, 'optional-install-plan.json')
   writeFileSync(optionalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['context7', 'rdd-review', 'background-agents'], providers: [] })}\n`)
   const optionalExternal = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', optionalPlan], { cwd: root, encoding: 'utf8' }))

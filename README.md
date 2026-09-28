@@ -245,6 +245,20 @@ Engram o `.env`. Para Engram informa únicamente conteos/tamaños agregados,
 presencia de archivos SQLite/WAL/SHM y, si se pasa `--project`, el estado
 resumido del check de lock contention.
 
+El único apply externo actualmente implementado es el de Gentle AI y exige
+todos estos elementos explícitos:
+
+```bash
+qz-kit external-apply \
+  --component gentle-ai \
+  --receipt /tmp/qz-preview.json \
+  --approve GENTLE_AI_APPLY
+```
+
+Valida el receipt, releva snapshots nativos antes y después, ejecuta sólo el
+comando allowlisted del manifest y corre `gentle-ai doctor` al finalizar. No
+aplica Engram: su DB requiere un backup SQLite separado y aprobación propia.
+
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 
 ```bash

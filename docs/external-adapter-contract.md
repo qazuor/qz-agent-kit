@@ -63,3 +63,9 @@ Un backup nativo puede satisfacer este requisito cuando el adapter registra su
 scope, identificador y resultado; nunca debe asumirse que cubre agentes o
 datos fuera de ese scope. En caso contrario el estado correcto es
 `pending-adapter`, aunque el binario y el preview estén disponibles.
+
+El apply de Gentle AI delega en el snapshot nativo de la herramienta. Requiere
+receipt `ok`, token de aprobación explícito, comando allowlisted, snapshot de
+estado antes/después y `gentle-ai doctor` posterior. El apply de Engram queda
+separado hasta disponer de un backup SQLite consistente y una restauración
+aislada verificable.
