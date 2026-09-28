@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v65",
-    "number": 65,
-    "createdAt": "2026-09-28T17:05:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v66",
+    "number": 66,
+    "createdAt": "2026-09-28T17:15:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "registrar previews seguros de Gentle AI y Engram",
+    "reason": "endurecer preview de Engram con proyecto explícito",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v64"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v65"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ya ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. Siguen pendientes backup verificable, aprobación separada, apply, receipt, verify y rollback externo.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ya ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Siguen pendientes backup verificable, aprobación separada, apply, receipt, verify y rollback externo.",
               "done": false
             },
             {
