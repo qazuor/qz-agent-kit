@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v88",
-    "number": 88,
-    "createdAt": "2026-09-29T00:00:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v89",
+    "number": 89,
+    "createdAt": "2026-09-29T00:20:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "validar contenido distribuible antes de publicar",
+    "reason": "verificar procedencia y necesidad de update instalado",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v87"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v88"
   },
   "view": {
     "tabs": [
@@ -257,7 +257,7 @@
               "title": "Update idempotente con drift",
               "category": "Actualización",
               "description": "Aplicar cambios de la fuente sin sobrescribir drift silenciosamente.",
-              "notes": "Validado y aplicado: `install --apply --client all` creó backup y sincronizó los cuatro archivos qz-engram que tenían drift. `install --check --client all` posterior reportó 60 targets, drift=0, missing=0 y contentDrift=0.",
+              "notes": "La sincronización anterior dejó 60 targets sin drift. El manifest de backup conserva kitVersion 0.1.0 y package-hash coincidente; el source commit instalado es anterior al HEAD actual, por lo que provenance devuelve `updateReview: required` aunque no hay drift de archivos. Se requiere ejecutar update cuando se quiera propagar commits posteriores.",
               "done": true
             },
             {
