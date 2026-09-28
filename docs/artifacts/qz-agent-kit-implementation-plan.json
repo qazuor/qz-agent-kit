@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v59",
-    "number": 59,
-    "createdAt": "2026-09-28T15:29:53.573Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v60",
+    "number": 60,
+    "createdAt": "2026-09-28T16:15:14.907Z",
     "author": "qz-agent-kit",
-    "reason": "registrar suite real del adapter Hospeda",
+    "reason": "validar dry-run real de start-issue",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v58"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v59"
   },
   "view": {
     "tabs": [
@@ -821,7 +821,7 @@
               "title": "Corrida E2E real con issue no destructivo",
               "category": "Hospeda",
               "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
-              "notes": "Suite del adapter ejecutada en worktree separado: 431 tests, 0 fallos. La E2E real con issue no destructivo, worktree, env, DB, puertos y closeout sigue pendiente.",
+              "notes": "Suite del adapter: 431 tests, 0 fallos. Dry-run real HOS-635 verificado: branch fix/hos-635..., base develop y no se creó nada. Falta ejecutar la E2E mutante con aprobación y cleanup.",
               "done": false
             }
           ]
