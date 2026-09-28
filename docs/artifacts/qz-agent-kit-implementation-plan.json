@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v83",
-    "number": 83,
-    "createdAt": "2026-09-28T22:00:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v84",
+    "number": 84,
+    "createdAt": "2026-09-28T22:30:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "relevar estado cloud de Engram sin activar sincronización",
+    "reason": "sincronizar drift real de qz-engram en los cuatro clientes",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v82"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v83"
   },
   "view": {
     "tabs": [
@@ -257,7 +257,7 @@
               "title": "Update idempotente con drift",
               "category": "Actualización",
               "description": "Aplicar cambios de la fuente sin sobrescribir drift silenciosamente.",
-              "notes": "Implementado: update --check/--plan/--apply respeta la selección persistida del install-plan cuando no se pasa --client.",
+              "notes": "Validado y aplicado: `install --apply --client all` creó backup y sincronizó los cuatro archivos qz-engram que tenían drift. `install --check --client all` posterior reportó 60 targets, drift=0, missing=0 y contentDrift=0.",
               "done": true
             },
             {
@@ -691,7 +691,7 @@
               "title": "Sincronizar AGENTS y skills a los cuatro clientes",
               "category": "Knowledge",
               "description": "Aplicar recursos versionados con hashes y backup externo.",
-              "notes": "Hospeda: 68/68 actuales.",
+              "notes": "Sincronización completa confirmada después de actualizar qz-engram: los cuatro clientes consumen ahora la fuente de verdad con drift=0.",
               "done": true
             },
             {
