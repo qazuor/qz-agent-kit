@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v63",
-    "number": 63,
-    "createdAt": "2026-09-28T16:45:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v64",
+    "number": 64,
+    "createdAt": "2026-09-28T16:50:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "registrar matriz de harnesses y límite de validación TUI",
+    "reason": "corregir métricas del checklist contra sus ítems reales",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v62"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v63"
   },
   "view": {
     "tabs": [
@@ -67,7 +67,7 @@
               "label": "drift de sync"
             },
             {
-              "value": "71/82",
+              "value": "72/83",
               "label": "tareas completadas"
             },
             {
