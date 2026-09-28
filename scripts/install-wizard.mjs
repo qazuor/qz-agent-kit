@@ -30,8 +30,8 @@ const components = [
 ]
 const providers = [
   { value: 'openai', label: 'OpenAI', hint: 'usar login/API existente, sin leer credenciales' },
-  { value: 'glm', label: 'GLM', hint: 'proveedor opcional' },
-  { value: 'deepseek', label: 'DeepSeek', hint: 'proveedor opcional' },
+  { value: 'nan', label: 'NaN Builders', hint: 'GLM, DeepSeek, Qwen y MiMo vía API compatible' },
+  { value: 'opencode-free', label: 'OpenCode gratis', hint: 'catálogo gratuito nativo, sin credencial' },
   { value: 'openkilo', label: 'OpenKilo', hint: 'proveedor/app opcional' },
   { value: 'ollama', label: 'Ollama local', hint: 'requiere servicio local' }
 ]
