@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v58",
-    "number": 58,
-    "createdAt": "2026-09-28T15:24:29.599Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v59",
+    "number": 59,
+    "createdAt": "2026-09-28T15:29:53.573Z",
     "author": "qz-agent-kit",
-    "reason": "definir contrato seguro para adapters externos",
+    "reason": "registrar suite real del adapter Hospeda",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v57"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v58"
   },
   "view": {
     "tabs": [
@@ -821,7 +821,7 @@
               "title": "Corrida E2E real con issue no destructivo",
               "category": "Hospeda",
               "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
-              "notes": "Pendiente como gate final.",
+              "notes": "Suite del adapter ejecutada en worktree separado: 431 tests, 0 fallos. La E2E real con issue no destructivo, worktree, env, DB, puertos y closeout sigue pendiente.",
               "done": false
             }
           ]
