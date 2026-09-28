@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { assertValidPlan } from './plan-schema.mjs'
 
 // Execute only an adapter-declared preview. Never invokes a shell and never
@@ -13,6 +13,8 @@ const root = resolve(new URL('..', import.meta.url).pathname)
 const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const strict = args.includes('--strict')
+const receiptPath = value('--receipt') ? resolve(value('--receipt')) : null
+const forceReceipt = args.includes('--force-receipt')
 const planPath = resolve(value('--from') || `${process.env.QZ_KIT_HOME || homedir()}/.config/qz-agent-kit/install-plan.json`)
 if (!existsSync(planPath)) throw new Error(`no se encontró el plan: ${planPath}`)
 const plan = assertValidPlan(JSON.parse(readFileSync(planPath, 'utf8')))
@@ -60,6 +62,12 @@ const results = selected.map((id) => {
   return { component: id, ...previewFor(id, manifest) }
 })
 const failed = results.some((result) => !['ok', 'pending-adapter'].includes(result.status))
-const output = { schemaVersion: 1, plan: planPath, project: project || null, results, summary: { selected: selected.length, ok: results.filter((result) => result.status === 'ok').length, failed: results.filter((result) => !['ok', 'pending-adapter'].includes(result.status)).length }, mutations: 'none', secretValues: 'not-read' }
+const mutations = receiptPath ? [receiptPath] : 'none'
+const output = { schemaVersion: 1, plan: planPath, project: project || null, results, summary: { selected: selected.length, ok: results.filter((result) => result.status === 'ok').length, failed: results.filter((result) => !['ok', 'pending-adapter'].includes(result.status)).length }, mutations, secretValues: 'not-read' }
+if (receiptPath) {
+  if (existsSync(receiptPath) && !forceReceipt) throw new Error(`el receipt ya existe: ${receiptPath}; usar --force-receipt para reemplazarlo`)
+  mkdirSync(dirname(receiptPath), { recursive: true })
+  writeFileSync(receiptPath, `${JSON.stringify({ schemaVersion: 1, type: 'qz-external-preview-receipt', createdAt: new Date().toISOString(), plan: planPath, project: project || null, results, summary: output.summary, mutations: [receiptPath], secretValues: 'not-read' }, null, 2)}\n`)
+}
 console.log(JSON.stringify(output, null, 2))
 if (strict && (failed || results.some((result) => result.status === 'pending-adapter'))) process.exit(1)

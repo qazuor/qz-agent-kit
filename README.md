@@ -228,10 +228,12 @@ el proyecto explícitamente:
 qz-kit external-preview --component gentle-ai
 qz-kit external-preview --component engram --project hospeda
 qz-kit external-preview --strict --project hospeda
+qz-kit external-preview --strict --project hospeda --receipt /tmp/qz-preview.json
 ```
 
 Un preview exitoso no instala, actualiza ni configura nada y no habilita el
-`apply` del adapter.
+`apply` del adapter. El receipt es opcional y sólo se escribe cuando se pasa
+explícitamente la ruta.
 
 Para un diagnóstico Engram concreto, se puede pedir un único check con timeout:
 

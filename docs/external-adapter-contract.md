@@ -46,4 +46,7 @@ Hasta completar estos requisitos, `external-plan` sólo describe acciones y
 `external-plan --strict` debe bloquearlas. `external-preview` puede ejecutar
 únicamente el preview declarado por el manifest, sin shell y sin mostrar su
 salida; devuelve estado, código de salida y una huella del resultado. No es un
-`apply` y no convierte un preview exitoso en una instalación aplicada.
+`apply` y no convierte un preview exitoso en una instalación aplicada. Con
+`--receipt <ruta>` puede escribir, sólo por pedido explícito, un receipt JSON
+que contiene la huella y el resultado resumido; si el archivo ya existe exige
+`--force-receipt`.
