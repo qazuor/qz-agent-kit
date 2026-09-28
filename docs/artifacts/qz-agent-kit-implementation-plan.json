@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v60",
-    "number": 60,
-    "createdAt": "2026-09-28T16:15:14.907Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v61",
+    "number": 61,
+    "createdAt": "2026-09-28T16:20:14.171Z",
     "author": "qz-agent-kit",
-    "reason": "validar dry-run real de start-issue",
+    "reason": "registrar validación parcial real de HOS-635",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v59"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v60"
   },
   "view": {
     "tabs": [
@@ -821,7 +821,7 @@
               "title": "Corrida E2E real con issue no destructivo",
               "category": "Hospeda",
               "description": "Validar start, worktree, env, DB, puertos, verify y close plan.",
-              "notes": "Suite del adapter: 431 tests, 0 fallos. Dry-run real HOS-635 verificado: branch fix/hos-635..., base develop y no se creó nada. Falta ejecutar la E2E mutante con aprobación y cleanup.",
+              "notes": "Validación parcial real HOS-635: start-issue reutilizó un worktree existente; context y DB funcionaron, env ejecutó 6/6 checks con 1 partial no bloqueante, sin servers. El worktree ya estaba dirty por scripts/worktree/, por lo que la E2E limpia de creación/preparación/cleanup sigue pendiente.",
               "done": false
             }
           ]
