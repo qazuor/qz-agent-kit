@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v69",
-    "number": 69,
-    "createdAt": "2026-09-28T17:55:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v70",
+    "number": 70,
+    "createdAt": "2026-09-28T18:10:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "agregar validador read-only de receipts externos",
+    "reason": "documentar límites reales de backup y apply externos",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v68"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v69"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, y `qz-kit external-receipt --check` lo valida sin reejecutar nada. Los manifests reflejan `engram setup --protocol=full`, `test --quick --json` y las flags actuales de Gentle AI. Siguen pendientes backup verificable, aprobación separada, apply, verify y rollback externo.",
+              "notes": "Contrato documentado en docs/external-adapter-contract.md. `qz-kit external-preview` ejecuta sin shell los previews declarados: Gentle AI dry-run y Engram doctor/check, devolviendo sólo estado, código y hash de salida. El preview estricto exige `--project` para Engram y no adivina la base. Con `--receipt` genera un receipt JSON explícito, y `qz-kit external-receipt --check` lo valida sin reejecutar nada. La evidencia actual confirma que Gentle AI no lista todos sus destinos administrados y Engram setup no ofrece dry-run; por eso ambos siguen correctamente en `pending-adapter` hasta poder construir backup/rollback confiables.",
               "done": false
             },
             {

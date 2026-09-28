@@ -7,6 +7,11 @@ El contrato declarativo está en `manifest.json`. Clasifica comandos read-only,
 exportaciones y mutaciones para que una futura instalación pueda pedir una
 aprobación concreta. No convierte `export` en una acción automática.
 
+`engram setup` no ofrece un modo dry-run en la ayuda actual; sólo permite
+seleccionar el agente y el protocolo. El adapter debe descubrir y respaldar sus
+destinos por separado antes de ejecutar setup, o mantener esa operación fuera
+del instalador qz.
+
 ## Contrato verificado
 
 - versión relevada: `2.0.0`;

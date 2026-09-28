@@ -25,6 +25,11 @@ respondió correctamente en Linux/Ubuntu. Para OpenCode declaró los componentes
 delegar la planificación al comando oficial, pero debe conservar el preview y
 pedir aprobación antes de ejecutar sus 11 pasos de apply.
 
+El preview observado informa componentes, dependencias y el launcher de
+background agents, pero no expone una lista completa de archivos administrados.
+Por eso el adapter no puede inferir destinos de backup a partir del texto del
+preview.
+
 ## Límites
 
 El kit sólo registra la selección y detecta la versión. No pisa profiles,

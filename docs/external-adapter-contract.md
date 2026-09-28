@@ -51,3 +51,8 @@ salida; devuelve estado, código de salida y una huella del resultado. No es un
 que contiene la huella y el resultado resumido; si el archivo ya existe exige
 `--force-receipt`. `external-receipt --check <ruta>` valida ese documento sin
 ejecutar nuevamente el preview y sin aceptar salida completa ni secretos.
+
+Un adapter no puede pasar a `apply` si la herramienta externa no expone una
+lista fiable de destinos o un preview suficiente para construir el backup. En
+ese caso el estado correcto es `pending-adapter`, aunque el binario y el
+preview estén disponibles.
