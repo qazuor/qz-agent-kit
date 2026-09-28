@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v57",
-    "number": 57,
-    "createdAt": "2026-09-28T15:20:20.725Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v58",
+    "number": 58,
+    "createdAt": "2026-09-28T15:24:29.599Z",
     "author": "qz-agent-kit",
-    "reason": "documentar política portable de TUI y plugins",
+    "reason": "definir contrato seguro para adapters externos",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v56"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v57"
   },
   "view": {
     "tabs": [
@@ -281,7 +281,7 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Pendiente; el wizard registra la intención pero no ejecuta componentes externos todavía.",
+              "notes": "Contrato de implementación documentado en docs/external-adapter-contract.md. Los manifests y external-plan son declarativos; ejecución segura, receipts y rollback externo siguen pendientes.",
               "done": false
             },
             {
