@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v80",
-    "number": 80,
-    "createdAt": "2026-09-28T20:55:00.000Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v81",
+    "number": 81,
+    "createdAt": "2026-09-28T21:10:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "hacer reproducible el gate de release con Gentle AI",
+    "reason": "relevar límites operativos de Engram para restore seguro",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v79"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v80"
   },
   "view": {
     "tabs": [
@@ -838,7 +838,7 @@
               "title": "Finalizar curación de Engram",
               "category": "Memoria",
               "description": "Eliminar lo obsoleto y conservar sólo memorias vigentes.",
-              "notes": "Revisión avanzada; borrado final/backup final pendiente.",
+              "notes": "La UI disponible es `engram tui`; también existen `projects list`, `search`, `conflicts` y diagnósticos read-only. Las operaciones destructivas (`delete`, `consolidate`, `prune`, `doctor repair`) siguen fuera del automatismo hasta completar revisión humana.",
               "done": false
             },
             {
@@ -846,7 +846,7 @@
               "title": "Probar backup y restore de Engram",
               "category": "Memoria",
               "description": "Validar que una reinstalación no pierda memoria.",
-              "notes": "Procedimiento documentado en docs/engram-continuity.md; backup/restore real todavía pendiente.",
+              "notes": "Pendiente: Engram 2.0.0 no tiene comando restore dedicado; `engram export` produce un JSON importable y su invocación incluso con `--help` ejecutó la exportación por defecto en el directorio actual. El relevamiento creó un archivo vacío accidentalmente, ya eliminado. Para cerrar este punto hace falta probar export/import en un HOME y base temporales, nunca sobre la DB real.",
               "done": false
             },
             {
