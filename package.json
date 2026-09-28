@@ -18,6 +18,7 @@
     "plan:backup": "node scripts/backup-plan.mjs",
     "check": "npm run validate:project && node scripts/validate-adapters.mjs && node scripts/check-manifests.mjs",
     "test": "node scripts/smoke.mjs",
+    "release:check": "node scripts/release-check.mjs",
     "check:package": "node scripts/check-package.mjs && node scripts/validate-adapters.mjs",
     "install:clients": "node scripts/install.mjs --plan"
   },
