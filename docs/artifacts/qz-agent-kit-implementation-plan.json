@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 99,
+  "version": 100,
   "view": {
     "tabs": [
       "overview"
@@ -625,8 +625,8 @@
               "title": "Validar auth y providers por cliente",
               "category": "CLI",
               "description": "Confirmar que el kit no pisa auth y que los clientes arrancan.",
-              "notes": "Configuración aplicada con backup en ~/.local/state/qz-agent-kit/model-config-backups/: OpenCode usa openai/gpt-5.6-sol y small_model openai/gpt-5.6-luna; Codex y Gentle Shell usan gpt-5.6-sol. Smoke sin modelo explícito respondió OK en los tres. Claude queda sin cambio porque no usa estos modelos OpenAI y su sesión no está autenticada.",
-              "done": false
+              "notes": "OpenCode conserva OpenAI OAuth y provider NaN; los modelos NaN fueron configurados y probados. Gentle Shell conserva OpenAI Codex y provider NaN, con glm5.3-flash probado. Codex y Claude no se modificaron. Las credenciales no se versionan.",
+              "done": true
             },
             {
               "id": "p2-tui-inventory",
@@ -644,6 +644,14 @@
               "notes": "Validación estática actualizada: tui.json de OpenCode y settings.json de Gentle Shell existen y son JSON válidos; Codex config.toml existe. Se confirmaron rutas sin leer contenidos sensibles. La semántica física de Home/End, scroll y mouse todavía requiere prueba interactiva por harness.",
               "done": false
             },
+            {
+              "id": "p2-provider-switch",
+              "title": "Selector de providers para Codex y Claude Code",
+              "category": "Providers",
+              "description": "Cambiar provider y modelo en harnesses que requieren endpoint, formato, credenciales o perfiles específicos.",
+              "notes": "Pendiente. OpenCode y Gentle Shell se excluyen porque ya tienen selector nativo. Debe incluir status, plan, use, test, backup y restore por harness.",
+              "done": false
+            }
           ]
         }
       },
