@@ -13,6 +13,21 @@ La suscripción económica de referencia para OpenCode y Gentle Shell es **NaN B
 
 Los IDs se mantienen exactamente como los publica NaN. No se deben sustituir por nombres aproximados.
 
+## Modelos gratuitos de OpenCode
+
+OpenCode mantiene un catálogo gratuito independiente de suscripciones. Se conservan porque no requieren credenciales ni pago adicional:
+
+- `opencode/big-pickle`
+- `opencode/ling-3.0-flash-fin-free`
+- `opencode/longcat-2.5-preview-free`
+- `opencode/mimo-v2.6-flash-free`
+- `opencode/muse-spark-1.3-contributor-free`
+- `opencode/nemotron-3-ultra-free`
+- `opencode/nemotron-3.5-lightning-free`
+- `opencode/space-bunny-free`
+
+Se verificó `opencode/mimo-v2.6-flash-free` con una ejecución read-only; respondió correctamente y registró costo cero. Se mantienen visibles para tareas simples, exploración y fallback.
+
 ## Alcance por harness
 
 - **OpenCode**: provider custom `nan` mediante `@ai-sdk/openai-compatible`; credencial fuera del repositorio.
