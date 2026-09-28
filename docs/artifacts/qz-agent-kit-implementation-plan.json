@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-implementation-plan-v52",
-    "number": 52,
-    "createdAt": "2026-09-27T00:12:41.009Z",
+    "id": "ver_qz-agent-kit-implementation-plan-v53",
+    "number": 53,
+    "createdAt": "2026-09-28T14:59:44.628Z",
     "author": "qz-agent-kit",
-    "reason": "ampliar evidencia read-only de providers",
+    "reason": "agregar gate read-only de release",
     "sourceHash": "sha256:qz-agent-kit-implementation-plan",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v51"
+    "basedOnVersion": "ver_qz-agent-kit-implementation-plan-v52"
   },
   "view": {
     "tabs": [
@@ -873,6 +873,14 @@
               "description": "Ejecutar el procedimiento completo en entorno limpio.",
               "notes": "Pendiente.",
               "done": false
+            },
+            {
+              "id": "p7-release-check",
+              "title": "Gate reproducible de release",
+              "category": "Release",
+              "description": "Ejecutar todas las validaciones, seguridad del package y limpieza de Git antes de publicar.",
+              "notes": "Implementado como npm run release:check; es read-only y no hace push ni publica.",
+              "done": true
             },
             {
               "id": "p7-publish",
