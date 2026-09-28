@@ -46,6 +46,8 @@ try {
   if (!readyStrict.summary.ready) throw new Error('readiness --strict rechazó un plan válido')
   const external = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', externalPlan], { cwd: root, encoding: 'utf8' }))
   if (external.mutations !== 'none' || external.actions.length !== 2 || external.actions.some((action) => action.requiresApproval !== true)) throw new Error('external-plan no aplicó contratos de aprobación')
+  const missingPreviewProject = spawnSync(node, [resolve(root, 'scripts/external-preview.mjs'), '--strict', '--from', externalPlan], { cwd: root, encoding: 'utf8' })
+  if (missingPreviewProject.status === 0 || !missingPreviewProject.stdout.includes('needs-project') || !missingPreviewProject.stdout.includes('mutations')) throw new Error('external-preview no bloqueó Engram sin proyecto')
   const optionalPlan = join(configRoot, 'optional-install-plan.json')
   writeFileSync(optionalPlan, `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: ['context7', 'rdd-review', 'background-agents'], providers: [] })}\n`)
   const optionalExternal = parse(execFileSync(node, [resolve(root, 'scripts/external-plan.mjs'), '--from', optionalPlan], { cwd: root, encoding: 'utf8' }))
