@@ -98,6 +98,12 @@ def percent_for(snapshot, key, value):
     return None
 
 
+def bar_color(percent):
+    if percent is None:
+        return '#8d9bad'
+    return '#55d6b4' if percent >= 40 else '#f6b65f' if percent >= 15 else '#ff7d77'
+
+
 class UsagePopup(QWidget):
     def __init__(self):
         super().__init__(None, Qt.WindowType.ToolTip | Qt.WindowType.FramelessWindowHint)
@@ -168,10 +174,16 @@ class UsagePopup(QWidget):
                 bar = QProgressBar()
                 bar.setRange(0, 100)
                 bar.setValue(int(percent or 0))
+                bar.setTextVisible(False)
+                bar.setStyleSheet(f'''
+                    QProgressBar {{ min-height: 8px; max-height: 8px; border: 0; border-radius: 4px; background: #263542; }}
+                    QProgressBar::chunk {{ border-radius: 4px; background: {bar_color(percent)}; }}
+                ''')
                 row.addWidget(bar)
                 self.layout.addLayout(row)
             if not rows:
-                empty = QLabel('Sin límites publicados')
+                status = str(snapshot.get('status', '')).lower()
+                empty = QLabel('Datos no disponibles' if status not in ('', 'verified') else 'Sin límites publicados')
                 empty.setObjectName('muted')
                 self.layout.addWidget(empty)
 
