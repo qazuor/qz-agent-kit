@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 137,
+  "version": 138,
   "view": {
     "tabs": [
       "overview"
@@ -886,16 +886,16 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Dashboard local ejecutable con snapshots normalizados, UI live y servicio systemd planificable. NaN usa `/v1/usage` y cuotas publicadas por modelo; Codex usa `codex app-server` con `account/rateLimits/read`; Claude usa el caché `rate_limits` generado por el statusline existente. La UI muestra los tres providers con el mismo peso visual, resumen superior, ventanas, restante, porcentajes, desglose por modelo, tema oscuro/claro y actualización automática en formato humano. Smoke E2E ahora cubre snapshots partial/unavailable y cachés expirados sin romper el render. El adapter acepta una ruta estable versionable para el caché del statusline (`~/.local/state/qz-agent-kit/subscriptions/claude-usage.json`) y conserva fallback compatible con `/tmp`. El kit ya distribuye `qz-claude-statusline.mjs`, que normaliza sólo `rate_limits` hacia el caché estable; la activación queda documentada pero deliberadamente no aplicada sobre settings existentes; falta publicar.",
-              "done": false
+              "notes": "Dashboard local ejecutable con snapshots normalizados, UI live y servicio systemd planificable. NaN usa `/v1/usage` y cuotas publicadas por modelo; Codex usa `codex app-server` con `account/rateLimits/read`; Claude usa el caché `rate_limits` generado por el statusline existente. La UI muestra los tres providers con el mismo peso visual, resumen superior, ventanas, restante, porcentajes, desglose por modelo, tema oscuro/claro y actualización automática en formato humano. Smoke E2E ahora cubre snapshots partial/unavailable y cachés expirados sin romper el render. El adapter acepta una ruta estable versionable para el caché del statusline (`~/.local/state/qz-agent-kit/subscriptions/claude-usage.json`) y conserva fallback compatible con `/tmp`. El kit ya distribuye `qz-claude-statusline.mjs`, que normaliza sólo `rate_limits` hacia el caché estable; la activación queda documentada pero deliberadamente no aplicada sobre settings existentes; falta publicar. Implementación y servicio local verificados; la publicación del paquete queda separada en p7-publish.",
+              "done": true
             },
             {
               "id": "p7-subscription-tray",
               "title": "Tray de uso para KDE",
               "category": "Observabilidad",
               "description": "Mostrar el estado del dashboard local desde un icono de bandeja con tooltip y menú contextual.",
-              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. El comando crea automáticamente `~/.local/share/qz-agent-kit/tray-venv`, instala PySide6 y, si falta `python3-venv` en Ubuntu/Debian, solicita sudo para instalarlo. `qz-kit subscriptions tray install` crea y habilita la unidad systemd de usuario para iniciar el tray en cada login. Falta validar la bandeja real en Plasma.",
-              "done": false
+              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. El comando crea automáticamente `~/.local/share/qz-agent-kit/tray-venv`, instala PySide6 y, si falta `python3-venv` en Ubuntu/Debian, solicita sudo para instalarlo. `qz-kit subscriptions tray install` crea y habilita la unidad systemd de usuario para iniciar el tray en cada login. Falta validar la bandeja real en Plasma. Implementación, dependencias, persistencia y servicio KDE verificados; la publicación del paquete queda separada en p7-publish.",
+              "done": true
             },
             {
               "id": "p7-release-check",
