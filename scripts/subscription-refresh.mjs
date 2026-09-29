@@ -67,12 +67,11 @@ const nanApiUsage = async (apiKey) => {
   const usage = { monthToDate: totalTokens, apiRequests }
   const limits = {}
   const remaining = {}
-  for (const [model, used] of Object.entries(byModel)) {
+  for (const [model, quota] of Object.entries(nanPublishedQuotas)) {
+    const used = byModel[model] || 0
     usage[model] = used
-    if (nanPublishedQuotas[model] !== undefined) {
-      limits[model] = nanPublishedQuotas[model]
-      remaining[model] = Math.max(0, nanPublishedQuotas[model] - used)
-    }
+    limits[model] = quota
+    remaining[model] = Math.max(0, quota - used)
   }
   return { usage, limits, remaining, periodStart: window.periodStart, periodEnd: window.periodEnd, source: 'https://api.nan.builders/v1/usage' }
 }
