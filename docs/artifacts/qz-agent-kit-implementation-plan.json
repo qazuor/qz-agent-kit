@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 140,
+  "version": 141,
   "view": {
     "tabs": [
       "overview"
@@ -926,7 +926,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Auditoría read-only actualizada: los cuatro ejecutables responden a --help y los cuatro destinos qz están instalados sin missing/drift/contentDrift. El fixture genérico valida context y rechaza recap porque ese workflow depende del adapter del proyecto; esto es intencional, pero deja pendiente la validación final desde el adapter real de Hospeda para commands, sesiones, TUI, memoria y workflows.",
+              "notes": "Validación real en worktree Hospeda qz-adapter: `qz context --json` y `qz recap --json` funcionan; `qz verify --changed --json` pasa los 52 pasos previos, incluidos server-tools (334 tests) y client-tools. Con los entornos copiados desde hospeda-staging, typecheck falla en apps/admin con 235 errores TypeScript (rutas TanStack: parámetros inferidos como undefined/never). El worktree queda limpio y el fallo es de baseline/código del checkout, no de instalación qz.",
               "done": false
             }
           ]
