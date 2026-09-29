@@ -38,3 +38,8 @@ qz-kit subscriptions tray install
 La unidad queda en `~/.config/systemd/user/qz-subscriptions-tray.service`,
 se habilita con `systemctl --user enable --now` y depende del dashboard.
 Para revisar sin instalar ni habilitar: `qz-kit subscriptions tray install --plan`.
+
+El texto nativo de la bandeja se complementa con un popup Qt propio al pasar el
+mouse sobre el icono. El popup muestra tarjetas por proveedor, barras de
+porcentaje restante por modelo y el estado `LIVE`; no consulta credenciales ni
+proveedores directamente.

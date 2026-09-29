@@ -8,8 +8,18 @@ import webbrowser
 
 try:
     from PySide6.QtCore import QObject, QTimer, Qt
-    from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPixmap
-    from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
+    from PySide6.QtGui import QAction, QColor, QCursor, QIcon, QPainter, QPixmap
+    from PySide6.QtWidgets import (
+        QApplication,
+        QFrame,
+        QHBoxLayout,
+        QLabel,
+        QMenu,
+        QProgressBar,
+        QSystemTrayIcon,
+        QVBoxLayout,
+        QWidget,
+    )
 except ImportError:
     print('qz usage tray requiere PySide6. Instalarlo en un entorno aislado y volver a ejecutar.', file=sys.stderr)
     sys.exit(2)
@@ -79,10 +89,107 @@ def tooltip(document):
     return '\n'.join(lines)
 
 
+def percent_for(snapshot, key, value):
+    if key.endswith('RemainingPercent') and isinstance(value, (int, float)):
+        return max(0, min(100, float(value)))
+    limit = (snapshot.get('limits') or {}).get(key)
+    if isinstance(value, (int, float)) and isinstance(limit, (int, float)) and limit > 0:
+        return max(0, min(100, float(value) * 100 / limit))
+    return None
+
+
+class UsagePopup(QWidget):
+    def __init__(self):
+        super().__init__(None, Qt.WindowType.ToolTip | Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setStyleSheet('''
+            QWidget#card { background: #101820; border: 1px solid #304150; border-radius: 14px; }
+            QLabel { color: #d9e3ec; }
+            QLabel#title { color: #f4f7fa; font-size: 15px; font-weight: 700; }
+            QLabel#muted { color: #8fa2b3; font-size: 11px; }
+            QLabel#provider { color: #f4f7fa; font-size: 12px; font-weight: 700; }
+            QLabel#model { color: #aebdca; font-size: 11px; }
+            QProgressBar { min-height: 8px; max-height: 8px; border: 0; border-radius: 4px; background: #263542; }
+            QProgressBar::chunk { border-radius: 4px; background: #55d6b4; }
+        ''')
+        self.card = QFrame(self)
+        self.card.setObjectName('card')
+        self.layout = QVBoxLayout(self.card)
+        self.layout.setContentsMargins(16, 14, 16, 14)
+        self.layout.setSpacing(8)
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(self.card)
+        self.setFixedWidth(330)
+
+    def render(self, document):
+        while self.layout.count():
+            item = self.layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        title = QLabel('QZ Usage Console')
+        title.setObjectName('title')
+        self.layout.addWidget(title)
+        live = QLabel('LIVE · actualización automática cada 15 s')
+        live.setObjectName('muted')
+        self.layout.addWidget(live)
+        if not document:
+            unavailable = QLabel('Dashboard no disponible')
+            unavailable.setObjectName('muted')
+            self.layout.addWidget(unavailable)
+            return
+        for snapshot in document.get('snapshots', []):
+            provider = QLabel(str(snapshot.get('provider', 'unknown')).upper())
+            provider.setObjectName('provider')
+            self.layout.addWidget(provider)
+            remaining = snapshot.get('remaining') or {}
+            limits = snapshot.get('limits') or {}
+            rows = []
+            for key, value in remaining.items():
+                percent = percent_for(snapshot, key, value)
+                if percent is not None:
+                    label = key.removesuffix('RemainingPercent') if key.endswith('RemainingPercent') else key
+                    rows.append((label, percent))
+            for model, limit in limits.items():
+                if model not in remaining and isinstance(limit, (int, float)):
+                    rows.append((model, None))
+            for label, percent in rows:
+                row = QVBoxLayout()
+                row.setSpacing(3)
+                heading = QHBoxLayout()
+                model = QLabel(str(label))
+                model.setObjectName('model')
+                heading.addWidget(model)
+                heading.addStretch()
+                value = QLabel(f'{percent:.0f}% restante' if percent is not None else 'sin dato')
+                value.setObjectName('muted')
+                heading.addWidget(value)
+                row.addLayout(heading)
+                bar = QProgressBar()
+                bar.setRange(0, 100)
+                bar.setValue(int(percent or 0))
+                row.addWidget(bar)
+                self.layout.addLayout(row)
+            if not rows:
+                empty = QLabel('Sin límites publicados')
+                empty.setObjectName('muted')
+                self.layout.addWidget(empty)
+
+    def place_near(self, rect):
+        if not rect.isValid():
+            return
+        point = rect.center()
+        x = point.x() - self.width() // 2
+        y = rect.top() - self.height() - 10
+        self.move(max(8, x), max(8, y))
+
+
 class Tray(QObject):
     def __init__(self):
         super().__init__()
         self.tray = QSystemTrayIcon(make_icon('#8d9bad'))
+        self.document = None
+        self.popup = UsagePopup()
         self.tray.setToolTip('QZ Usage Console')
         menu = QMenu()
         open_action = QAction('Abrir dashboard', self)
@@ -101,12 +208,31 @@ class Tray(QObject):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
         self.timer.start(POLL_MS)
+        self.hover_timer = QTimer(self)
+        self.hover_timer.timeout.connect(self.update_hover_popup)
+        self.hover_timer.start(120)
         self.refresh()
 
     def refresh(self):
         document = fetch()
+        self.document = document
         self.tray.setIcon(make_icon(color_for(document or {})))
         self.tray.setToolTip(tooltip(document))
+        self.popup.render(document)
+
+    def update_hover_popup(self):
+        tray_rect = self.tray.geometry()
+        cursor = QCursor.pos()
+        over_tray = tray_rect.isValid() and tray_rect.adjusted(-5, -5, 5, 5).contains(cursor)
+        over_popup = self.popup.isVisible() and self.popup.geometry().adjusted(8, 8, -8, -8).contains(cursor)
+        if over_tray:
+            self.popup.render(self.document)
+            self.popup.adjustSize()
+            self.popup.place_near(tray_rect)
+            self.popup.show()
+            self.popup.raise_()
+        elif not over_popup:
+            self.popup.hide()
 
 
 app = QApplication(sys.argv)
