@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 144,
+  "version": 145,
   "view": {
     "tabs": [
       "overview"
@@ -641,7 +641,7 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Configuración OpenCode documentada: mouse=false, diff auto, atención sin sonido, Home/End y navegación de mensajes. Gentle Shell usa fullscreen y Gentleman-Cute. La semántica de scroll y atajos de Pi requiere prueba interactiva; Codex y Claude no se modificaron.",
+              "notes": "Verificación estática actualizada: OpenCode 1.18.32 carga ~/.config/opencode/tui.json con mouse=false, diff auto, atención/notifications sin sonido, Home/End de línea y Ctrl+Home/Ctrl+End del buffer, además de navegación de mensajes. `opencode debug config` responde OK y carga los plugins globales. Gentle Shell 3.7.0/Pi 0.87.1 usa el perfil aislado y theme Gentleman-Cute. Sigue pendiente la prueba interactiva de scroll/atajos en cada TUI.",
               "done": false
             },
             {
