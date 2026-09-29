@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 141,
+  "version": 142,
   "view": {
     "tabs": [
       "overview"
@@ -926,7 +926,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Validación real en worktree Hospeda qz-adapter: `qz context --json` y `qz recap --json` funcionan; `qz verify --changed --json` pasa los 52 pasos previos, incluidos server-tools (334 tests) y client-tools. Con los entornos copiados desde hospeda-staging, typecheck falla en apps/admin con 235 errores TypeScript (rutas TanStack: parámetros inferidos como undefined/never). El worktree queda limpio y el fallo es de baseline/código del checkout, no de instalación qz.",
+              "notes": "Validación real en worktree Hospeda qz-adapter: context, recap, server-tools (334 tests) y client-tools OK. `qz verify --changed` requiere previamente `pnpm build` para generar routeTree.gen.ts y outputs ignorados; sin ellos se detiene en typecheck, pero después del build el typecheck completo pasa con 43 tareas, 0 errores. El worktree queda limpio. Queda pendiente decidir si verify debe autodetectar ese prerequisite o documentarlo explícitamente.",
               "done": false
             }
           ]
