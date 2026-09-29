@@ -73,8 +73,8 @@ en cero. El servidor es read-only respecto del store salvo el refresh explícito
 y la carga de snapshots queda separada para que los adapters puedan validarlos.
 
 En Linux, `qz-kit subscriptions install --plan` genera una unidad systemd de
-usuario; `--apply` la instala, la habilita y la inicia. El MVP sólo admite
-loopback y usa `Restart=on-failure`.
+usuario; `--apply` la instala, la habilita y la inicia. La unidad quedó activa
+en esta máquina. El MVP sólo admite loopback y usa `Restart=on-failure`.
 
 Referencias oficiales verificadas: NaN expone su uso mediante el CLI y la API
 de sesión (`cloud-api.nan.builders/api/metrics/usage`); OpenAI requiere acceso
