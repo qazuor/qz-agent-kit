@@ -104,6 +104,24 @@ def bar_color(percent):
     return '#55d6b4' if percent >= 40 else '#f6b65f' if percent >= 15 else '#ff7d77'
 
 
+def display_provider(value):
+    return {'nan': 'NAN Builder', 'openai': 'OpenAI', 'claude': 'Claude'}.get(str(value).lower(), str(value).title())
+
+
+def display_model(value):
+    labels = {
+        'fiveHour': 'Sesión de 5 horas',
+        'fiveHourRemainingPercent': 'Sesión de 5 horas',
+        'sevenDay': 'Límite semanal',
+        'sevenDayRemainingPercent': 'Límite semanal',
+        'primary': 'Límite primario',
+        'primaryRemainingPercent': 'Límite primario',
+        'secondary': 'Límite secundario',
+        'secondaryRemainingPercent': 'Límite secundario',
+    }
+    return labels.get(str(value), str(value).replace('_', ' ').replace('-', ' ').title())
+
+
 class UsagePopup(QWidget):
     def __init__(self):
         super().__init__(None, Qt.WindowType.ToolTip | Qt.WindowType.FramelessWindowHint)
@@ -129,10 +147,7 @@ class UsagePopup(QWidget):
         self.setFixedWidth(330)
 
     def render(self, document):
-        while self.layout.count():
-            item = self.layout.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
+        self.clear_layout(self.layout)
         title = QLabel('QZ Usage Console')
         title.setObjectName('title')
         self.layout.addWidget(title)
@@ -145,7 +160,7 @@ class UsagePopup(QWidget):
             self.layout.addWidget(unavailable)
             return
         for snapshot in document.get('snapshots', []):
-            provider = QLabel(str(snapshot.get('provider', 'unknown')).upper())
+            provider = QLabel(display_provider(snapshot.get('provider', 'unknown')))
             provider.setObjectName('provider')
             self.layout.addWidget(provider)
             remaining = snapshot.get('remaining') or {}
@@ -154,11 +169,11 @@ class UsagePopup(QWidget):
             for key, value in remaining.items():
                 percent = percent_for(snapshot, key, value)
                 if percent is not None:
-                    label = key.removesuffix('RemainingPercent') if key.endswith('RemainingPercent') else key
+                    label = display_model(key.removesuffix('RemainingPercent') if key.endswith('RemainingPercent') else key)
                     rows.append((label, percent))
             for model, limit in limits.items():
                 if model not in remaining and isinstance(limit, (int, float)):
-                    rows.append((model, None))
+                    rows.append((display_model(model), None))
             for label, percent in rows:
                 row = QVBoxLayout()
                 row.setSpacing(3)
@@ -186,6 +201,18 @@ class UsagePopup(QWidget):
                 empty = QLabel('Datos no disponibles' if status not in ('', 'verified') else 'Sin límites publicados')
                 empty.setObjectName('muted')
                 self.layout.addWidget(empty)
+
+    @staticmethod
+    def clear_layout(layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            child_layout = item.layout()
+            if child_layout is not None:
+                UsagePopup.clear_layout(child_layout)
+                child_layout.deleteLater()
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
 
     def place_near(self, rect):
         if not rect.isValid():
