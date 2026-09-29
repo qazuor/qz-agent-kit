@@ -17,3 +17,21 @@ statusline de Claude Code: recibe por stdin el JSON de la sesión, extrae sólo
 `~/.local/state/qz-agent-kit/subscriptions/claude-usage.json` (o en
 `QZ_CLAUDE_USAGE_FILE`). Nunca persiste el JSON completo ni campos ajenos a las
 ventanas de uso.
+
+### Activación explícita
+
+El kit no modifica `~/.claude/settings.json` automáticamente. Para activarlo,
+la configuración de Claude debe apuntar el `statusLine` al ejecutable instalado:
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "qz-claude-statusline.mjs"
+  }
+}
+```
+
+La activación debe hacerse después de revisar el settings existente. El
+collector no imprime una línea de estado propia: su responsabilidad es
+persistir el snapshot para `qz-kit subscriptions refresh`.
