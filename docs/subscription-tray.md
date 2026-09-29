@@ -39,7 +39,7 @@ La unidad queda en `~/.config/systemd/user/qz-subscriptions-tray.service`,
 se habilita con `systemctl --user enable --now` y depende del dashboard.
 Para revisar sin instalar ni habilitar: `qz-kit subscriptions tray install --plan`.
 
-El texto nativo de la bandeja se complementa con un popup Qt propio al pasar el
-mouse sobre el icono. El popup muestra tarjetas por proveedor, barras de
+El tooltip nativo de Qt está desactivado para evitar el popup de texto sin estilos. Un popup Qt propio aparece al pasar el
+mouse sobre el icono y también al hacer clic, como fallback en sesiones KDE que no exponen la geometría del StatusNotifier. El popup muestra tarjetas por proveedor, barras de
 porcentaje restante por modelo y el estado `LIVE`; no consulta credenciales ni
 proveedores directamente.

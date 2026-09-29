@@ -190,7 +190,9 @@ class Tray(QObject):
         self.tray = QSystemTrayIcon(make_icon('#8d9bad'))
         self.document = None
         self.popup = UsagePopup()
-        self.tray.setToolTip('QZ Usage Console')
+        # Disable the native Qt tooltip: KDE renders it as an unstyled text
+        # bubble. The tray uses the custom popup below instead.
+        self.tray.setToolTip('')
         menu = QMenu()
         open_action = QAction('Abrir dashboard', self)
         open_action.triggered.connect(lambda: webbrowser.open(API))
@@ -203,7 +205,7 @@ class Tray(QObject):
         menu.addSeparator()
         menu.addAction(quit_action)
         self.tray.setContextMenu(menu)
-        self.tray.activated.connect(lambda reason: webbrowser.open(API) if reason == QSystemTrayIcon.ActivationReason.Trigger else None)
+        self.tray.activated.connect(self.on_activated)
         self.tray.show()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
@@ -217,8 +219,20 @@ class Tray(QObject):
         document = fetch()
         self.document = document
         self.tray.setIcon(make_icon(color_for(document or {})))
-        self.tray.setToolTip(tooltip(document))
+        self.tray.setToolTip('')
         self.popup.render(document)
+
+    def on_activated(self, reason):
+        if reason != QSystemTrayIcon.ActivationReason.Trigger:
+            return
+        if self.popup.isVisible():
+            self.popup.hide()
+            return
+        self.popup.render(self.document)
+        self.popup.adjustSize()
+        self.popup.move(QCursor.pos().x() - self.popup.width() // 2, QCursor.pos().y() - self.popup.height() - 12)
+        self.popup.show()
+        self.popup.raise_()
 
     def update_hover_popup(self):
         tray_rect = self.tray.geometry()
