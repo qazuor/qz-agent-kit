@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 117,
+  "version": 118,
   "view": {
     "tabs": [
       "overview"
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene fechas legibles, actualización automática de tarjetas, refresh live y fallbacks locales; queda implementar las fuentes oficiales de rate limits de Codex/Claude."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene fechas legibles, actualización automática y adapters operativos para NaN, Codex y Claude; queda validar casos de expiración y publicación."
         }
       },
       {
@@ -886,7 +886,7 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md y contrato normalizado en docs/subscription-snapshot.schema.json. `qz-kit subscriptions validate <snapshot.json>` valida snapshots sin leer credenciales. `qz-kit subscriptions refresh` consulta NaN, detecta `codex login status` y lee sólo agregados de `~/.claude/stats-cache.json`; las fuentes locales quedan como `partial`/confianza baja. La UI muestra métricas y fechas en formato humano y consulta `/api/snapshots` cada 15 segundos. La investigación identificó `codex app-server account/rateLimits/read` y ventanas `rate_limits` del statusline de Claude como siguientes fuentes oficiales. Faltan esos adapters, cuotas NaN, UI completa y publicación.",
+              "notes": "Dashboard local ejecutable con snapshots normalizados, UI live y servicio systemd planificable. NaN usa `/v1/usage` y cuotas publicadas por modelo; Codex usa `codex app-server` con `account/rateLimits/read`; Claude usa el caché `rate_limits` generado por el statusline existente. La UI muestra consumo, restante, porcentajes y reinicios en formato humano. Faltan pruebas de expiración/offline, configuración portable del statusline y publicación.",
               "done": false
             },
             {

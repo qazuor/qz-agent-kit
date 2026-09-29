@@ -31,10 +31,15 @@ obtenerse, pero no desde los archivos de estadísticas que veníamos leyendo:
   cuota total debe combinarse con los límites publicados para el plan o con un
   endpoint de cuenta que los exponga; no se debe derivar un saldo sin esa base.
 
-La implementación futura seguirá esta prioridad: fuente oficial del CLI o
-app-server, luego caché local de rate limits, luego API administrativa y por
-último estimación local. Cada número conservará `source`, `observedAt` y
-`confidence`.
+La implementación sigue esta prioridad: fuente oficial del CLI o app-server,
+luego caché local de rate limits, luego API administrativa y por último
+estimación local. Cada número conserva `source`, `observedAt` y `confidence`.
+
+Los tres adapters principales ya están operativos: NaN consulta `/v1/usage` y
+calcula restantes contra las cuotas publicadas; Codex consulta
+`account/rateLimits/read` mediante su app-server; Claude consume el caché de
+`rate_limits` generado por el statusline existente. Un caché vencido queda
+marcado como `partial`.
 
 ## Seguridad
 
