@@ -7,6 +7,9 @@ OpenCode, Claude Code, Codex CLI y Gentle Shell. El proyecto mantiene el
 workflow portable; cada CLI conserva su propia interfaz, permisos y formato de
 configuración.
 
+La guía operativa completa, con instalación, comandos, adapters, servicios,
+seguridad y diagnóstico, está en [docs/USER-GUIDE.md](docs/USER-GUIDE.md).
+
 ## Qué resuelve
 
 El kit evita que una actualización de un skill, agent o command tenga que
