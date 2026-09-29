@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 129,
+  "version": 130,
   "view": {
     "tabs": [
       "overview"
@@ -894,7 +894,7 @@
               "title": "Tray de uso para KDE",
               "category": "Observabilidad",
               "description": "Mostrar el estado del dashboard local desde un icono de bandeja con tooltip y menú contextual.",
-              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. El comando crea automáticamente `~/.local/share/qz-agent-kit/tray-venv` e instala PySide6 en la primera ejecución; no modifica el Python global. Falta validar la bandeja real en Plasma.",
+              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. El comando crea automáticamente `~/.local/share/qz-agent-kit/tray-venv`, instala PySide6 y, si falta `python3-venv` en Ubuntu/Debian, solicita sudo para instalarlo. `qz-kit subscriptions tray install` crea y habilita la unidad systemd de usuario para iniciar el tray en cada login. Falta validar la bandeja real en Plasma.",
               "done": false
             },
             {

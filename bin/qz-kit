@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { assertValidPlan } from '../scripts/plan-schema.mjs'
@@ -110,20 +110,45 @@ if (command === 'subscriptions' && args[0] === 'tray') {
   const trayVenv = join(homedir(), '.local/share/qz-agent-kit/tray-venv')
   const trayPython = process.env.QZ_TRAY_PYTHON || join(trayVenv, 'bin/python')
   const noInstall = trayArgs.includes('--no-install')
-  if (!existsSync(trayPython) && !noInstall && !process.env.QZ_TRAY_PYTHON) {
+  const ensureTrayRuntime = () => {
+    if (existsSync(trayPython) || noInstall || process.env.QZ_TRAY_PYTHON) return true
     const bootstrapPython = process.env.QZ_TRAY_BOOTSTRAP_PYTHON || 'python3'
     console.error('qz usage tray: preparando entorno aislado y PySide6…')
-    const venv = spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
+    let venv = spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
+    if (venv.status !== 0 && process.platform === 'linux' && spawnSync('command', ['-v', 'apt-get'], { shell: true, stdio: 'ignore' }).status === 0) {
+      console.error('Falta python3-venv; se solicitará sudo para instalarlo.')
+      const apt = spawnSync('sudo', ['apt-get', 'install', '-y', 'python3-venv'], { stdio: 'inherit' })
+      if (apt.status === 0) venv = spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
+    }
     if (venv.status !== 0) {
       console.error('No se pudo crear el entorno Python. Instala python3-venv o define QZ_TRAY_BOOTSTRAP_PYTHON.')
-      process.exit(1)
+      return false
     }
     const install = spawnSync(trayPython, ['-m', 'pip', 'install', '--disable-pip-version-check', 'PySide6>=6.8,<7'], { stdio: 'inherit' })
     if (install.status !== 0) {
       console.error('No se pudo instalar PySide6 en el entorno aislado del kit.')
-      process.exit(1)
+      return false
     }
+    return true
   }
+  if (trayArgs[0] === 'install') {
+    const unitPath = join(homedir(), '.config/systemd/user/qz-subscriptions-tray.service')
+    const unit = `[Unit]\nDescription=qz subscription tray\nAfter=qz-subscriptions.service graphical-session.target\n\n[Service]\nType=simple\nExecStart=${trayPython} ${subscriptionTray}\nRestart=on-failure\nRestartSec=5\nNoNewPrivileges=true\n\n[Install]\nWantedBy=default.target\n`
+    if (trayArgs.includes('--plan')) {
+      console.log(JSON.stringify({ unitPath, unit, mutations: 'none', secretValues: 'not-read' }, null, 2))
+      process.exit(0)
+    }
+    if (!ensureTrayRuntime()) process.exit(1)
+    const probe = spawnSync('systemctl', ['--user', 'show-environment'], { stdio: 'ignore' })
+    if (probe.status !== 0) { console.error('systemd --user no está disponible.'); process.exit(1) }
+    mkdirSync(join(homedir(), '.config/systemd/user'), { recursive: true })
+    writeFileSync(unitPath, unit, { mode: 0o600 })
+    if (spawnSync('systemctl', ['--user', 'daemon-reload'], { stdio: 'inherit' }).status !== 0) process.exit(1)
+    if (spawnSync('systemctl', ['--user', 'enable', '--now', 'qz-subscriptions-tray.service'], { stdio: 'inherit' }).status !== 0) process.exit(1)
+    console.log(JSON.stringify({ unitPath, status: 'installed', mutations: [unitPath, 'systemd-user-unit'], secretValues: 'not-read' }, null, 2))
+    process.exit(0)
+  }
+  if (!ensureTrayRuntime()) process.exit(1)
   const result = spawnSync(existsSync(trayPython) ? trayPython : 'python3', [subscriptionTray, ...trayArgs.filter((arg) => arg !== '--no-install')], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
