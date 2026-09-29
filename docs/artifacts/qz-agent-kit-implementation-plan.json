@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 142,
+  "version": 143,
   "view": {
     "tabs": [
       "overview"
@@ -926,7 +926,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Validación real en worktree Hospeda qz-adapter: context, recap, server-tools (334 tests) y client-tools OK. `qz verify --changed` requiere previamente `pnpm build` para generar routeTree.gen.ts y outputs ignorados; sin ellos se detiene en typecheck, pero después del build el typecheck completo pasa con 43 tareas, 0 errores. El worktree queda limpio. Queda pendiente decidir si verify debe autodetectar ese prerequisite o documentarlo explícitamente.",
+              "notes": "Validación real en worktree Hospeda qz-adapter: context, recap, server-tools (334 tests), client-tools y typecheck posterior al build OK. El adapter ahora declara `verification.generatedPaths`/`build`; qz verify detecta outputs ausentes y devuelve `blocked` con el comando requerido, sin ejecutar mutaciones. Cambio implementado en Hospeda como b9c93cc721. Continúa pendiente repetir verify desde un worktree limpio para validar el nuevo bloqueo.",
               "done": false
             }
           ]
