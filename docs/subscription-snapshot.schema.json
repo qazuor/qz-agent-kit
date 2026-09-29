@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qz-agent-kit.local/schemas/subscription-snapshot.json",
+  "title": "qz subscription snapshot",
+  "type": "object",
+  "required": ["schemaVersion", "snapshots"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "snapshots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider", "status", "observedAt", "confidence"],
+        "properties": {
+          "provider": { "enum": ["claude", "openai", "nan"] },
+          "plan": { "type": ["string", "null"] },
+          "status": { "enum": ["verified", "partial", "manual", "unavailable"] },
+          "periodStart": { "type": ["string", "null"], "format": "date-time" },
+          "periodEnd": { "type": ["string", "null"], "format": "date-time" },
+          "renewalAt": { "type": ["string", "null"], "format": "date-time" },
+          "limits": { "type": "object", "additionalProperties": { "type": ["number", "string", "null"] } },
+          "usage": { "type": "object", "additionalProperties": { "type": ["number", "string", "null"] } },
+          "remaining": { "type": "object", "additionalProperties": { "type": ["number", "string", "null"] } },
+          "observedAt": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "minLength": 1 },
+          "confidence": { "enum": ["high", "medium", "low"] },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
