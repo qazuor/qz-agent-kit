@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 118,
+  "version": 119,
   "view": {
     "tabs": [
       "overview"
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene fechas legibles, actualización automática y adapters operativos para NaN, Codex y Claude; queda validar casos de expiración y publicación."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene fechas legibles, actualización automática, UI rediseñada y adapters operativos para NaN, Codex y Claude; queda validar casos de expiración y publicación."
         }
       },
       {
@@ -886,7 +886,7 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Dashboard local ejecutable con snapshots normalizados, UI live y servicio systemd planificable. NaN usa `/v1/usage` y cuotas publicadas por modelo; Codex usa `codex app-server` con `account/rateLimits/read`; Claude usa el caché `rate_limits` generado por el statusline existente. La UI muestra consumo, restante, porcentajes y reinicios en formato humano. Faltan pruebas de expiración/offline, configuración portable del statusline y publicación.",
+              "notes": "Dashboard local ejecutable con snapshots normalizados, UI live y servicio systemd planificable. NaN usa `/v1/usage` y cuotas publicadas por modelo; Codex usa `codex app-server` con `account/rateLimits/read`; Claude usa el caché `rate_limits` generado por el statusline existente. La UI muestra los tres providers con el mismo peso visual, resumen superior, ventanas, restante, porcentajes, desglose por modelo, tema oscuro/claro y actualización automática en formato humano. Faltan pruebas de expiración/offline, configuración portable del statusline y publicación.",
               "done": false
             },
             {

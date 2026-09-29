@@ -55,6 +55,10 @@ Las credenciales viven fuera del repositorio, con referencias indirectas y permi
 6. enlaces directos a las consolas oficiales;
 7. NaN automatizado; OpenAI y Claude combinan fuentes administrativas cuando existen y fuentes locales de baja confianza cuando sólo hay login/estadísticas del CLI.
 
+### Interfaz actual
+
+La vista local usa un dashboard oscuro por defecto, con selector claro/oscuro persistido en el navegador y una jerarquía común para los tres providers. Cada provider ocupa una tarjeta del mismo peso visual; dentro se muestran su estado, ventana de uso, porcentaje restante, fecha de reinicio, fuente y antigüedad de los datos. El encabezado resume cantidad de fuentes verificadas, consumo mensual observado de NaN, próximo reinicio y última lectura. La página se actualiza sola cada 15 segundos y permite una actualización manual, sin buscador ni filtros que oculten providers críticos.
+
 La primera pieza ejecutable del MVP ya está disponible con `qz-kit subscriptions
 serve`: sirve el store local en loopback, expone `/api/health` y
 `/api/snapshots`, muestra una vista oscura básica por proveedor y puede ejecutar

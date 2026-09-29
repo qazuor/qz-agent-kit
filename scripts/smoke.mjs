@@ -61,7 +61,7 @@ try {
   const pageResponse = await fetch('http://127.0.0.1:4321/')
   const page = await pageResponse.text()
   subscriptionServer.kill('SIGTERM')
-  if (!health.ok || health.snapshotCount !== 1 || !page.includes('Suscripciones') || !page.includes('nan')) throw new Error('subscription-server no sirvió health/UI')
+  if (!health.ok || health.snapshotCount !== 1 || !page.includes('Usage Console') || !page.includes('nan')) throw new Error('subscription-server no sirvió health/UI')
   parse(run('scripts/validate-adapters.mjs', []))
   parse(run('scripts/check-manifests.mjs', []))
   const readiness = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' }))
