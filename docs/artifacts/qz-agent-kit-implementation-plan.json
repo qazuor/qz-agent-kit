@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 139,
+  "version": 140,
   "view": {
     "tabs": [
       "overview"
@@ -926,7 +926,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Auditoría read-only actualizada: OpenCode 1.18.32, Gentle AI/Shell 3.7.0, Engram 2.0.0, Claude Code 2.1.284 y Codex CLI 0.155.0 detectados. Los cuatro destinos qz están instalados sin missing/drift/contentDrift y las rutas de auth fueron detectadas sin leer contenidos. Continúa pendiente la validación final de sesiones, modelos, TUI, memoria y workflows en cada harness.",
+              "notes": "Auditoría read-only actualizada: los cuatro ejecutables responden a --help y los cuatro destinos qz están instalados sin missing/drift/contentDrift. El fixture genérico valida context y rechaza recap porque ese workflow depende del adapter del proyecto; esto es intencional, pero deja pendiente la validación final desde el adapter real de Hospeda para commands, sesiones, TUI, memoria y workflows.",
               "done": false
             }
           ]
