@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 110,
+  "version": 111,
   "view": {
     "tabs": [
       "overview"
@@ -58,7 +58,7 @@
               "label": "drift de sync"
             },
             {
-              "value": "77/85",
+              "value": "78/86",
               "label": "tareas completadas"
             },
             {
@@ -756,6 +756,14 @@
               "category": "Memoria",
               "description": "Wrapper seguro y descubrible de Engram.",
               "notes": "Implementado como wrapper global `qz engram`: permite consultas read-only aun fuera de un proyecto y bloquea save/delete/import/export/sync/setup/consolidate/prune y mutaciones cloud. La limpieza final de memoria sigue pendiente.",
+              "done": true
+            },
+            {
+              "id": "p4-gentle",
+              "title": "qz-gentle",
+              "category": "Ecosistema",
+              "description": "Wrapper seguro y descubrible de diagnóstico Gentle AI.",
+              "notes": "Implementado como wrapper global `qz gentle`: permite version, doctor, sdd-status, review status, telemetry status y update; bloquea install, sync, upgrade, uninstall, restore y mutaciones de review/telemetry.",
               "done": true
             },
             {
