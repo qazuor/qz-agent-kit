@@ -14,6 +14,28 @@ Cada integración devuelve un snapshot normalizado con `provider`, `plan`, `peri
 - **OpenAI API**: Usage Dashboard y Cost API requieren permisos de organización; el dashboard debe aceptar una exportación o credencial de sólo lectura. No debe confundir consumo API con la suscripción ChatGPT/Codex.
 - **Claude**: la Usage and Cost API requiere Admin API key u OAuth con `org:admin`; Claude.ai/Claude Code puede exponer límites de producto distintos. Sin esos permisos, el dashboard enlaza a la consola y permite registrar una captura manual.
 
+## Cuotas de suscripciones personales
+
+La investigación confirmó que el saldo de las suscripciones personales puede
+obtenerse, pero no desde los archivos de estadísticas que veníamos leyendo:
+
+- **Codex**: OpenAI documenta `/status` dentro de una sesión activa. El
+  app-server local expone `account/rateLimits/read`, que es la fuente que usan
+  herramientas de monitoreo locales. Debemos invocarlo mediante `codex
+  app-server`, sin leer `~/.codex/auth.json` ni copiar tokens.
+- **Claude Code**: Claude muestra el estado en `/status`. Después de cada
+  respuesta, el statusline recibe ventanas `rate_limits` con porcentaje y
+  `resets_at`; esa es la fuente preferible. `stats-cache.json` sólo sirve para
+  actividad local y no para saldo.
+- **NaN**: la sesión autenticada entrega uso oficial por ventana y modelo. La
+  cuota total debe combinarse con los límites publicados para el plan o con un
+  endpoint de cuenta que los exponga; no se debe derivar un saldo sin esa base.
+
+La implementación futura seguirá esta prioridad: fuente oficial del CLI o
+app-server, luego caché local de rate limits, luego API administrativa y por
+último estimación local. Cada número conservará `source`, `observedAt` y
+`confidence`.
+
 ## Seguridad
 
 Las credenciales viven fuera del repositorio, con referencias indirectas y permisos restrictivos. El backend local no imprime tokens, no los envía al navegador y no almacena respuestas completas de APIs. Cada adapter tiene timeout, rate limit y caché corta.
@@ -31,7 +53,9 @@ Las credenciales viven fuera del repositorio, con referencias indirectas y permi
 La primera pieza ejecutable del MVP ya está disponible con `qz-kit subscriptions
 serve`: sirve el store local en loopback, expone `/api/health` y
 `/api/snapshots`, muestra una vista oscura básica por proveedor y puede ejecutar
-`--refresh-interval <segundos>`. `qz-kit subscriptions refresh` consulta NaN
+`--refresh-interval <segundos>`. La página consulta `/api/snapshots` cada 15
+segundos y actualiza las tarjetas sin recargar el navegador; el servidor
+refresca providers cada 300 segundos por defecto. `qz-kit subscriptions refresh` consulta NaN
 cuando hay sesión/API key; detecta `codex login status` y las estadísticas
 locales de Claude Code (`~/.claude/stats-cache.json`) como fuentes `partial`,
 sin confundirlas con cuotas oficiales. Deja un provider como `unavailable`
