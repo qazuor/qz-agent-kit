@@ -10,7 +10,7 @@ Cada integración devuelve un snapshot normalizado con `provider`, `plan`, `peri
 
 ## Fuentes
 
-- **NaN Builders**: su CLI oficial ya expone Profile, Usage, Models y Costs; además documenta el endpoint de uso. Es el primer adapter automatizable.
+- **NaN Builders**: su CLI oficial ya expone Profile, Usage, Models y Costs; además documenta el endpoint de uso. Con una sesión de `nan` se obtiene consumo real; con sólo API key se valida disponibilidad de modelos, pero no saldo.
 - **OpenAI API**: Usage Dashboard y Cost API requieren permisos de organización; el dashboard debe aceptar una exportación o credencial de sólo lectura. No debe confundir consumo API con la suscripción ChatGPT/Codex.
 - **Claude**: la Usage and Cost API requiere Admin API key u OAuth con `org:admin`; Claude.ai/Claude Code puede exponer límites de producto distintos. Sin esos permisos, el dashboard enlaza a la consola y permite registrar una captura manual.
 
@@ -26,14 +26,16 @@ Las credenciales viven fuera del repositorio, con referencias indirectas y permi
 4. estado `verificado`, `parcial` o `manual`;
 5. refresco bajo demanda y timestamp de última consulta;
 6. enlaces directos a las consolas oficiales;
-7. NaN automatizado; OpenAI y Claude inicialmente con integración disponible sólo cuando existan permisos adecuados.
+7. NaN automatizado; OpenAI y Claude combinan fuentes administrativas cuando existen y fuentes locales de baja confianza cuando sólo hay login/estadísticas del CLI.
 
 La primera pieza ejecutable del MVP ya está disponible con `qz-kit subscriptions
 serve`: sirve el store local en loopback, expone `/api/health` y
 `/api/snapshots`, muestra una vista oscura básica por proveedor y puede ejecutar
 `--refresh-interval <segundos>`. `qz-kit subscriptions refresh` consulta NaN
-cuando hay sesión/API key y deja OpenAI/Claude como `unavailable` si no hay
-credenciales administrativas de usage; nunca convierte una falta de permisos
+cuando hay sesión/API key; detecta `codex login status` y las estadísticas
+locales de Claude Code (`~/.claude/stats-cache.json`) como fuentes `partial`,
+sin confundirlas con cuotas oficiales. Deja un provider como `unavailable`
+cuando tampoco existe una fuente local. Nunca convierte una falta de permisos
 en cero. El servidor es read-only respecto del store salvo el refresh explícito
 y la carga de snapshots queda separada para que los adapters puedan validarlos.
 

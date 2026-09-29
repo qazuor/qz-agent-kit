@@ -2,6 +2,7 @@
 import { existsSync, readFileSync, mkdirSync, renameSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, resolve } from 'node:path'
+import { execFileSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
@@ -22,6 +23,12 @@ const requestJson = async (url, headers) => {
   } finally { clearTimeout(timeout) }
 }
 const failed = (provider, source, reason) => ({ provider, status: 'unavailable', confidence: 'low', observedAt: iso, source, notes: reason })
+const commandAvailable = (command, args = []) => {
+  try {
+    execFileSync(command, args, { stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 })
+    return true
+  } catch { return false }
+}
 
 const nanSnapshot = async () => {
   const session = secret(process.env.NAN_SESSION_FILE || `${home}/.config/nan/session.json`)
@@ -51,10 +58,37 @@ const adminSnapshot = async (provider, key, url, source) => {
   if (!response.ok) return failed(provider, source, `endpoint respondió HTTP ${response.status}`)
   return { provider, status: 'verified', confidence: 'high', observedAt: iso, source, usage: {}, limits: {}, remaining: {}, notes: 'respuesta administrativa disponible; transformación detallada pendiente' }
 }
+const claudeLocalSnapshot = () => {
+  const file = `${home}/.claude/stats-cache.json`
+  const raw = secret(file)
+  if (!raw) return null
+  try {
+    const data = JSON.parse(raw)
+    const usage = {}
+    for (const key of ['totalMessages', 'totalSessions', 'firstSessionDate', 'lastComputedDate']) {
+      if (data[key] !== undefined && data[key] !== null) usage[key] = data[key]
+    }
+    return {
+      provider: 'claude', status: 'partial', confidence: 'low', observedAt: iso,
+      source: file, usage, limits: {}, remaining: {},
+      notes: 'estadísticas locales de Claude Code; no representan la cuota restante de Claude.ai'
+    }
+  } catch { return null }
+}
+const openaiLocalSnapshot = () => {
+  if (!commandAvailable('codex', ['login', 'status'])) return null
+  return {
+    provider: 'openai', status: 'partial', confidence: 'low', observedAt: iso,
+    source: 'codex login status', usage: {}, limits: {}, remaining: {},
+    notes: 'Codex está autenticado localmente; el CLI no expone una cuota restante persistida'
+  }
+}
+const openaiAdmin = await adminSnapshot('openai', envOrFile('OPENAI_ADMIN_API_KEY', `${home}/.config/qz/secrets/openai-admin.key`), 'https://api.openai.com/v1/organization/costs', 'https://api.openai.com/v1/organization/costs')
+const claudeAdmin = await adminSnapshot('claude', envOrFile('ANTHROPIC_ADMIN_API_KEY', `${home}/.config/qz/secrets/anthropic-admin.key`), 'https://api.anthropic.com/v1/organizations/cost_report', 'https://api.anthropic.com/v1/organizations/cost_report')
 const snapshots = [
   await nanSnapshot(),
-  await adminSnapshot('openai', envOrFile('OPENAI_ADMIN_API_KEY', `${home}/.config/qz/secrets/openai-admin.key`), 'https://api.openai.com/v1/organization/costs', 'https://api.openai.com/v1/organization/costs'),
-  await adminSnapshot('claude', envOrFile('ANTHROPIC_ADMIN_API_KEY', `${home}/.config/qz/secrets/anthropic-admin.key`), 'https://api.anthropic.com/v1/organizations/cost_report', 'https://api.anthropic.com/v1/organizations/cost_report')
+  openaiAdmin.status === 'unavailable' ? (openaiLocalSnapshot() || openaiAdmin) : openaiAdmin,
+  claudeAdmin.status === 'unavailable' ? (claudeLocalSnapshot() || claudeAdmin) : claudeAdmin
 ]
 mkdirSync(dirname(store), { recursive: true })
 const temporary = `${store}.tmp-${process.pid}`

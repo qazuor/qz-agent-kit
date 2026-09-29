@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 115,
+  "version": 116,
   "view": {
     "tabs": [
       "overview"
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) implementar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El paquete qz mantiene guards, manifests, wrappers read-only y adapters declarativos."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene refresh live, fallback local de Codex/Claude y servicio systemd planificable; las fuentes locales quedan marcadas como partial y no representan saldo oficial."
         }
       },
       {
@@ -886,7 +886,7 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md y contrato normalizado en docs/subscription-snapshot.schema.json. `qz-kit subscriptions validate <snapshot.json>` valida snapshots sin leer credenciales. `qz-kit subscriptions refresh` consulta providers disponibles y conserva estados partial/unavailable sin inventar ceros; `subscriptions serve --refresh-interval` mantiene polling live. `subscriptions install --plan|--apply` prepara el servicio systemd de usuario en Linux. Faltan adapters detallados de OpenAI/Claude, persistencia asistida y UI completa.",
+              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md y contrato normalizado en docs/subscription-snapshot.schema.json. `qz-kit subscriptions validate <snapshot.json>` valida snapshots sin leer credenciales. `qz-kit subscriptions refresh` consulta NaN, detecta `codex login status` y lee sólo agregados de `~/.claude/stats-cache.json`; las fuentes locales quedan como `partial`/confianza baja y nunca se presentan como cuota oficial. `subscriptions serve --refresh-interval` mantiene polling live y `subscriptions install --plan|--apply` prepara el servicio systemd de usuario en Linux. Faltan login NaN, adapters administrativos detallados de OpenAI/Claude, UI completa y publicación.",
               "done": false
             },
             {
