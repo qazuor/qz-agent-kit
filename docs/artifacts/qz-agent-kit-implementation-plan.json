@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 143,
+  "version": 144,
   "view": {
     "tabs": [
       "overview"
@@ -926,7 +926,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Validación real en worktree Hospeda qz-adapter: context, recap, server-tools (334 tests), client-tools y typecheck posterior al build OK. El adapter ahora declara `verification.generatedPaths`/`build`; qz verify detecta outputs ausentes y devuelve `blocked` con el comando requerido, sin ejecutar mutaciones. Cambio implementado en Hospeda como b9c93cc721. Continúa pendiente repetir verify desde un worktree limpio para validar el nuevo bloqueo.",
+              "notes": "Validación real completa del guard de prerequisites: al ocultar temporalmente el output ignorado, `qz verify --changed --json` devuelve exit 2 con `status: blocked`, `reason: generated_prerequisites_missing`, la ruta ausente y `build: pnpm build`; el archivo fue restaurado y el worktree quedó limpio. Con el build generado, server-tools (334 tests), client-tools y typecheck (43 tareas) pasan. La validación funcional de sesiones/TUI/memoria por harness sigue pendiente.",
               "done": false
             }
           ]
