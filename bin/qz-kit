@@ -29,6 +29,8 @@ const readiness = resolve(new URL('..', import.meta.url).pathname, 'scripts/read
 const planScript = resolve(new URL('..', import.meta.url).pathname, 'scripts/plan.mjs')
 const subscriptionValidate = resolve(new URL('..', import.meta.url).pathname, 'scripts/subscription-validate.mjs')
 const subscriptionServer = resolve(new URL('..', import.meta.url).pathname, 'scripts/subscription-server.mjs')
+const subscriptionRefresh = resolve(new URL('..', import.meta.url).pathname, 'scripts/subscription-refresh.mjs')
+const subscriptionService = resolve(new URL('..', import.meta.url).pathname, 'scripts/subscription-service.mjs')
 const argValue = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
@@ -94,6 +96,14 @@ if (command === 'subscriptions' && args[0] === 'serve') {
   const result = spawnSync(process.execPath, [subscriptionServer, ...args.slice(1)], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
+if (command === 'subscriptions' && args[0] === 'refresh') {
+  const result = spawnSync(process.execPath, [subscriptionRefresh, ...args.slice(1)], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'subscriptions' && args[0] === 'install') {
+  const result = spawnSync(process.execPath, [subscriptionService, ...args.slice(1)], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
   const wizardArgs = args.filter((arg) => arg !== '--interactive')
   const result = spawnSync(process.execPath, [wizard, ...wizardArgs], { stdio: 'inherit' })
@@ -113,11 +123,11 @@ const mapped = command === 'update' ? (updateArgs.includes('--check') ? ['--chec
     : command === 'install' ? args
       : []
 if (!mapped.length && !['help', '--help', '-h'].includes(command)) {
-  console.error('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup-status|external-apply|subscriptions validate|subscriptions serve|provenance|verify|rollback [opciones]')
+  console.error('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup-status|external-apply|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|provenance|verify|rollback [opciones]')
   process.exit(2)
 }
 if (!mapped.length) {
-  console.log('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup-status|external-apply|subscriptions validate|subscriptions serve|provenance|verify [opciones] | rollback <install-manifest.json>')
+  console.log('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup-status|external-apply|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|provenance|verify [opciones] | rollback <install-manifest.json>')
   process.exit(0)
 }
 const result = spawnSync(process.execPath, [script, ...mapped], { stdio: 'inherit' })

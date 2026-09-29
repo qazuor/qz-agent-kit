@@ -30,9 +30,22 @@ Las credenciales viven fuera del repositorio, con referencias indirectas y permi
 
 La primera pieza ejecutable del MVP ya está disponible con `qz-kit subscriptions
 serve`: sirve el store local en loopback, expone `/api/health` y
-`/api/snapshots`, y muestra una vista oscura básica por proveedor. El servidor
-es read-only respecto del store; la carga de snapshots queda separada para que
-los adapters puedan validarlos antes de persistirlos.
+`/api/snapshots`, muestra una vista oscura básica por proveedor y puede ejecutar
+`--refresh-interval <segundos>`. `qz-kit subscriptions refresh` consulta NaN
+cuando hay sesión/API key y deja OpenAI/Claude como `unavailable` si no hay
+credenciales administrativas de usage; nunca convierte una falta de permisos
+en cero. El servidor es read-only respecto del store salvo el refresh explícito
+y la carga de snapshots queda separada para que los adapters puedan validarlos.
+
+En Linux, `qz-kit subscriptions install --plan` genera una unidad systemd de
+usuario; `--apply` la instala, la habilita y la inicia. El MVP sólo admite
+loopback y usa `Restart=on-failure`.
+
+Referencias oficiales verificadas: NaN expone su uso mediante el CLI y la API
+de sesión (`cloud-api.nan.builders/api/metrics/usage`); OpenAI requiere acceso
+al Usage Dashboard/API de organización; Claude Usage and Cost API requiere una
+credencial administrativa. Estas fuentes sirven para distinguir “sin permiso”
+de “consumo cero”.
 
 ## Fuera del MVP
 

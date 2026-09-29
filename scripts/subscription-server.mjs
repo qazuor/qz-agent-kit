@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createServer } from 'node:http'
+import { spawn } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { resolve } from 'node:path'
@@ -7,9 +8,11 @@ import { resolve } from 'node:path'
 const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 const port = Number(value('--port') || 4319)
+const refreshInterval = Number(value('--refresh-interval') || 0)
 const host = value('--host') || '127.0.0.1'
 const store = resolve(value('--store') || `${process.env.QZ_KIT_HOME || homedir()}/.local/state/qz-agent-kit/subscriptions/snapshots.json`)
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('puerto inválido')
+if (!Number.isInteger(refreshInterval) || refreshInterval < 0) throw new Error('refresh interval inválido')
 if (host !== '127.0.0.1' && host !== 'localhost' && host !== '::1') throw new Error('el servidor sólo admite loopback en el MVP')
 
 const load = () => {
@@ -37,4 +40,10 @@ const server = createServer((request, response) => {
     return send(response, 404, { error: 'not found' })
   } catch (error) { return send(response, 500, { error: error.message, mutations: 'none', secretValues: 'not-read' }) }
 })
-server.listen(port, host, () => console.log(JSON.stringify({ url: `http://${host}:${port}`, store, snapshotCount: load().snapshots.length, mutations: 'server-only', secretValues: 'not-read' }, null, 2)))
+if (refreshInterval > 0) {
+  const refreshScript = resolve(new URL('./subscription-refresh.mjs', import.meta.url).pathname)
+  const refresh = () => { const child = spawn(process.execPath, [refreshScript, '--store', store], { stdio: 'ignore' }); child.on('error', () => {}) }
+  refresh()
+  setInterval(refresh, refreshInterval * 1000).unref()
+}
+server.listen(port, host, () => console.log(JSON.stringify({ url: `http://${host}:${port}`, store, snapshotCount: load().snapshots.length, refreshInterval, mutations: refreshInterval > 0 ? 'server-and-provider-refresh' : 'server-only', secretValues: 'not-read' }, null, 2)))
