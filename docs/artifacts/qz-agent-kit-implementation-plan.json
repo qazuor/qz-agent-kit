@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 112,
+  "version": 113,
   "view": {
     "tabs": [
       "overview"
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "1) prueba clean-room del instalador; 2) registrar Hospeda; 3) E2E real con issue no destructivo; 4) completar Engram y backup; 5) validar plugins/TUI; 6) publicar y decidir retiro de Claude. El paquete qz ya tiene los guards de plan, manifests, readiness estricto y adapters declarativos; los pendientes actuales son integración externa y validación real."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) implementar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El paquete qz mantiene guards, manifests, wrappers read-only y adapters declarativos."
         }
       },
       {
@@ -100,17 +100,17 @@
             [
               "1",
               "Instalador y ciclo de vida",
-              "avanzada · clean-room pendiente"
+              "validada · adapters externos pendientes"
             ],
             [
               "2",
               "Adapters de CLI",
-              "parcial · auth/TUI pendiente"
+              "parcial · TUI interactiva pendiente"
             ],
             [
               "3",
               "Proyecto y knowledge",
-              "avanzada · registro y legacy pendiente"
+              "validada"
             ],
             [
               "4",
@@ -120,17 +120,17 @@
             [
               "5",
               "Adapter Hospeda",
-              "avanzada · E2E pendiente"
+              "validada"
             ],
             [
               "6",
               "Engram y operación",
-              "pendiente"
+              "parcial · curación pendiente"
             ],
             [
               "7",
               "Cierre y migración",
-              "pendiente"
+              "parcial · dashboard/publicación pendientes"
             ]
           ]
         }
@@ -142,24 +142,24 @@
         "data": {
           "items": [
             {
-              "label": "Gate A · Instalación limpia",
-              "detail": "HOME temporal, cuatro clientes, backup, apply, doctor y rollback."
+              "label": "Gate A · Instalación limpia · validado",
+              "detail": "HOME temporal, cuatro clientes, backup, apply, doctor, drift=0 y rollback."
             },
             {
-              "label": "Gate B · Proyecto Hospeda",
-              "detail": "register/init/sync, hospeda-staging, env, template y wrappers."
+              "label": "Gate B · Proyecto Hospeda · validado",
+              "detail": "register/init/sync, hospeda-staging, env, template, wrappers y adapter operativo."
             },
             {
-              "label": "Gate C · E2E",
-              "detail": "issue real no destructivo, worktree, DB, servidores, verify y close plan."
+              "label": "Gate C · E2E · validado",
+              "detail": "issue no destructivo, worktree, DB, servidores, verify, health checks y cleanup."
             },
             {
-              "label": "Gate D · Memoria",
-              "detail": "backup final, curación final y restore test de Engram."
+              "label": "Gate D · Memoria · parcial",
+              "detail": "restore aislado y estrategia entre PCs validados; queda la curación final de memorias."
             },
             {
-              "label": "Gate E · Publicación",
-              "detail": "push/PR, merge y decisión de retiro de Claude."
+              "label": "Gate E · Cierre",
+              "detail": "dashboard local, validación TUI, adapters finales, publicación y decisión de retiro de Claude."
             }
           ]
         }
