@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 123,
+  "version": 124,
   "view": {
     "tabs": [
       "overview"
@@ -878,7 +878,7 @@
               "title": "Reinstalación reproducible documentada",
               "category": "Release",
               "description": "Ejecutar el procedimiento completo en entorno limpio.",
-              "notes": "Validado en HOME temporal: install --apply para los cuatro clientes instaló 60 targets, creó backup y install-manifest; install --check posterior reportó drift=0, missing=0 y contentDrift=0. No se leyeron secretos ni se instalaron componentes externos.",
+              "notes": "Validado en HOME temporal: install --apply para los cuatro clientes instaló 63 targets, creó backup y install-manifest; install --check posterior reportó drift=0, missing=0 y contentDrift=0. No se leyeron secretos ni se instalaron componentes externos.",
               "done": true
             },
             {
@@ -918,7 +918,7 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Diagnóstico integral read-only OK: instalación qz sin drift en 60 targets, package seguro, adapters/manifests válidos y ecosystem detectado sin leer secretos. La validación final de sesiones/modelos por harness continúa pendiente.",
+              "notes": "Diagnóstico integral read-only OK: instalación qz sin drift en 63 targets, package seguro, adapters/manifests válidos y ecosystem detectado sin leer secretos. La validación final de sesiones/modelos por harness continúa pendiente.",
               "done": false
             }
           ]
