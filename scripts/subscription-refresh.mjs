@@ -113,7 +113,8 @@ const adminSnapshot = async (provider, key, url, source) => {
   return { provider, status: 'verified', confidence: 'high', observedAt: iso, source, usage: {}, limits: {}, remaining: {}, notes: 'respuesta administrativa disponible; transformación detallada pendiente' }
 }
 const claudeLocalSnapshot = () => {
-  const usageFile = process.env.CLAUDE_USAGE_CACHE_FILE || '/tmp/claude-statusline/usage.json'
+  const usageCandidates = [process.env.CLAUDE_USAGE_CACHE_FILE, `${home}/.local/state/qz-agent-kit/subscriptions/claude-usage.json`, '/tmp/claude-statusline/usage.json'].filter(Boolean)
+  const usageFile = usageCandidates.find((candidate) => existsSync(candidate)) || usageCandidates[0]
   const usageRaw = secret(usageFile)
   if (usageRaw) {
     try {
