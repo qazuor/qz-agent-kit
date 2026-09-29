@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 126,
+  "version": 127,
   "view": {
     "tabs": [
       "overview"
@@ -894,8 +894,8 @@
               "title": "Tray de uso para KDE",
               "category": "Observabilidad",
               "description": "Mostrar el estado del dashboard local desde un icono de bandeja con tooltip y menú contextual.",
-              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. Requiere empaquetar PySide6 en un entorno aislado antes de activarlo.",
-              "done": true
+              "notes": "Implementado como cliente opcional Qt/PySide6; consume sólo `/api/snapshots`, cambia color según margen y abre el dashboard. La fuente, instalador y documentación están listas; falta crear el entorno PySide6 aislado y validar la bandeja real en Plasma.",
+              "done": false
             },
             {
               "id": "p7-release-check",
