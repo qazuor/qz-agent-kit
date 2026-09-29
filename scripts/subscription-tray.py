@@ -189,6 +189,7 @@ class Tray(QObject):
         super().__init__()
         self.tray = QSystemTrayIcon(make_icon('#8d9bad'))
         self.document = None
+        self.manual_popup = False
         self.popup = UsagePopup()
         # Disable the native Qt tooltip: KDE renders it as an unstyled text
         # bubble. The tray uses the custom popup below instead.
@@ -226,8 +227,10 @@ class Tray(QObject):
         if reason != QSystemTrayIcon.ActivationReason.Trigger:
             return
         if self.popup.isVisible():
+            self.manual_popup = False
             self.popup.hide()
             return
+        self.manual_popup = True
         self.popup.render(self.document)
         self.popup.adjustSize()
         self.popup.move(QCursor.pos().x() - self.popup.width() // 2, QCursor.pos().y() - self.popup.height() - 12)
@@ -235,6 +238,8 @@ class Tray(QObject):
         self.popup.raise_()
 
     def update_hover_popup(self):
+        if self.manual_popup:
+            return
         tray_rect = self.tray.geometry()
         cursor = QCursor.pos()
         over_tray = tray_rect.isValid() and tray_rect.adjusted(-5, -5, 5, 5).contains(cursor)
