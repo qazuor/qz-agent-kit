@@ -111,10 +111,12 @@ if (command === 'subscriptions' && args[0] === 'tray') {
   const trayPython = process.env.QZ_TRAY_PYTHON || join(trayVenv, 'bin/python')
   const noInstall = trayArgs.includes('--no-install')
   const ensureTrayRuntime = () => {
-    if (existsSync(trayPython) || noInstall || process.env.QZ_TRAY_PYTHON) return true
+    if (noInstall || process.env.QZ_TRAY_PYTHON) return true
     const bootstrapPython = process.env.QZ_TRAY_BOOTSTRAP_PYTHON || 'python3'
     console.error('qz usage tray: preparando entorno aislado y PySide6…')
-    let venv = spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
+    let venv = existsSync(trayPython)
+      ? { status: 0 }
+      : spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
     if (venv.status !== 0 && process.platform === 'linux' && spawnSync('command', ['-v', 'apt-get'], { shell: true, stdio: 'ignore' }).status === 0) {
       console.error('Falta python3-venv; se solicitará sudo para instalarlo.')
       const apt = spawnSync('sudo', ['apt-get', 'install', '-y', 'python3-venv'], { stdio: 'inherit' })
@@ -124,6 +126,8 @@ if (command === 'subscriptions' && args[0] === 'tray') {
       console.error('No se pudo crear el entorno Python. Instala python3-venv o define QZ_TRAY_BOOTSTRAP_PYTHON.')
       return false
     }
+    const moduleProbe = spawnSync(trayPython, ['-c', 'import PySide6'], { stdio: 'ignore' })
+    if (moduleProbe.status === 0) return true
     const install = spawnSync(trayPython, ['-m', 'pip', 'install', '--disable-pip-version-check', 'PySide6>=6.8,<7'], { stdio: 'inherit' })
     if (install.status !== 0) {
       console.error('No se pudo instalar PySide6 en el entorno aislado del kit.')
