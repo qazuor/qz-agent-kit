@@ -62,6 +62,17 @@ try {
   const page = await pageResponse.text()
   subscriptionServer.kill('SIGTERM')
   if (!health.ok || health.snapshotCount !== 1 || !page.includes('Usage Console') || !page.includes('nan')) throw new Error('subscription-server no sirvió health/UI')
+  const offlineSnapshot = join(configRoot, 'subscription-offline.json')
+  writeFileSync(offlineSnapshot, `${JSON.stringify({ schemaVersion: 1, snapshots: [
+    { provider: 'nan', status: 'verified', confidence: 'high', observedAt: '2026-09-28T12:00:00Z', source: 'fixture', usage: { 'mimo-v2.6-flash': 0 }, limits: { 'mimo-v2.6-flash': 1000 }, remaining: { 'mimo-v2.6-flash': 1000 } },
+    { provider: 'openai', status: 'unavailable', confidence: 'low', observedAt: '2026-09-28T12:00:00Z', source: 'fixture', usage: {}, limits: {}, remaining: {}, notes: 'offline' },
+    { provider: 'claude', status: 'partial', confidence: 'medium', observedAt: '2026-09-28T00:00:00Z', source: 'fixture', usage: { fiveHourUsedPercent: 95 }, limits: { fiveHourResetsAt: '2026-09-28T01:00:00Z' }, remaining: { fiveHourRemainingPercent: 5 }, notes: 'expired cache' }
+  ] })}\n`)
+  const offlineServer = spawn(node, [resolve(root, 'scripts/subscription-server.mjs'), '--port', '4322', '--store', offlineSnapshot], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] })
+  await new Promise((resolvePromise, reject) => { const timer = setTimeout(() => reject(new Error('offline subscription-server no inició')), 3000); offlineServer.stdout.once('data', () => { clearTimeout(timer); resolvePromise() }); offlineServer.once('error', reject) })
+  const offlinePage = await (await fetch('http://127.0.0.1:4322/')).text()
+  offlineServer.kill('SIGTERM')
+  if (!offlinePage.includes('partial') || !offlinePage.includes('unavailable') || !offlinePage.includes('fiveHourUsedPercent')) throw new Error('subscription-server no renderizó estados offline/expirados')
   parse(run('scripts/validate-adapters.mjs', []))
   parse(run('scripts/check-manifests.mjs', []))
   const readiness = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' }))
