@@ -106,7 +106,8 @@ if (command === 'subscriptions' && args[0] === 'install') {
   process.exit(result.status ?? 1)
 }
 if (command === 'subscriptions' && args[0] === 'tray') {
-  const result = spawnSync('python3', [subscriptionTray, ...args.slice(1)], { stdio: 'inherit' })
+  const trayPython = process.env.QZ_TRAY_PYTHON || join(homedir(), '.local/share/qz-agent-kit/tray-venv/bin/python')
+  const result = spawnSync(existsSync(trayPython) ? trayPython : 'python3', [subscriptionTray, ...args.slice(1)], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {
