@@ -8,3 +8,12 @@ Las instrucciones universales y guards se conservan en el store central del
 kit; no se sobreescribe `~/.claude/CLAUDE.md`, `AGENTS.md`, settings, hooks ni
 credenciales. La activación de instrucciones por proyecto requiere una etapa
 explícita del adapter.
+
+## Caché portable de rate limits
+
+El kit distribuye `qz-claude-statusline.mjs`. Se puede usar como comando de
+statusline de Claude Code: recibe por stdin el JSON de la sesión, extrae sólo
+`rate_limits` y escribe el caché estable en
+`~/.local/state/qz-agent-kit/subscriptions/claude-usage.json` (o en
+`QZ_CLAUDE_USAGE_FILE`). Nunca persiste el JSON completo ni campos ajenos a las
+ventanas de uso.
