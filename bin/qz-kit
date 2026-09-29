@@ -106,8 +106,25 @@ if (command === 'subscriptions' && args[0] === 'install') {
   process.exit(result.status ?? 1)
 }
 if (command === 'subscriptions' && args[0] === 'tray') {
-  const trayPython = process.env.QZ_TRAY_PYTHON || join(homedir(), '.local/share/qz-agent-kit/tray-venv/bin/python')
-  const result = spawnSync(existsSync(trayPython) ? trayPython : 'python3', [subscriptionTray, ...args.slice(1)], { stdio: 'inherit' })
+  const trayArgs = args.slice(1)
+  const trayVenv = join(homedir(), '.local/share/qz-agent-kit/tray-venv')
+  const trayPython = process.env.QZ_TRAY_PYTHON || join(trayVenv, 'bin/python')
+  const noInstall = trayArgs.includes('--no-install')
+  if (!existsSync(trayPython) && !noInstall && !process.env.QZ_TRAY_PYTHON) {
+    const bootstrapPython = process.env.QZ_TRAY_BOOTSTRAP_PYTHON || 'python3'
+    console.error('qz usage tray: preparando entorno aislado y PySide6…')
+    const venv = spawnSync(bootstrapPython, ['-m', 'venv', trayVenv], { stdio: 'inherit' })
+    if (venv.status !== 0) {
+      console.error('No se pudo crear el entorno Python. Instala python3-venv o define QZ_TRAY_BOOTSTRAP_PYTHON.')
+      process.exit(1)
+    }
+    const install = spawnSync(trayPython, ['-m', 'pip', 'install', '--disable-pip-version-check', 'PySide6>=6.8,<7'], { stdio: 'inherit' })
+    if (install.status !== 0) {
+      console.error('No se pudo instalar PySide6 en el entorno aislado del kit.')
+      process.exit(1)
+    }
+  }
+  const result = spawnSync(existsSync(trayPython) ? trayPython : 'python3', [subscriptionTray, ...trayArgs.filter((arg) => arg !== '--no-install')], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'install' && (args.length === 0 || args.includes('--interactive') || args.includes('--from') || args.includes('--non-interactive'))) {

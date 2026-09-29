@@ -13,13 +13,16 @@ La app ofrece:
 - menú para actualizar o salir.
 
 El componente está implementado en `scripts/subscription-tray.py` y se instala
-como recurso administrado del kit. Requiere PySide6 en el entorno de Python
-que lo ejecute; la dependencia es opcional y no se instala silenciosamente.
+como recurso administrado del kit. En la primera ejecución de `qz-kit
+subscriptions tray`, el kit crea automáticamente
+`~/.local/share/qz-agent-kit/tray-venv` e instala allí PySide6. Las ejecuciones
+siguientes reutilizan ese entorno; el Python global no se modifica.
 
 ```bash
 qz-kit subscriptions tray
 ```
 
-Si PySide6 no está disponible, el comando termina sin tocar nada y explica la
-dependencia faltante. La instalación futura debe usar un entorno virtual
-propio del kit, no el Python global.
+Para diagnosticar sin instalar dependencias: `qz-kit subscriptions tray
+--no-install`. Si falta `python3-venv`, el comando lo informa y termina sin
+modificar el sistema operativo; la instalación del paquete OS queda a cargo del
+usuario.
