@@ -28,6 +28,12 @@ Las credenciales viven fuera del repositorio, con referencias indirectas y permi
 6. enlaces directos a las consolas oficiales;
 7. NaN automatizado; OpenAI y Claude inicialmente con integración disponible sólo cuando existan permisos adecuados.
 
+La primera pieza ejecutable del MVP ya está disponible con `qz-kit subscriptions
+serve`: sirve el store local en loopback, expone `/api/health` y
+`/api/snapshots`, y muestra una vista oscura básica por proveedor. El servidor
+es read-only respecto del store; la carga de snapshots queda separada para que
+los adapters puedan validarlos antes de persistirlos.
+
 ## Fuera del MVP
 
 Autenticación remota, multiusuario, notificaciones, histórico analítico largo y scraping de interfaces privadas.

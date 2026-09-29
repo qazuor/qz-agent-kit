@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 113,
+  "version": 114,
   "view": {
     "tabs": [
       "overview"
@@ -886,7 +886,7 @@
               "title": "Dashboard de suscripciones y consumo",
               "category": "Observabilidad",
               "description": "Crear una mini app que consolide estado, límites, consumo y próxima renovación de Claude, OpenAI y NaN Builders.",
-              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md y contrato normalizado en docs/subscription-snapshot.schema.json. `qz-kit subscriptions validate <snapshot.json>` valida snapshots sin leer credenciales ni mutar datos. MVP local: NaN automatizado; OpenAI/Claude sólo con APIs/permisos oficiales o captura manual. Falta implementar servidor y UI.",
+              "notes": "Diseño técnico documentado en docs/subscription-dashboard-design.md y contrato normalizado en docs/subscription-snapshot.schema.json. `qz-kit subscriptions validate <snapshot.json>` valida snapshots sin leer credenciales ni mutar datos. `qz-kit subscriptions serve` ya sirve el store local por loopback, expone health/snapshots y muestra una vista oscura básica. Faltan adapters de consumo, persistencia asistida y UI completa.",
               "done": false
             },
             {

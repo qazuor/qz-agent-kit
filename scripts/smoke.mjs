@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execFileSync, spawnSync } from 'node:child_process'
+import { execFileSync, spawn, spawnSync } from 'node:child_process'
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -48,6 +48,14 @@ try {
   writeFileSync(subscriptionSnapshot, `${JSON.stringify({ schemaVersion: 1, snapshots: [{ provider: 'nan', status: 'manual', confidence: 'low', observedAt: '2026-09-28T12:00:00Z', source: 'manual-capture' }] })}\n`)
   const subscription = parse(execFileSync(qzKit, ['subscriptions', 'validate', subscriptionSnapshot], { cwd: configRoot, encoding: 'utf8' }))
   if (!subscription.valid || subscription.snapshotCount !== 1 || subscription.providers.join(',') !== 'nan' || subscription.mutations !== 'none') throw new Error('subscription snapshot inválido')
+  const subscriptionServer = spawn(node, [resolve(root, 'scripts/subscription-server.mjs'), '--port', '4321', '--store', subscriptionSnapshot], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] })
+  await new Promise((resolvePromise, reject) => { const timer = setTimeout(() => reject(new Error('subscription-server no inició')), 3000); subscriptionServer.stdout.once('data', () => { clearTimeout(timer); resolvePromise() }); subscriptionServer.once('error', reject) })
+  const healthResponse = await fetch('http://127.0.0.1:4321/api/health')
+  const health = await healthResponse.json()
+  const pageResponse = await fetch('http://127.0.0.1:4321/')
+  const page = await pageResponse.text()
+  subscriptionServer.kill('SIGTERM')
+  if (!health.ok || health.snapshotCount !== 1 || !page.includes('Suscripciones') || !page.includes('nan')) throw new Error('subscription-server no sirvió health/UI')
   parse(run('scripts/validate-adapters.mjs', []))
   parse(run('scripts/check-manifests.mjs', []))
   const readiness = parse(execFileSync(node, [resolve(root, 'scripts/readiness.mjs'), '--project', fixture, '--from', join(configRoot, 'missing-plan.json')], { cwd: root, encoding: 'utf8' }))
