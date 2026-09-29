@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 146,
+  "version": 147,
   "view": {
     "tabs": [
       "overview"
@@ -58,11 +58,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "78/86",
+              "value": "81/92",
               "label": "tareas completadas"
             },
             {
-              "value": "8",
+              "value": "6",
               "label": "pendientes"
             },
             {
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. Próximo orden: 1) terminar curación de memoria; 2) validar TUI en sesión interactiva; 3) completar dashboard local de suscripciones; 4) completar adapters externos sin saltar gates; 5) decidir publicación y retiro de Claude. El dashboard ya tiene fechas legibles, actualización automática, UI rediseñada y adapters operativos para NaN, Codex y Claude; queda validar casos de expiración y publicación."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. La curación de proyectos históricos Hospeda3 quedó completada sin tocar Hospeda, Hospeda2 ni proyectos externos. Próximo orden: 1) validar TUI en sesión interactiva; 2) completar adapters externos sin saltar gates; 3) publicar el adapter de Hospeda; 4) ejecutar la validación final de los cuatro harnesses; 5) decidir el retiro de Claude. El dashboard y tray de suscripciones ya están implementados y validados; queda cerrar la publicación y los casos finales de integración."
         }
       },
       {
@@ -845,8 +845,8 @@
               "title": "Finalizar curación de Engram",
               "category": "Memoria",
               "description": "Eliminar lo obsoleto y conservar sólo memorias vigentes.",
-              "notes": "Diagnóstico read-only completado: 203 proyectos registrados; hospeda, hospeda2, qz-agent-kit y tmp tienen sqlite_lock_contention OK. La curación/eliminación de proyectos y memorias sigue pendiente y no fue ejecutada.",
-              "done": false
+              "notes": "Curación final completada sobre la familia `hospeda3`: se eliminaron definitivamente nueve proyectos, seis observaciones soft-deleted y sus sesiones residuales. Verificación read-only posterior: 0 sesiones, 0 observaciones y 0 prompts bajo `hospeda3%`. Se conservaron intactos `hospeda`, `hospeda2`, Engram no-Hospeda y los proyectos con memoria vigente.",
+              "done": true
             },
             {
               "id": "p6-engram-restore",
