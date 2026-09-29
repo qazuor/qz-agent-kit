@@ -272,9 +272,28 @@ class Tray(QObject):
         self.manual_popup = True
         self.popup.render(self.document)
         self.popup.adjustSize()
-        self.popup.move(QCursor.pos().x() - self.popup.width() // 2, QCursor.pos().y() - self.popup.height() - 12)
+        self.place_popup_for_cursor()
         self.popup.show()
         self.popup.raise_()
+
+    def place_popup_for_cursor(self):
+        cursor = QCursor.pos()
+        screen = QApplication.screenAt(cursor) or QApplication.primaryScreen()
+        available = screen.availableGeometry() if screen else None
+        if not available:
+            self.popup.move(cursor.x() - self.popup.width() // 2, cursor.y() - self.popup.height() - 36)
+            return
+        gap = 28
+        x = cursor.x() - self.popup.width() // 2
+        above = cursor.y() - self.popup.height() - gap
+        below = cursor.y() + gap
+        if above >= available.top():
+            y = above
+        else:
+            y = below
+        x = max(available.left() + 8, min(x, available.right() - self.popup.width() - 8))
+        y = max(available.top() + 8, min(y, available.bottom() - self.popup.height() - 8))
+        self.popup.move(x, y)
 
     def update_hover_popup(self):
         if self.manual_popup:
