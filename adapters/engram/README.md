@@ -13,10 +13,12 @@ destinos por separado antes de ejecutar setup, o mantener esa operación fuera
 del instalador qz.
 
 La DB local es la fuente de verdad y usa el triplete SQLite `engram.db`,
-`engram.db-wal` y `engram.db-shm`. Una copia binaria consistente debe tratar
-los tres archivos juntos y sólo sobre filesystem local. `engram export` es una
-segunda copia lógica versionada (observations, prompts, pins y relaciones),
-pero sigue siendo una operación explícita y no se ejecuta desde el instalador.
+`engram.db-wal` y `engram.db-shm`. El backup del kit usa SQLite online backup
+para producir una DB independiente consistente mientras el servicio está vivo;
+los archivos WAL/SHM activos no se copian como si fueran una DB restaurable.
+`engram export` es una segunda copia lógica versionada (observations, prompts,
+pins y relaciones), pero sigue siendo una operación explícita y no se ejecuta
+desde el instalador.
 
 ## Contrato verificado
 
@@ -25,8 +27,9 @@ pero sigue siendo una operación explícita y no se ejecuta desde el instalador.
 - integración: `engram mcp --tools=agent` es la forma documentada para los CLI;
 - interfaces disponibles: `doctor`, `stats`, `projects list`, `export`, `tui`,
   `test --quick --json`, `sync` y `cloud`;
-- política del kit: nunca copiar, importar, exportar, limpiar, consolidar ni
-  modificar la DB automáticamente.
+- política del kit: nunca importar, exportar, limpiar, consolidar ni modificar
+  la DB automáticamente. El único apply externo permitido requiere un backup
+  explícito con checksum, preview, `--approve ENGRAM_APPLY` y doctor posterior.
 
 ## Diagnóstico actual
 
@@ -46,11 +49,22 @@ integridad también revelaron warnings/errors históricos que no deben corregirs
 automáticamente: sesiones activas ambiguas, observaciones huérfanas, metadatos
 de ownership incompletos y targets cloud antiguos con mutaciones pendientes.
 
-## Futuro adapter
+## Flujo de apply explícito
 
-Debe separar tres operaciones: inventario read-only, backup explícito y
-restauración verificada. Los wrappers `qz-engram` pueden exponer las interfaces
-humanas, pero no deben convertir operaciones destructivas en defaults. La ayuda
-actual confirma que `engram setup <agent> --protocol=full|slim` instala la
-integración del agente; el adapter conserva `full` como default porque `slim`
-tiene restricciones de compatibilidad específicas de Claude Code.
+El adapter separa inventario read-only, backup explícito y aplicación verificada.
+Los wrappers `qz-engram` siguen bloqueando mutaciones. La aplicación controlada
+usa el siguiente flujo:
+
+```bash
+qz-kit external-backup --component engram --project <project> --approve ENGRAM_BACKUP
+qz-kit external-preview --component engram --project <project> \
+  --receipt /tmp/engram-preview.json
+qz-kit external-apply --component engram --project <project> \
+  --backup ~/.local/state/qz-agent-kit/external-backups/engram/<timestamp>/manifest.json \
+  --receipt /tmp/engram-preview.json --approve ENGRAM_APPLY
+```
+
+El apply sólo ejecuta `engram setup opencode --protocol=full` y valida luego
+`sqlite_lock_contention`. No exporta, consolida, poda ni borra memorias. El
+adapter conserva `full` como default porque `slim` tiene restricciones de
+compatibilidad específicas de Claude Code.

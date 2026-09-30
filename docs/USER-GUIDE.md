@@ -58,6 +58,10 @@ El flujo conserva un registro de procedencia y compara el estado instalado con l
 | `qz-kit project sync` | sincronizar adapter y comandos | mutante en el proyecto |
 | `qz-kit external list` | ver adapters externos | lectura |
 | `qz-kit external doctor` | diagnosticar adapters | lectura |
+| `qz-kit external-plan` | mostrar acciones externas declaradas | lectura |
+| `qz-kit external-preview` | ejecutar previews seguros y generar receipt | lectura, salvo el receipt |
+| `qz-kit external-backup` | crear backup explícito de Engram | mutante en backup externo |
+| `qz-kit external-apply` | aplicar un adapter externo aprobado | mutante, aprobación obligatoria |
 | `qz-kit subscriptions` | levantar dashboard y datos de suscripciones | puede iniciar servicios |
 | `qz-kit subscriptions install` | instalar servicio de dashboard | mutante en el usuario/OS |
 | `qz-kit subscriptions tray` | instalar o ejecutar indicador KDE | mutante si instala dependencias |
@@ -85,6 +89,21 @@ Los nombres específicos de Hospeda siguen siendo `hops-*` y viven en el adapter
 `qz-engram` deja pasar únicamente operaciones de lectura: versión, doctor, estadísticas, proyectos, búsqueda, contexto, timeline, conflictos, estado cloud y quick test. Bloquea import, export, sync, setup, consolidate, prune y cualquier escritura. La memoria se conserva fuera de Git y se respalda antes de cualquier limpieza.
 
 `qz-gentle` permite inspeccionar versión, doctor, estado SDD/ODD, review y telemetry. Bloquea instalación, upgrade, sync, restore, desinstalación y mutaciones de review o telemetry. Las actualizaciones de Gentle y Engram se hacen desde una etapa explícita del instalador, nunca como efecto oculto de un comando de trabajo.
+
+El flujo externo de Engram exige un proyecto, un backup SQLite consistente y un
+receipt de preview:
+
+```bash
+qz-kit external-backup --component engram --project <project> --approve ENGRAM_BACKUP
+qz-kit external-preview --component engram --project <project> \
+  --receipt /tmp/engram-preview.json
+qz-kit external-apply --component engram --project <project> \
+  --backup ~/.local/state/qz-agent-kit/external-backups/engram/<timestamp>/manifest.json \
+  --receipt /tmp/engram-preview.json --approve ENGRAM_APPLY
+```
+
+El apply sólo ejecuta `engram setup opencode --protocol=full` y corre el doctor
+de lock SQLite después. Nunca exporta, poda, consolida ni borra memorias.
 
 ## Configuración de un proyecto
 

@@ -19,8 +19,9 @@
     "export": "never-implicit"
   },
   "apply": {
-    "supported": false,
-    "reason": "requiere backup SQLite consistente y restauración aislada verificable antes de automatizar cualquier mutación"
+    "supported": true,
+    "approval": "ENGRAM_APPLY",
+    "requires": ["external-backup --component engram --project <project> --approve ENGRAM_BACKUP", "preview receipt ok", "isolated restore/integrity verification"]
   },
   "installPlan": {
     "command": "engram setup opencode --protocol=full",

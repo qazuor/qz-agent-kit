@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 147,
+  "version": 148,
   "view": {
     "tabs": [
       "overview"
@@ -58,11 +58,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "81/92",
+              "value": "82/92",
               "label": "tareas completadas"
             },
             {
-              "value": "6",
+              "value": "5",
               "label": "pendientes"
             },
             {
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores y restore aislado de Engram. La curación de proyectos históricos Hospeda3 quedó completada sin tocar Hospeda, Hospeda2 ni proyectos externos. Próximo orden: 1) validar TUI en sesión interactiva; 2) completar adapters externos sin saltar gates; 3) publicar el adapter de Hospeda; 4) ejecutar la validación final de los cuatro harnesses; 5) decidir el retiro de Claude. El dashboard y tray de suscripciones ya están implementados y validados; queda cerrar la publicación y los casos finales de integración."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores, restore aislado de Engram y flujo externo aprobado para Gentle AI y Engram. La curación de proyectos históricos Hospeda3 quedó completada sin tocar Hospeda, Hospeda2 ni proyectos externos. Próximo orden: 1) validar TUI en sesión interactiva; 2) publicar el adapter de Hospeda; 3) ejecutar la validación final de los cuatro harnesses; 4) decidir el retiro de Claude. El dashboard y tray de suscripciones ya están implementados y validados; queda cerrar la publicación y los casos finales de integración."
         }
       },
       {
@@ -272,8 +272,8 @@
               "title": "Adapters explícitos para instalar Gentle AI, Engram y servicios opcionales",
               "category": "Ecosistema",
               "description": "Automatizar sólo integraciones verificadas, separadas del núcleo qz y con checks de versión, rollback y permisos.",
-              "notes": "Contrato y apply protegido implementados. Preview real con el plan local: Gentle AI 3.7.0 `install --dry-run` OK; Engram 2.0.0 requiere proyecto y con `--project hospeda` ejecuta doctor acotado OK. Ambos resultados fueron read-only, con hashes de salida y sin incluir output sensible. El apply de Gentle AI exige receipt seguro, snapshot nativo verificable previo (si ya existe estado), HOME explícito, snapshot con checksum y `gentle-ai doctor` posterior; el smoke test cubre también el bloqueo de estado previo sin snapshot. Engram queda declarado `pending-adapter` aunque tenga plan de setup: no se ofrece apply hasta disponer de backup SQLite consistente y restore aislado verificable.",
-              "done": false
+              "notes": "Implementado con manifests, preview seguro, receipts, backup SQLite online consistente para Engram, checksum, integrity_check y apply explícito con aprobación. Gentle AI conserva su snapshot nativo; Engram sólo ejecuta `setup opencode --protocol=full` después de `ENGRAM_BACKUP`, preview y `ENGRAM_APPLY`. Ninguna operación de memoria se ejecuta implícitamente.",
+              "done": true
             },
             {
               "id": "p1-reinstall-plan",
