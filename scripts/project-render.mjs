@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** Render a project's declared knowledge layer for one CLI without installing it. */
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
 
 const args = process.argv.slice(2)
 const value = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
@@ -72,5 +72,20 @@ if (client === 'gentle-shell') {
 } else {
   const source = join(sourceRoot, dirs.commands)
   if (existsSync(source)) for (const file of readdirSync(source).filter((name) => name.endsWith('.md')).sort()) copyFile(join(source, file), join(destination, 'commands', file))
+}
+const commandDirectory = client === 'gentle-shell'
+  ? join(destination, 'prompts')
+  : client === 'codex'
+    ? join(destination, 'skills', 'project-commands')
+    : join(destination, 'commands')
+for (const command of (Array.isArray(config.commands?.registry) ? config.commands.registry : [])) {
+  if (!command || typeof command.id !== 'string' || typeof command.delegate !== 'string') continue
+  const target = join(commandDirectory, `${command.id}.md`)
+  const mutation = command.mutates === true ? 'Este comando puede modificar estado; pedí autorización cuando corresponda.' : 'Este comando es read-only salvo que su ayuda indique lo contrario.'
+  const content = `---\ndescription: ${JSON.stringify(command.description || command.id)}\n---\n\n# ${command.id}\n\nEjecutá el comando del adapter del proyecto y explicá el resultado:\n\n\`\`\`bash\nqz ${command.id} \"$ARGUMENTS\"\n\`\`\`\n\n${mutation}\n\nNo reemplaces este workflow por una reimplementación manual si el comando está disponible.\n`
+  mkdirSync(dirname(target), { recursive: true })
+  writeFileSync(target, content)
+  // The generated file is the rendered source consumed by project-sync.
+  resources.push({ source: target, target })
 }
 console.log(JSON.stringify({ projectRoot, projectId: config.projectId, adapter: config.adapter, client, output: destination, resources: resources.length, files: resources, mutations: [destination], secretValues: 'not-read' }, null, 2))
