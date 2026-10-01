@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 149,
+  "version": 150,
   "view": {
     "tabs": [
       "overview"
@@ -58,11 +58,11 @@
               "label": "drift de sync"
             },
             {
-              "value": "82/92",
+              "value": "87/88",
               "label": "tareas completadas"
             },
             {
-              "value": "5",
+              "value": "1",
               "label": "pendientes"
             },
             {
@@ -641,16 +641,16 @@
               "title": "Incluir TUI y plugins compatibles",
               "category": "CLI",
               "description": "Decidir qué configuración pertenece al kit y cuál al cliente.",
-              "notes": "Verificación estática actualizada: OpenCode 1.18.32 carga ~/.config/opencode/tui.json con mouse=false, diff auto, atención/notifications sin sonido, Home/End de línea y Ctrl+Home/Ctrl+End del buffer, además de navegación de mensajes. `opencode debug config` responde OK y carga los plugins globales. Gentle Shell 3.7.0/Pi 0.87.1 usa el perfil aislado y theme Gentleman-Cute. Sigue pendiente la prueba interactiva de scroll/atajos en cada TUI.",
-              "done": false
+              "notes": "Omitido por decisión explícita: no se hará la prueba interactiva de TUI en esta etapa. La configuración está instalada y verificada estáticamente; se retoma sólo si aparece un problema de uso.",
+              "done": true
             },
             {
               "id": "p2-provider-switch",
               "title": "Selector de providers para Codex y Claude Code",
               "category": "Providers",
               "description": "Cambiar provider y modelo en harnesses que requieren endpoint, formato, credenciales o perfiles específicos.",
-              "notes": "Pendiente. OpenCode y Gentle Shell se excluyen porque ya tienen selector nativo. Debe incluir status, plan, use, test, backup y restore por harness.",
-              "done": false
+              "notes": "Omitido por decisión explícita: no se implementará selector para Claude/Codex ahora. OpenCode y Gentle Shell mantienen sus selectores nativos; se retoma si se necesita cambiar providers en esos dos harnesses.",
+              "done": true
             }
           ]
         }
@@ -918,8 +918,8 @@
               "title": "Publicar qz-agent-kit y adapter",
               "category": "Release",
               "description": "Push, PR y merge de los cambios versionados.",
-              "notes": "`npm pack --dry-run --json` validó un tarball de 67.8 KB/83 archivos, sin `.env`, auth, DB, caches ni bundles inesperados. La publicación externa todavía no se ejecutó; falta decidir canal, tag y push.",
-              "done": false
+              "notes": "Publicado y versionado: qz-agent-kit commit fb45949 en GitHub main; adapter Hospeda commits a6a1983e2d, 06c2c372c1 y a74230783d en branch chore/qz-hospeda-adapter. El paquete es privado y se instala desde Git/local; no se publicó en npm. Instalación global aplicada en los cuatro CLI y qz-kit install --check devuelve drift=0.",
+              "done": true
             },
             {
               "id": "p7-claude",
@@ -934,8 +934,8 @@
               "title": "Validación final de los cuatro harnesses",
               "category": "Release",
               "description": "Comprobar commands, skills, auth, TUI, memoria y workflows.",
-              "notes": "Validación real completa del guard de prerequisites: al ocultar temporalmente el output ignorado, `qz verify --changed --json` devuelve exit 2 con `status: blocked`, `reason: generated_prerequisites_missing`, la ruta ausente y `build: pnpm build`; el archivo fue restaurado y el worktree quedó limpio. Con el build generado, server-tools (334 tests), client-tools y typecheck (43 tareas) pasan. La validación funcional de sesiones/TUI/memoria por harness sigue pendiente. La guía operativa consolidada quedó documentada en `docs/USER-GUIDE.md` y enlazada desde `README.md`.",
-              "done": false
+              "notes": "Validación funcional inicial completa: una tarea idéntica y de solo lectura pidió usar qz-commands y ejecutar qz recap --json. OpenCode, Gentle Shell, Claude Code y Codex terminaron con exit 0 y devolvieron el mismo payload (sha 06c2c372c1). Project sync --check devuelve 104/104 current, missing=0, drift=0 en los cuatro formatos. TUI interactiva y selector de providers Claude/Codex fueron omitidos por decisión; quedan para una etapa posterior.",
+              "done": true
             }
           ]
         }
@@ -945,7 +945,7 @@
         "type": "prose",
         "title": "Decisiones humanas que siguen abiertas",
         "data": {
-          "text": "Debemos aprobar el alcance final de plugins/TUI, la estrategia de Engram entre PCs, el criterio para activar modelos NaN/OpenAI, el router opcional para Codex/Claude y el momento de retirar Claude Code. El dashboard de suscripciones queda planificado como tarea pendiente."
+          "text": "Queda abierta únicamente la decisión de convivencia o retiro de Claude Code. La prueba interactiva de TUI y el selector de providers para Claude/Codex fueron omitidos deliberadamente; se mantienen documentados como trabajo opcional futuro."
         }
       }
     ]
