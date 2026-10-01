@@ -91,7 +91,11 @@ function buildPlan() {
 if (!has('--plan') && !has('--apply')) throw new Error('elegí --plan o --apply')
 const plan = buildPlan()
 if (has('--plan')) {
-  console.log(JSON.stringify(plan, null, 2))
+  // The interactive qz-kit menu only needs a bounded preview. Keeping the
+  // full plan for the explicit command preserves machine-readable output
+  // without overflowing spawnSync buffers when thousands of files exist.
+  if (has('--menu')) console.log(JSON.stringify({ ...plan, items: plan.items.slice(0, 40), truncatedItems: Math.max(0, plan.items.length - 40) }))
+  else console.log(JSON.stringify(plan, null, 2))
   process.exit(0)
 }
 if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('clean --apply requiere una terminal interactiva para confirmar cada elemento')
