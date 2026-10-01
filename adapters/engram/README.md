@@ -68,3 +68,37 @@ El apply sólo ejecuta `engram setup opencode --protocol=full` y valida luego
 `sqlite_lock_contention`. No exporta, consolida, poda ni borra memorias. El
 adapter conserva `full` como default porque `slim` tiene restricciones de
 compatibilidad específicas de Claude Code.
+
+## Resolución determinista del proyecto y sesiones
+
+Cada repositorio que use Engram debe versionar un archivo `.engram/config.json`
+con el nombre canónico del proyecto, por ejemplo:
+
+```json
+{ "project_name": "hospeda" }
+```
+
+Esto evita que el nombre dependa del directorio, del remoto Git o del clone
+desde el que se abrió el CLI. La configuración local es la fuente de identidad
+del proyecto; no se deben crear proyectos nuevos para cada worktree.
+
+El nombre explícito no elimina la regla de concurrencia de Engram: una escritura
+también necesita una sesión activa inequívoca. Si un CLI dejó sesiones históricas
+abiertas, se deben cerrar mediante `POST /sessions/{id}/end` (o desde la TUI),
+sin borrar observaciones. Nunca se debe resolver la ambigüedad eligiendo la
+sesión más reciente a ciegas. Los CLIs que exponen su identidad runtime deben
+enviarla; los transportes que no la exponen, como algunas integraciones MCP de
+Claude Code, deben mantener una sola sesión activa del proyecto o usar el CLI
+de Engram con `--project <nombre>` para una escritura explícita.
+
+Runbook de diagnóstico, sin exponer contenido de memoria:
+
+```bash
+engram projects list
+engram doctor --json --check sqlite_lock_contention --project hospeda
+engram context --project hospeda --scope project
+```
+
+El kit no cierra sesiones automáticamente durante una instalación. La limpieza
+de sesiones es una operación administrativa separada, auditable y reversible en
+cuanto a observaciones: sólo cambia `ended_at` y el resumen de cierre.

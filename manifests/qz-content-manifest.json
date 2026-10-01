@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-content-pack",
   "sourceOfTruth": "source",
-  "generatedAt": "2026-10-01T09:15:03.331Z",
+  "generatedAt": "2026-10-01T20:36:40.390Z",
   "content": [
     {
       "path": "source/agents/qz-implementation.md",
@@ -26,7 +26,7 @@
     },
     {
       "path": "source/commands/qz-engram.md",
-      "sha256": "98cbd50a65f781fa64a9008229b013cf114b93c5c53f9dcabf7d57778ed13897"
+      "sha256": "b3243c6688f11092d8e24b8d2b481d9ec5ba49c0da4056c4792d4a82f508014a"
     },
     {
       "path": "source/commands/qz-handoff.md",

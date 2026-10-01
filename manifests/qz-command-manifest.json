@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-command-pack",
   "sourceOfTruth": "source/commands",
-  "generatedAt": "2026-10-01T09:15:03.317Z",
+  "generatedAt": "2026-10-01T20:36:40.375Z",
   "clients": [
     "opencode",
     "claude",
@@ -23,7 +23,7 @@
     {
       "id": "qz-engram",
       "source": "source/commands/qz-engram.md",
-      "sha256": "98cbd50a65f781fa64a9008229b013cf114b93c5c53f9dcabf7d57778ed13897"
+      "sha256": "b3243c6688f11092d8e24b8d2b481d9ec5ba49c0da4056c4792d4a82f508014a"
     },
     {
       "id": "qz-handoff",
