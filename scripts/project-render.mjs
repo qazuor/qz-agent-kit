@@ -82,6 +82,9 @@ for (const command of (Array.isArray(config.commands?.registry) ? config.command
   if (!command || typeof command.id !== 'string' || typeof command.delegate !== 'string') continue
   if (Array.isArray(command.clients) && !command.clients.includes(client)) continue
   const target = join(commandDirectory, `${command.id}.md`)
+  // A project may provide a richer prompt in knowledge.commands. Keep that
+  // source authoritative and generate only commands without custom guidance.
+  if (existsSync(target)) continue
   const mutation = command.mutates === true ? 'Este comando puede modificar estado; pedí autorización cuando corresponda.' : 'Este comando es read-only salvo que su ayuda indique lo contrario.'
   const content = `---\ndescription: ${JSON.stringify(command.description || command.id)}\n---\n\n# ${command.id}\n\nEjecutá el comando del adapter del proyecto y explicá el resultado:\n\n\`\`\`bash\nqz ${command.id} \"$ARGUMENTS\"\n\`\`\`\n\n${mutation}\n\nNo reemplaces este workflow por una reimplementación manual si el comando está disponible.\n`
   mkdirSync(dirname(target), { recursive: true })
