@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 148,
+  "version": 149,
   "view": {
     "tabs": [
       "overview"
@@ -42,7 +42,7 @@
               "label": "harnesses objetivo"
             },
             {
-              "value": "7",
+              "value": "9",
               "label": "commands qz"
             },
             {
@@ -78,7 +78,7 @@
         "title": "Próximo orden recomendado",
         "data": {
           "tone": "warning",
-          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores, restore aislado de Engram y flujo externo aprobado para Gentle AI y Engram. La curación de proyectos históricos Hospeda3 quedó completada sin tocar Hospeda, Hospeda2 ni proyectos externos. Próximo orden: 1) validar TUI en sesión interactiva; 2) publicar el adapter de Hospeda; 3) ejecutar la validación final de los cuatro harnesses; 4) decidir el retiro de Claude. El dashboard y tray de suscripciones ya están implementados y validados; queda cerrar la publicación y los casos finales de integración."
+          "text": "Validado: clean-room del instalador, registro/adapter Hospeda, E2E real de worktree/DB/env/servidores, restore aislado de Engram y flujo externo aprobado para Gentle AI y Engram. La curación de proyectos históricos Hospeda3 quedó completada sin tocar Hospeda, Hospeda2 ni proyectos externos. Próximo orden: 1) validar el adapter de backlog y el refinamiento de specs; validar TUI en sesión interactiva; 2) publicar el adapter de Hospeda; 3) ejecutar la validación final de los cuatro harnesses; 4) decidir el retiro de Claude. El dashboard y tray de suscripciones ya están implementados y validados; queda cerrar la publicación y los casos finales de integración."
         }
       },
       {
@@ -772,6 +772,14 @@
               "category": "Reporting",
               "description": "Publicar y listar snapshots visuales locales.",
               "notes": "MVP operativo; integración natural con lenguaje del agente pendiente.",
+              "done": true
+            },
+            {
+              "id": "p4-linear-backlog",
+              "title": "qz-linear-backlog y qz-refine-spec",
+              "category": "Workflows",
+              "description": "Backlog y refinamiento portable versionados; Hospeda aporta el adapter declarativo.",
+              "notes": "Plan-only por defecto; Linear sólo con --yes. Tests y manifests verificados.",
               "done": true
             }
           ]

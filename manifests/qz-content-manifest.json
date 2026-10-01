@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-content-pack",
   "sourceOfTruth": "source",
-  "generatedAt": "2026-09-29T03:40:02.206Z",
+  "generatedAt": "2026-09-30T22:19:37.152Z",
   "content": [
     {
       "path": "source/agents/qz-implementation.md",
@@ -33,8 +33,16 @@
       "sha256": "e95077e8a719cd6ce51cc688336b3b9b23744fce53d8b663c153108f200a0b51"
     },
     {
+      "path": "source/commands/qz-linear-backlog.md",
+      "sha256": "6a69a6caf04b2b358888ea19f9e49a2b7f14832c412340871191fa2e80666537"
+    },
+    {
       "path": "source/commands/qz-recap.md",
       "sha256": "ae992ec7c5f15b5cb6f3efecbfaf7923e269164a3ab3d185b786fc2ed434381d"
+    },
+    {
+      "path": "source/commands/qz-refine-spec.md",
+      "sha256": "6e8a39354683788d1e17d5664c41ecbefd5d9850eb31cb4ef6c9355f126eb00c"
     },
     {
       "path": "source/commands/qz-start-issue.md",
@@ -45,12 +53,20 @@
       "sha256": "a0564b5936df1493c21428cc8e2c7bd1d80f83f1101fe1ad253542bb70d932a8"
     },
     {
+      "path": "source/guards/qz-shell-policy.sh",
+      "sha256": "b4fd92561389320efc3efd8ec7bdb6794d9ad5495c76e374f1cf8534a93b5c26"
+    },
+    {
+      "path": "source/guards/qz-workflow-policy.sh",
+      "sha256": "80930c92abe1cc7720e445069905f3ec4ac56fcd923baa12a4f7f2cfc475c2b6"
+    },
+    {
       "path": "source/guards/staged-secrets.sh",
       "sha256": "dd6d8f028cc2570aee050caa9a5a980ee1330a1c5c2eb3312ae31fdd0824d9d0"
     },
     {
       "path": "source/instructions/AGENTS.md",
-      "sha256": "dcbec3887faacb6fba72ee21a5da6d01c92388b5521a87bb5abbd0d0823acb67"
+      "sha256": "6ec8b49562bb1936e933d15ec2cfd37bf2d24919b6cbe15a036a4e024c79914c"
     },
     {
       "path": "source/skills/qz-agents/SKILL.md",
@@ -59,6 +75,22 @@
     {
       "path": "source/skills/qz-commands/SKILL.md",
       "sha256": "358b97f9a213465b8758c00993c559ef9212e83ff54eb7aa1712f116d0cf6689"
+    },
+    {
+      "path": "source/skills/qz-linear-backlog/SKILL.md",
+      "sha256": "4b935a35f804ee9875dff9bdaf079376930aefd14bc4c72326e456110fea21f9"
+    },
+    {
+      "path": "source/skills/qz-refine-spec/SKILL.md",
+      "sha256": "4134a87c391c8f7ec3c35c5ff5cbfc77af1feeb216faa1cd7bec00f6abaabde5"
+    },
+    {
+      "path": "source/skills/qz-safety/SKILL.md",
+      "sha256": "4072cc72a1986399a51224c630de1ccf82bdc2c830494ebd230d9977a298d75d"
+    },
+    {
+      "path": "source/skills/qz-shell-safety/SKILL.md",
+      "sha256": "2a4e3e30527354adbd9dac80cf665b32fb92fb4abed3012133df72d9d507bc72"
     }
   ]
 }

@@ -33,6 +33,7 @@ necesita comportamiento específico.
 | Update | Plan, diff, backup, aplicación idempotente, validación y rollback. |
 | Guards | Validaciones de seguridad, permisos, secretos, Git y configuración. |
 | Wrappers `qz-*` | Operaciones portables que delegan el estado del proyecto a su adapter. |
+| Memoria | Scanner read-only para convertir memoria local de Claude en conocimiento normativo sin duplicarla. |
 
 ## Arquitectura
 
@@ -132,9 +133,10 @@ qz-start-issue       # workflow portable
 hops-start-issue     # adapter exclusivo de Hospeda
 ```
 
-La primera colección portable incluye siete commands: `qz-recap`,
-`qz-handoff`, `qz-verify`, `qz-start-issue`, `qz-close-issue`, `qz-engram` y
-`qz-artifact`. El manifest generado en `manifests/qz-command-manifest.json`
+La colección portable incluye nueve commands: `qz-recap`, `qz-handoff`,
+`qz-verify`, `qz-start-issue`, `qz-close-issue`, `qz-engram`, `qz-artifact`,
+`qz-linear-backlog` y `qz-refine-spec`. El manifest generado en
+`manifests/qz-command-manifest.json`
 registra sus hashes y sirve como entrada para todos los adapters.
 
 Para regenerar el manifest y comprobar cada formato:

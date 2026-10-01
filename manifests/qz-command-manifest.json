@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-command-pack",
   "sourceOfTruth": "source/commands",
-  "generatedAt": "2026-09-29T03:40:02.193Z",
+  "generatedAt": "2026-09-30T22:19:37.138Z",
   "clients": [
     "opencode",
     "claude",
@@ -31,9 +31,19 @@
       "sha256": "e95077e8a719cd6ce51cc688336b3b9b23744fce53d8b663c153108f200a0b51"
     },
     {
+      "id": "qz-linear-backlog",
+      "source": "source/commands/qz-linear-backlog.md",
+      "sha256": "6a69a6caf04b2b358888ea19f9e49a2b7f14832c412340871191fa2e80666537"
+    },
+    {
       "id": "qz-recap",
       "source": "source/commands/qz-recap.md",
       "sha256": "ae992ec7c5f15b5cb6f3efecbfaf7923e269164a3ab3d185b786fc2ed434381d"
+    },
+    {
+      "id": "qz-refine-spec",
+      "source": "source/commands/qz-refine-spec.md",
+      "sha256": "6e8a39354683788d1e17d5664c41ecbefd5d9850eb31cb4ef6c9355f126eb00c"
     },
     {
       "id": "qz-start-issue",

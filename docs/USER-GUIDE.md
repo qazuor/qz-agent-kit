@@ -56,6 +56,7 @@ El flujo conserva un registro de procedencia y compara el estado instalado con l
 | `qz-kit check` / `verify` | validar instalación | lectura |
 | `qz-kit project init` | registrar un proyecto | mutante en el proyecto |
 | `qz-kit project sync` | sincronizar adapter y comandos | mutante en el proyecto |
+| `qz-kit memory scan` | relevar memoria de Claude y clasificar candidatos | sólo lectura |
 | `qz-kit external list` | ver adapters externos | lectura |
 | `qz-kit external doctor` | diagnosticar adapters | lectura |
 | `qz-kit external-plan` | mostrar acciones externas declaradas | lectura |

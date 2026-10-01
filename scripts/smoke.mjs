@@ -26,6 +26,19 @@ const registryHome = mkdtempSync(join(tmpdir(), 'qz-registry-'))
 const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 const externalPlan = join(configRoot, 'install-plan.json')
 try {
+  const memoryFixture = join(configRoot, 'claude-memory')
+  mkdirSync(memoryFixture, { recursive: true })
+  writeFileSync(join(memoryFixture, 'feedback_example.md'), '# Feedback\nUsar el verificador del proyecto.\n')
+  writeFileSync(join(memoryFixture, 'gotcha_example.md'), '# Gotcha\nEl flujo necesita un guard.\n')
+  writeFileSync(join(memoryFixture, 'credential-example.md'), '# Sensitive\napi_key = sk-this-value-is-never-printed\n')
+  const memoryScan = parse(execFileSync(qzKit, ['memory', 'scan', '--root', memoryFixture, '--json'], { cwd: configRoot, encoding: 'utf8' }))
+  if (memoryScan.mutations !== 'none' || memoryScan.counts.total !== 3 || memoryScan.counts.sensitive !== 1 || memoryScan.candidates.some((candidate) => candidate.file.includes('sk-this-value'))) {
+    throw new Error('qz memory scan no clasificó el fixture de forma segura')
+  }
+  const memoryPlan = parse(execFileSync(qzKit, ['memory', 'plan', '--root', memoryFixture, '--json'], { cwd: configRoot, encoding: 'utf8' }))
+  if (memoryPlan.mutations !== 'none' || memoryPlan.actions.length !== 3 || memoryPlan.actions.some((action) => action.removeSource === true) || !memoryPlan.actions.some((action) => action.action === 'manual-review-required')) {
+    throw new Error('qz memory plan no mantuvo la promoción read-only y segura')
+  }
   const engramBin = join(configRoot, 'engram-bin')
   mkdirSync(engramBin, { recursive: true })
   const fakeEngram = join(engramBin, 'engram')

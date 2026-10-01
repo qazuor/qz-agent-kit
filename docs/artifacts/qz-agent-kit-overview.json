@@ -9,14 +9,14 @@
     "audience": "team"
   },
   "version": {
-    "id": "ver_qz-agent-kit-overview-v4",
-    "number": 4,
-    "createdAt": "2026-09-27T22:32:06.006Z",
+    "id": "ver_qz-agent-kit-overview-v5",
+    "number": 5,
+    "createdAt": "2026-09-30T23:00:00.000Z",
     "author": "qz-agent-kit",
-    "reason": "corregir ejemplos de verify",
+    "reason": "agregar qz-linear-backlog y qz-refine-spec",
     "sourceHash": "sha256:qz-agent-kit-overview",
     "rendererVersion": "artifact-app/0.1",
-    "basedOnVersion": "ver_qz-agent-kit-overview-v3"
+    "basedOnVersion": "ver_qz-agent-kit-overview-v4"
   },
   "view": {
     "tabs": [
@@ -55,7 +55,7 @@
               "label": "fuente de verdad"
             },
             {
-              "value": "7",
+              "value": "9",
               "label": "commands qz portables"
             },
             {
@@ -195,6 +195,16 @@
               "qz-artifact",
               "Publica/lista snapshots de artifacts locales.",
               "Reporte visual versionado."
+            ],
+            [
+              "qz-linear-backlog",
+              "Prepara una issue con configuración del adapter y sólo escribe con confirmación explícita.",
+              "Borrador o issue creada con URL."
+            ],
+            [
+              "qz-refine-spec",
+              "Guía el refinamiento de una spec con evidencia del código y decisiones explícitas.",
+              "Spec implementable o drift registrado."
             ]
           ]
         }
