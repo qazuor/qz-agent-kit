@@ -38,6 +38,8 @@ if (!root) {
 }
 const manifestPath = join(root, '.qz/project.json')
 const config = JSON.parse(readFileSync(manifestPath, 'utf8'))
+const projectCommands = Array.isArray(config.commands?.registry) ? config.commands.registry : []
+const projectCommand = projectCommands.find((entry) => entry?.id === command)
 const sensitive = /(?:secret|token|password|passwd|private.?key|credential|cookie|auth)/i
 const sanitize = (value, key = '') => {
   if (sensitive.test(key)) return undefined
@@ -59,6 +61,7 @@ Uso:
   qz gentle <operación>    diagnóstico read-only de Gentle AI
   qz doctor                 valida el contrato del proyecto
   qz config [--json]        muestra configuración no secreta
+  qz commands [--json]      lista comandos propios declarados por el adapter
   qz <comando> [args...]    delega en el adapter declarado
 
 El dispatcher no implementa Linear, Git, worktrees, env, DB ni servidores.`)
@@ -69,6 +72,11 @@ if (command === 'config') {
   if (args.includes('--json')) console.log(JSON.stringify({ projectRoot: root, manifest: manifestPath, config: safe, secretValues: 'not-read' }, null, 2))
   else console.log(`${safe.projectId || '(sin id)'} · adapter=${safe.adapter || '(sin adapter)'} · base=${safe.branches?.base || '(sin base)'}`)
   process.exit(0)
+}
+if (command === 'commands' || command === 'list-commands') {
+  const script = resolve(new URL('../scripts/project-commands.mjs', import.meta.url).pathname)
+  const result = spawnSync(process.execPath, [script, ...args], { cwd: root, stdio: 'inherit' })
+  process.exit(result.status ?? 1)
 }
 if (command === 'doctor') {
   const validator = resolve(new URL('../scripts/validate-project.mjs', import.meta.url).pathname)
@@ -89,8 +97,9 @@ if (typeof dispatch !== 'string' || dispatch.length === 0) {
   console.error('qz: este comando requiere soporte del adapter o el fallback genérico disponible')
   process.exit(2)
 }
-const result = spawnSync(dispatch, [command, ...args], { cwd: root, stdio: 'inherit', shell: true })
-if ((command === 'start-issue' || command === 'close-issue') && result.status === 2) {
+const delegatedCommand = projectCommand?.delegate || command
+const result = spawnSync(dispatch, [delegatedCommand, ...args], { cwd: root, stdio: 'inherit', shell: true })
+if ((delegatedCommand === 'start-issue' || delegatedCommand === 'close-issue') && result.status === 2) {
   const fallback = join(homedir(), '.config/qz-agent-kit/bin', command === 'start-issue' ? 'generic-start-issue.mjs' : 'generic-close-issue.mjs')
   if (existsSync(fallback)) {
     const generic = spawnSync(process.execPath, [fallback, '--root', root, ...args], { cwd: root, stdio: 'inherit' })

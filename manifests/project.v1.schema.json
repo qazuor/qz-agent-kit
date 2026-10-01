@@ -13,7 +13,28 @@
     "worktree": { "type": "object", "required": ["pathPattern", "envSource"] },
     "database": { "type": "object" },
     "servers": { "type": "array", "minItems": 1 },
-    "commands": { "type": "object", "required": ["genericPrefix", "projectPrefix"], "properties": { "dispatch": { "type": "string", "minLength": 1 } } }
+    "commands": {
+      "type": "object",
+      "required": ["genericPrefix", "projectPrefix"],
+      "properties": {
+        "dispatch": { "type": "string", "minLength": 1 },
+        "registry": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "delegate", "description"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*-$|^[A-Za-z][A-Za-z0-9_-]*$" },
+              "delegate": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "description": { "type": "string", "minLength": 1 },
+              "mutates": { "type": "boolean" },
+              "clients": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    }
   },
   "additionalProperties": true
 }
