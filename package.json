@@ -24,6 +24,8 @@
     "install:clients": "node scripts/install.mjs --plan"
   },
   "dependencies": {
-    "@clack/prompts": "^1.8.1"
+    "@clack/prompts": "^1.8.1",
+    "commander": "^15.0.0",
+    "picocolors": "^1.1.1"
   }
 }
