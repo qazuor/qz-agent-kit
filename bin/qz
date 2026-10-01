@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { delimiter, dirname, join, resolve } from 'node:path'
 import { homedir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
+const packageRoot = resolve(new URL('..', import.meta.url).pathname)
 const command = args.shift() || 'help'
 if (command === '--version' || command === 'version') {
   console.log('qz dispatcher 1')
@@ -98,7 +99,9 @@ if (typeof dispatch !== 'string' || dispatch.length === 0) {
   process.exit(2)
 }
 const delegatedCommand = projectCommand?.delegate || command
-const result = spawnSync(dispatch, [delegatedCommand, ...args], { cwd: root, stdio: 'inherit', shell: true })
+const kitNodeModules = join(packageRoot, 'node_modules')
+const nodePath = [kitNodeModules, process.env.NODE_PATH].filter(Boolean).join(delimiter)
+const result = spawnSync(dispatch, [delegatedCommand, ...args], { cwd: root, stdio: 'inherit', shell: true, env: { ...process.env, NODE_PATH: nodePath } })
 if ((delegatedCommand === 'start-issue' || delegatedCommand === 'close-issue') && result.status === 2) {
   const fallback = join(homedir(), '.config/qz-agent-kit/bin', command === 'start-issue' ? 'generic-start-issue.mjs' : 'generic-close-issue.mjs')
   if (existsSync(fallback)) {
