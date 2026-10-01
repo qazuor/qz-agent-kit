@@ -95,6 +95,31 @@ const commandPrefix = /^[A-Za-z][A-Za-z0-9_-]*-$/
 if (typeof config.commands?.genericPrefix !== 'string' || !commandPrefix.test(config.commands.genericPrefix)) errors.push('commands:genericPrefix')
 if (typeof config.commands?.projectPrefix !== 'string' || !commandPrefix.test(config.commands.projectPrefix)) errors.push('commands:projectPrefix')
 if (config.commands?.dispatch !== undefined && (typeof config.commands.dispatch !== 'string' || config.commands.dispatch.length === 0)) errors.push('commands.dispatch:type')
+if (config.commands?.registry !== undefined) {
+  if (!Array.isArray(config.commands.registry)) errors.push('commands.registry:type')
+  else {
+    const ids = new Set()
+    for (const [index, entry] of config.commands.registry.entries()) {
+      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+        errors.push(`commands.registry[${index}]:object`)
+        continue
+      }
+      const id = entry.id
+      if (typeof id !== 'string' || !id.length) errors.push(`commands.registry[${index}]:id`)
+      else {
+        if (ids.has(id)) errors.push(`commands.registry[${index}]:duplicate-id:${id}`)
+        ids.add(id)
+        if (typeof config.commands?.projectPrefix === 'string' && !id.startsWith(config.commands.projectPrefix)) {
+          errors.push(`commands.registry[${index}]:project-prefix:${id}`)
+        }
+      }
+      if (typeof entry.delegate !== 'string' || !/^[a-z][a-z0-9-]*$/.test(entry.delegate)) errors.push(`commands.registry[${index}]:delegate`)
+      if (typeof entry.description !== 'string' || !entry.description.length) errors.push(`commands.registry[${index}]:description`)
+      if (entry.mutates !== undefined && typeof entry.mutates !== 'boolean') errors.push(`commands.registry[${index}]:mutates`)
+      if (entry.clients !== undefined && (!Array.isArray(entry.clients) || entry.clients.some((client) => typeof client !== 'string' || !client.length))) errors.push(`commands.registry[${index}]:clients`)
+    }
+  }
+}
 if (config.knowledge !== undefined) {
   if (!config.knowledge || typeof config.knowledge !== 'object' || Array.isArray(config.knowledge)) errors.push('knowledge:type')
   else {
@@ -110,6 +135,6 @@ const serialized = JSON.stringify(config).toLowerCase()
 for (const forbidden of ['password', 'secret', 'token', 'privatekey', 'accesskey']) {
   if (serialized.includes(`"${forbidden}"`)) errors.push(`forbidden-field:${forbidden}`)
 }
-const result = { projectRoot, manifest: path, projectId: config.projectId, adapter: config.adapter, dispatchDeclared: typeof config.commands?.dispatch === 'string', servers: config.servers?.map((s) => s.id), errors, valid: errors.length === 0, mutations: 'none', secretValues: 'not-read' }
+const result = { projectRoot, manifest: path, projectId: config.projectId, adapter: config.adapter, dispatchDeclared: typeof config.commands?.dispatch === 'string', registeredCommands: Array.isArray(config.commands?.registry) ? config.commands.registry.map((entry) => entry?.id).filter(Boolean) : [], servers: config.servers?.map((s) => s.id), errors, valid: errors.length === 0, mutations: 'none', secretValues: 'not-read' }
 console.log(JSON.stringify(result, null, 2))
 process.exit(result.valid ? 0 : 1)
