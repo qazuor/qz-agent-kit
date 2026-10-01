@@ -5,7 +5,23 @@ import { homedir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
-const packageRoot = resolve(new URL('..', import.meta.url).pathname)
+const localPackageRoot = resolve(new URL('..', import.meta.url).pathname)
+const packageCandidates = [
+  process.env.QZ_AGENT_KIT_HOME,
+  localPackageRoot,
+  process.env.npm_config_prefix ? join(process.env.npm_config_prefix, 'lib/node_modules/@qz/agent-kit') : null,
+  join(dirname(process.execPath), '../lib/node_modules/@qz/agent-kit')
+]
+const npmRoot = spawnSync('npm', ['root', '-g'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+if (npmRoot.status === 0 && npmRoot.stdout.trim()) packageCandidates.push(join(npmRoot.stdout.trim(), '@qz/agent-kit'))
+const packageRoot = packageCandidates.filter(Boolean).map((candidate) => resolve(candidate)).find((candidate) => {
+  try {
+    const metadata = JSON.parse(readFileSync(join(candidate, 'package.json'), 'utf8'))
+    return metadata.name === '@qz/agent-kit'
+  } catch {
+    return false
+  }
+}) || localPackageRoot
 const command = args.shift() || 'help'
 if (command === '--version' || command === 'version') {
   console.log('qz dispatcher 1')
