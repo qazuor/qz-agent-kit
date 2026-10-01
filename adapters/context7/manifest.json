@@ -13,5 +13,5 @@
     "requiresHumanApproval": true
   },
   "secrets": "never-read-or-copied",
-  "source": "declarative pending adapter; configuration is not changed automatically"
+  "source": "Gentle AI/OpenCode MCP configuration; qz-kit verifies the connected MCP without reading credentials"
 }

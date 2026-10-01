@@ -13,5 +13,5 @@
     "requiresHumanApproval": true
   },
   "secrets": "never-read-or-copied",
-  "source": "declarative pending adapter; disabled by default"
+  "source": "Gentle AI managed OpenCode launcher; qz-kit verifies policy and launcher presence without reading credentials"
 }

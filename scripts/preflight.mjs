@@ -23,6 +23,42 @@ const adapterManifests = Object.fromEntries(readdirSync(resolve(root, 'adapters'
   return [[manifest.id, { ...manifest, path }]]
 }))
 const checks = []
+const home = homedir()
+const run = (command, args, timeout = 8000) => {
+  const result = spawnSync(command, args, { encoding: 'utf8', timeout })
+  return {
+    ok: result.status === 0,
+    output: `${result.stdout || ''}\n${result.stderr || ''}`.trim(),
+  }
+}
+const configuredComponent = (component) => {
+  if (component === 'context7') {
+    const probe = run('opencode', ['mcp', 'list'], 30000)
+    const connected = /context7/i.test(probe.output) && /connected/i.test(probe.output)
+    return connected
+      ? { status: 'ok', message: 'Context7 MCP conectado en OpenCode (contenido de credenciales no leído).' }
+      : { status: 'pending', message: 'Context7 está seleccionado pero OpenCode no reporta el MCP como conectado.' }
+  }
+  if (component === 'rdd-review') {
+    const probe = run('gentle-ai', ['review', 'mode', 'status', '--json'])
+    let parsed = null
+    try { parsed = JSON.parse(probe.output) } catch {}
+    const effective = parsed?.status?.effective
+    return effective === 'on'
+      ? { status: 'ok', message: 'RDD/review habilitado globalmente en Gentle AI.' }
+      : { status: 'pending', message: `RDD/review no está habilitado (estado efectivo: ${effective || 'desconocido'}).` }
+  }
+  if (component === 'background-agents') {
+    let state = null
+    try { state = JSON.parse(readFileSync(resolve(home, '.gentle-ai/state.json'), 'utf8')) } catch {}
+    const launcher = resolve(home, '.gentle-ai/bin/opencode')
+    const enabled = state?.opencode_background_subagents === 'on' && existsSync(launcher)
+    return enabled
+      ? { status: 'ok', message: 'Background agents habilitados para OpenCode mediante launcher administrado.' }
+      : { status: 'pending', message: 'Background agents de OpenCode no están habilitados o falta su launcher.' }
+  }
+  return null
+}
 for (const client of plan.clients || []) {
   const found = byId[client]
   checks.push({ id: `client:${client}`, status: found?.installed ? 'ok' : 'warning', message: found?.installed ? `${client} disponible (${found.version || 'versión no reportada'})` : `${client} no está instalado; qz puede preparar archivos, pero el CLI requerirá instalación aparte.` })
@@ -30,7 +66,8 @@ for (const client of plan.clients || []) {
 for (const component of plan.components || []) {
   const manifest = adapterManifests[component]
   const binary = byId[component]
-  checks.push({ id: `component:${component}`, status: !manifest ? 'warning' : binary?.installed ? 'ok' : 'pending', message: !manifest ? `${component} no tiene manifest de adapter.` : binary?.installed ? `${component} disponible (${binary.version || 'versión no reportada'})` : `${component} está seleccionado pero su adapter de instalación aún es explícito/pending.`, adapterManifest: manifest?.path || null })
+  const configured = configuredComponent(component)
+  checks.push({ id: `component:${component}`, status: !manifest ? 'warning' : configured?.status || (binary?.installed ? 'ok' : 'pending'), message: !manifest ? `${component} no tiene manifest de adapter.` : configured?.message || (binary?.installed ? `${component} disponible (${binary.version || 'versión no reportada'})` : `${component} está seleccionado pero su adapter de instalación aún es explícito/pending.`), adapterManifest: manifest?.path || null })
 }
 for (const client of plan.clients || []) {
   const auth = ecosystem.integrations.auth?.[client]

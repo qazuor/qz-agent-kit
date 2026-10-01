@@ -13,5 +13,5 @@
     "requiresHumanApproval": true
   },
   "secrets": "never-read-or-copied",
-  "source": "declarative pending adapter; feature remains disabled until explicitly configured"
+  "source": "Gentle AI review mode; qz-kit verifies the global effective mode without reading credentials"
 }

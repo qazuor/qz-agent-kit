@@ -184,8 +184,10 @@ y proveedores. El plan queda en
 qz se aplica con backup. Gentle AI y Engram tienen adapters ejecutables: después
 de un preview exitoso, backup y confirmación explícita, el wizard puede ejecutar
 sus instaladores oficiales y validar el resultado con doctor. Context7,
-revisiones y background agents siguen registrados como componentes pendientes
-hasta contar con adapters verificables. El wizard nunca lee, copia, limpia ni
+revisiones y background agents se verifican mediante probes read-only después
+de la configuración oficial: Context7 debe aparecer conectado en OpenCode, RDD
+debe estar habilitado globalmente y el launcher administrado de OpenCode debe
+existir. El wizard nunca lee, copia, limpia ni
 migra credenciales, `.env` o la base de Engram sin el flujo explícito de backup.
 
 La instalación normal reconcilia únicamente archivos administrados por qz. Si
@@ -471,9 +473,11 @@ memoria Engram. Esos recursos se detectan y validan localmente, pero sus
 valores permanecen fuera del repositorio y del manifest.
 
 Los componentes opcionales que aparecen en el wizard también tienen un
-contrato declarativo. Context7, RDD/review y background agents se informan como
-`pending-adapter` hasta que exista una integración ejecutable y verificada; no
-se tratan como componentes desconocidos ni se habilitan automáticamente.
+contrato declarativo. La configuración mutante continúa delegada a Gentle AI y
+OpenCode con aprobación explícita; `qz-kit preflight` y `qz-kit readiness`
+comprueban su estado efectivo sin leer credenciales. La configuración
+recomendada habilita background agents sólo para OpenCode, mantiene Pi en
+foreground y deja RDD/review globalmente habilitado.
 
 ## Actualización y sincronización
 
