@@ -8,7 +8,7 @@
     "description": "Checklist vivo para terminar el paquete portable, sus adapters y el setup reproducible de Hospeda.",
     "audience": "team"
   },
-  "version": 150,
+  "version": 151,
   "view": {
     "tabs": [
       "overview"
@@ -58,7 +58,7 @@
               "label": "drift de sync"
             },
             {
-              "value": "87/88",
+              "value": "88/89",
               "label": "tareas completadas"
             },
             {
@@ -918,7 +918,15 @@
               "title": "Publicar qz-agent-kit y adapter",
               "category": "Release",
               "description": "Push, PR y merge de los cambios versionados.",
-              "notes": "Publicado y versionado: qz-agent-kit commit fb45949 en GitHub main; adapter Hospeda commits a6a1983e2d, 06c2c372c1 y a74230783d en branch chore/qz-hospeda-adapter. El paquete es privado y se instala desde Git/local; no se publicó en npm. Instalación global aplicada en los cuatro CLI y qz-kit install --check devuelve drift=0.",
+              "notes": "Publicado y versionado: qz-agent-kit commits fb45949, 7827c3b, c92b7f3 y 1623556 en GitHub main, tags v0.1.0, v0.1.1 y v0.1.2; adapter Hospeda mergeado en staging con commit 629a21c34f. El paquete es privado y se instala desde Git/tag; no se publicó en npm. Instalación global aplicada en los cuatro CLI y qz-kit install --check devuelve drift=0.",
+              "done": true
+            },
+            {
+              "id": "p7-clean",
+              "title": "Limpieza segura y limpieza total guiada",
+              "category": "Release",
+              "description": "Reconciliar qz obsoleto y permitir inventario/recomendación de recursos legacy antes de borrar.",
+              "notes": "Implementado en qz-kit 0.1.2: install --check/--apply detecta y respalda qz-* obsoletos; clean --plan clasifica commands, skills, agents y prompts; clean --apply pide confirmación individual, excluye rutas sensibles y guarda receipt/backup.",
               "done": true
             },
             {
