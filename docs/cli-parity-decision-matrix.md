@@ -110,6 +110,21 @@ Esta matriz registra qué hacer con cada componente de Claude/Hospeda. No implic
 
 ## Skills genéricos
 
+## Decisiones nuevas de portabilidad
+
+| Recurso | Destino | Alcance | Estado |
+|---|---|---|---|
+| `agents-sdk` | conservar sin copiar | Claude Code | CLAUDE_ONLY |
+| `sandbox-sdk` | conservar sin copiar | Claude Code | CLAUDE_ONLY |
+| `go-testing` | retirar | todos los clientes | DELETE_AFTER_CHECK |
+| `gentleman.md` | reemplazar por `qz-output-style` | todos los clientes | ADAPT |
+| Output style común | `source/skills/qz-output-style/SKILL.md` + adapters | cuatro CLI | TEST |
+| Rules y permisos | `source/skills/qz-permissions/SKILL.md` + guards/adapters | cuatro CLI | ADAPT |
+| Claude `synced` | descomponer e inventariar | Claude Code | INVENTORY |
+| Hooks/plugins no atribuidos | inventariar individualmente | cliente original | INVENTORY |
+| Skills/agentes Hospeda no `hops-*` | clasificar por archivo | adapter Hospeda o qz | INVENTORY |
+| Código externo del usuario | identificar procedencia y uso | cliente original | INVENTORY |
+
 | Skill actual/grupo | Destino |
 |---|---|
 | astro-patterns | `qz-astro`, con adaptación para Hospeda |
@@ -273,4 +288,3 @@ Ninguna fila pasa de `DECIDED_NOT_MIGRATED` a `MIGRATED` sin:
 - documentación;
 - rollback;
 - confirmación de que no se copiaron secretos.
-

@@ -205,6 +205,16 @@ cuatro CLI, además de archivos Gentle que un snapshot marque como administrados
 excluye auth, sesiones, memoria, bases y rutas con nombres sensibles. Cada
 elemento aprobado se respalda antes de eliminarse.
 
+Cuando el plan ya fue revisado y todos sus candidatos son reemplazos aprobados,
+`qz-kit clean --apply --approve-all` permite ejecutar la misma limpieza sin
+interacción. Sólo procesa elementos clasificados como `eliminar`,
+`reemplazado-por-qz` o `reemplazado-por-gentle`; nunca incluye recursos
+conservados o marcados para revisión.
+
+La clasificación detallada por CLI está en
+[`docs/cleanup-review.md`](docs/cleanup-review.md). Ese documento separa
+decisiones tomadas de recursos que todavía requieren revisión humana.
+
 Para automatización se conservan `--plan`, `--check` y `--apply`. La instalación
 interactiva equivale a elegir clientes y luego ejecutar `--apply`; no reemplaza
 el plan read-only ni el rollback.
@@ -334,6 +344,10 @@ qz-kit install --plan --client opencode,claude
 # sólo la capa central qz, sin instalar destinos de ningún CLI
 qz-kit install --apply --client none
 qz-kit doctor
+qz-kit parity
+qz-kit instructions-plan
+qz-kit instructions-merge --plan
+qz-kit backup-clients --apply
 qz-kit ecosystem
 qz-kit preflight
 qz-kit backup-plan
@@ -344,6 +358,30 @@ qz-kit readiness --project /ruta/al/proyecto
 qz-kit plan
 qz-kit verify --client opencode
 ```
+
+`qz-kit parity` es read-only: compara los hashes de `qz-output-style` y
+`qz-permissions` en OpenCode, Claude Code, Codex y Gentle Shell, e informa por
+separado qué adapters nativos todavía requieren validación específica.
+
+`qz-kit instructions-plan` compara la fuente común de `AGENTS.md` y el output
+style con las rutas nativas de cada CLI. Señala los archivos que requieren
+merge y nunca modifica ni imprime su contenido.
+
+`qz-kit instructions-merge --plan` calcula un merge acotado para OpenCode y
+Codex. Conserva el contenido nativo existente y sólo crea o reemplaza un bloque
+delimitado por marcadores de qz-agent-kit. Para aplicar el plan se requiere
+`qz-kit instructions-merge --apply --approve QZ_INSTRUCTIONS_MERGE`; antes de
+escribir crea un backup y un recibo con permisos restringidos. Claude Code y
+Gentle Shell quedan fuera de este merge porque sus instrucciones nativas son
+administradas por sus propios mecanismos.
+
+Estos tres diagnósticos muestran un resumen humano por defecto; `--json` conserva
+la salida estructurada para scripts y automatizaciones.
+
+`qz-kit backup-clients --apply` crea un backup verificable de las configuraciones,
+skills, agents, commands, instrucciones, estados qz y la base de Engram. Excluye
+paths que parecen contener credenciales, tokens, cookies, claves privadas o
+`.env`; informa sólo cantidades y checksums, nunca sus valores.
 
 `qz-kit external-plan` genera comandos y precondiciones para instalar o
 configurar Gentle AI y Engram. Es siempre read-only: cada acción requiere

@@ -12,6 +12,11 @@ El sistema tiene tres capas:
 
 La fuente de verdad vive en este repositorio. Los archivos instalados en cada CLI son proyecciones generadas o sincronizadas desde aquí; no deben editarse directamente.
 
+Además de los workflows `qz-*`, el kit distribuye skills portables con el mismo
+contenido para los cuatro clientes: `qz-cloudflare`, `qz-web-perf` y
+`qz-env-safety`. Se cargan bajo demanda y no se mantienen copias divergentes
+por CLI.
+
 ## Instalación en una máquina nueva
 
 ```bash
@@ -48,6 +53,16 @@ qz-kit update
 qz-kit verify
 ```
 
+Para comprobar que los cuatro CLI recibieron la misma capa portable de estilo y
+permisos:
+
+```bash
+qz-kit parity
+```
+
+El comando compara hashes de `qz-output-style` y `qz-permissions` sin modificar
+archivos ni leer secretos.
+
 El flujo conserva un registro de procedencia y compara el estado instalado con la fuente. `--check` es de lectura; `--plan` muestra acciones; `update` aplica la actualización. Antes de una actualización importante conviene guardar el plan y revisar el diff. Para volver atrás se usa la versión anterior del repositorio y se ejecuta nuevamente el instalador; no se borran automáticamente proyectos, worktrees, Git, DBs ni memorias Engram.
 
 Los archivos `qz-*` que fueron administrados por una instalación anterior y ya
@@ -63,6 +78,10 @@ kit no se eliminan automáticamente.
 | `qz-kit update` | sincronizar una versión nueva | mutante |
 | `qz-kit plan` | revisar acciones | lectura |
 | `qz-kit check` / `verify` | validar instalación | lectura |
+| `qz-kit parity` | validar paridad portable entre los cuatro CLI | lectura |
+| `qz-kit instructions-plan` | planificar merge de instrucciones nativas | lectura |
+| `qz-kit instructions-merge` | planificar/aplicar bloque qz acotado en OpenCode y Codex | plan lectura; apply con aprobación |
+| `qz-kit backup-clients --apply` | respaldar configuraciones de los cuatro CLI y Engram | mutante en el directorio de backup |
 | `qz-kit project init` | registrar un proyecto | mutante en el proyecto |
 | `qz-kit project sync` | sincronizar adapter y comandos | mutante en el proyecto |
 | `qz-kit memory scan` | relevar memoria de Claude y clasificar candidatos | sólo lectura |
@@ -93,6 +112,19 @@ Los comandos portables son wrappers deterministas. Hacen el trabajo costoso en s
 | `qz-artifact` | generar o actualizar un artifact con datos separados del markup |
 | `qz-engram` | wrapper seguro de consultas y diagnóstico de Engram |
 | `qz-gentle` | wrapper de estado y diagnóstico de Gentle AI |
+
+Skills portables:
+
+- `qz-cloudflare`: Workers, Pages, KV, D1, R2, Durable Objects, Queues,
+  Workflows, Workers AI y Wrangler.
+- `qz-web-perf`: Core Web Vitals, trazas de DevTools, red y estabilidad visual.
+- `qz-env-safety`: registro de variables, guards Bash, secretos staged y
+  separación read-only/mutante.
+
+RTK no forma parte del kit y debe retirarse de todos los clientes durante la
+limpieza aprobada. El kit no borra el binario global de RTK automáticamente:
+lo detecta como legacy y conserva un backup antes de retirar sus hooks y
+archivos de configuración.
 
 Los nombres específicos de Hospeda siguen siendo `hops-*` y viven en el adapter de Hospeda. Un comando genérico no debe asumir Linear, PostgreSQL ni la estructura de Hospeda.
 

@@ -5,6 +5,13 @@ formato que necesita cada cliente; no se editan copias instaladas a mano.
 
 - `agents/`: agentes comunes y sus límites.
 - `skills/`: conocimiento especializado cargado bajo demanda.
+- `skills/qz-cloudflare/`: reglas portables para Workers, Pages, storage,
+  Durable Objects y Wrangler.
+- `skills/qz-web-perf/`: auditorías de rendimiento con DevTools y Core Web
+  Vitals.
+- `skills/qz-env-safety/`: validación de Bash, variables de entorno y guards.
+- `skills/qz-output-style/`: estilo conversacional común para los cuatro CLI.
+- `skills/qz-permissions/`: política semántica común de permisos y operaciones sensibles.
 - `commands/`: commands `qz-*` que delegan en scripts deterministas.
 - `prompts/`: templates para clientes que los exponen como slash commands.
 - `policies/`: reglas de permisos y seguridad.

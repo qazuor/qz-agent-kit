@@ -26,6 +26,7 @@ const wizard = resolve(new URL('..', import.meta.url).pathname, 'scripts/install
 const ecosystem = resolve(new URL('..', import.meta.url).pathname, 'scripts/ecosystem.mjs')
 const preflight = resolve(new URL('..', import.meta.url).pathname, 'scripts/preflight.mjs')
 const backupPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/backup-plan.mjs')
+const backupClients = resolve(new URL('..', import.meta.url).pathname, 'scripts/backup-clients.mjs')
 const externalPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-plan.mjs')
 const externalPreview = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-preview.mjs')
 const externalReceipt = resolve(new URL('..', import.meta.url).pathname, 'scripts/external-receipt.mjs')
@@ -43,6 +44,9 @@ const subscriptionService = resolve(new URL('..', import.meta.url).pathname, 'sc
 const subscriptionTray = resolve(new URL('..', import.meta.url).pathname, 'scripts/subscription-tray.py')
 const memory = resolve(new URL('..', import.meta.url).pathname, 'scripts/qz-memory.mjs')
 const clean = resolve(new URL('..', import.meta.url).pathname, 'scripts/clean.mjs')
+const parity = resolve(new URL('..', import.meta.url).pathname, 'scripts/parity.mjs')
+const instructionsPlan = resolve(new URL('..', import.meta.url).pathname, 'scripts/instructions-plan.mjs')
+const instructionsMerge = resolve(new URL('..', import.meta.url).pathname, 'scripts/instructions-merge.mjs')
 const argValue = (flag) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : undefined }
 if (command === 'project') {
   const result = spawnSync(process.execPath, [projects, ...args], { stdio: 'inherit' })
@@ -66,6 +70,10 @@ if (command === 'preflight') {
 }
 if (command === 'backup-plan') {
   const result = spawnSync(process.execPath, [backupPlan, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'backup-clients') {
+  const result = spawnSync(process.execPath, [backupClients, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'external-plan') {
@@ -106,6 +114,18 @@ if (command === 'memory') {
 }
 if (command === 'clean') {
   const result = spawnSync(process.execPath, [clean, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'parity') {
+  const result = spawnSync(process.execPath, [parity, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'instructions-plan') {
+  const result = spawnSync(process.execPath, [instructionsPlan, ...args], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+if (command === 'instructions-merge') {
+  const result = spawnSync(process.execPath, [instructionsMerge, ...args], { stdio: 'inherit' })
   process.exit(result.status ?? 1)
 }
 if (command === 'readiness') {
@@ -202,11 +222,11 @@ const mapped = command === 'update' ? (updateArgs.includes('--check') ? ['--chec
     : command === 'install' ? args
       : []
 if (!mapped.length && !['help', '--help', '-h'].includes(command)) {
-  console.error('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup|external-backup-status|external-bootstrap|external-apply|clean|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|subscriptions tray|memory scan|memory plan|provenance|verify|rollback [opciones]')
+  console.error('Uso: qz-kit install|update|plan|doctor|parity|instructions-plan|instructions-merge|ecosystem|preflight|readiness|backup-plan|backup-clients|external-plan|external-preview|external-receipt|external-backup|external-backup-status|external-bootstrap|external-apply|clean|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|subscriptions tray|memory scan|memory plan|provenance|verify|rollback [opciones]')
   process.exit(2)
 }
 if (!mapped.length) {
-  console.log('Uso: qz-kit install|update|plan|doctor|ecosystem|preflight|readiness|backup-plan|external-plan|external-preview|external-receipt|external-backup|external-backup-status|external-bootstrap|external-apply|clean|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|subscriptions tray|memory scan|memory plan|provenance|verify [opciones] | rollback <install-manifest.json>')
+  console.log('Uso: qz-kit install|update|plan|doctor|parity|instructions-plan|instructions-merge|ecosystem|preflight|readiness|backup-plan|backup-clients|external-plan|external-preview|external-receipt|external-backup|external-backup-status|external-bootstrap|external-apply|clean|subscriptions validate|subscriptions refresh|subscriptions serve|subscriptions install [--plan|--apply]|subscriptions tray|memory scan|memory plan|provenance|verify [opciones] | rollback <install-manifest.json>')
   process.exit(0)
 }
 const result = spawnSync(process.execPath, [script, ...mapped], { stdio: 'inherit' })

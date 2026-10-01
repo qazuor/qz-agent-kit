@@ -52,8 +52,14 @@ const qzClaudeStatuslineSource = resolve(root, 'scripts/qz-claude-statusline.mjs
 const qzSubscriptionTraySource = resolve(root, 'scripts/subscription-tray.py')
 const qzShimSource = resolve(root, 'scripts/qz-command-shim.sh')
 const instructionsSource = resolve(root, 'source/instructions/AGENTS.md')
+const outputStyleSource = resolve(root, 'source/skills/qz-output-style/SKILL.md')
 const agentFiles = readdirSync(resolve(root, 'source/agents')).filter((name) => name.startsWith('qz-') && name.endsWith('.md')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/agents', name) }))
 const guardFiles = readdirSync(resolve(root, 'source/guards')).filter((name) => name.endsWith('.sh')).sort().map((name) => ({ id: name.slice(0, -3), sourcePath: resolve(root, 'source/guards', name) }))
+const portableSkillFiles = readdirSync(resolve(root, 'source/skills'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && entry.name.startsWith('qz-') && !['qz-agents', 'qz-commands'].includes(entry.name))
+  .flatMap((entry) => readdirSync(resolve(root, 'source/skills', entry.name), { withFileTypes: true })
+    .filter((file) => file.isFile() && file.name.endsWith('.md'))
+    .map((file) => ({ id: entry.name, relativePath: file.name, sourcePath: resolve(root, 'source/skills', entry.name, file.name) })))
 const detect = (name) => {
   const result = spawnSync('command', ['-v', executable[name]], { shell: true, encoding: 'utf8' })
   return { detected: result.status === 0, executable: result.status === 0 ? result.stdout.trim() : null }
@@ -84,8 +90,13 @@ for (const client of selected) {
   }
   if (client === 'codex') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.codex/skills/qz-commands/SKILL.md'), executable: false })
   if (client === 'gentle-shell') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.gentle-shell/agent/skills/qz-commands/SKILL.md'), executable: false })
+  for (const skill of portableSkillFiles) {
+    const skillRoot = client === 'opencode' ? join(home, '.config/opencode/skills') : client === 'claude' ? join(home, '.claude/skills') : client === 'codex' ? join(home, '.codex/skills') : join(home, '.gentle-shell/agent/skills')
+    targets.push({ client, id: skill.id, source: skill.sourcePath, target: join(skillRoot, skill.id, skill.relativePath), executable: false })
+  }
   if (client === 'opencode') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.config/opencode/skills/qz-commands/SKILL.md'), executable: false })
   if (client === 'claude') targets.push({ client, id: 'qz-commands-skill', source: skillSource, target: join(home, '.claude/skills/qz-commands/SKILL.md'), executable: false })
+  if (client === 'claude') targets.push({ client, id: 'qz-output-style-native', source: outputStyleSource, target: join(home, '.claude/output-styles/qz-output-style.md'), executable: false })
   if (client === 'codex') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.codex/skills/qz-agents/SKILL.md'), executable: false })
   if (client === 'opencode') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.config/opencode/skills/qz-agents/SKILL.md'), executable: false })
   if (client === 'claude') targets.push({ client, id: 'qz-agents-skill', source: agentsSkillSource, target: join(home, '.claude/skills/qz-agents/SKILL.md'), executable: false })
@@ -95,7 +106,7 @@ for (const client of selected) {
     targets.push({ client, id: agent.id, source: agent.sourcePath, target: agentTarget, executable: false })
   }
 }
-const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(qzEngramSource) ? ['qz-engram'] : []), ...(!existsSync(qzGentleSource) ? ['qz-gentle'] : []), ...(!existsSync(qzClaudeStatuslineSource) ? ['qz-claude-statusline'] : []), ...(!existsSync(qzSubscriptionTraySource) ? ['qz-subscription-tray'] : []), ...(!existsSync(qzShimSource) ? ['qz-command-shim'] : []), ...(!existsSync(genericStartIssueSource) ? ['generic-start-issue'] : []), ...(!existsSync(genericCloseIssueSource) ? ['generic-close-issue'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...guardFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
+const missing = [...(!existsSync(qzSource) ? ['qz'] : []), ...(!existsSync(qzEngramSource) ? ['qz-engram'] : []), ...(!existsSync(qzGentleSource) ? ['qz-gentle'] : []), ...(!existsSync(qzClaudeStatuslineSource) ? ['qz-claude-statusline'] : []), ...(!existsSync(qzSubscriptionTraySource) ? ['qz-subscription-tray'] : []), ...(!existsSync(qzShimSource) ? ['qz-command-shim'] : []), ...(!existsSync(genericStartIssueSource) ? ['generic-start-issue'] : []), ...(!existsSync(genericCloseIssueSource) ? ['generic-close-issue'] : []), ...(!existsSync(instructionsSource) ? ['AGENTS'] : []), ...(!existsSync(outputStyleSource) ? ['qz-output-style-native'] : []), ...guardFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...commandFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...agentFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...portableSkillFiles.filter((entry) => !existsSync(entry.sourcePath)).map((entry) => entry.id), ...(!existsSync(skillSource) ? ['qz-commands-skill'] : []), ...(!existsSync(agentsSkillSource) ? ['qz-agents-skill'] : [])]
 const drift = targets.filter(({ source, target }) => existsSync(target) && createHash('sha256').update(readFileSync(source)).digest('hex') !== createHash('sha256').update(readFileSync(target)).digest('hex')).map(({ client, id, target }) => ({ client, id, target }))
 const contentDrift = contentManifest
   ? contentManifest.content.filter(({ path, sha256 }) => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex') !== sha256).map(({ path }) => path)

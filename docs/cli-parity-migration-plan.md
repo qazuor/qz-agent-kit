@@ -21,6 +21,10 @@ La fuente de verdad será versionada. Cada harness recibirá una adaptación com
 7. Secretos, tokens y credenciales nunca formarán parte de la fuente de verdad ni serán copiados por el instalador.
 8. Cada elemento existente se decidirá individualmente: migrar a todos, migrar a algunos, dejar sólo en Claude, adaptar, reemplazar o eliminar.
 9. No se forzará paridad ficticia: una función se marcará como portable, adaptada, parcial, Claude-only, no soportada o eliminada.
+10. `agents-sdk` y `sandbox-sdk` se conservan únicamente en Claude Code; no se proyectan desde qz-kit.
+11. `go-testing` se elimina de los cuatro clientes.
+12. El estilo conversacional común vive en qz-agent-kit y se adapta a los cuatro CLI; `gentleman.md` no será una excepción exclusiva de Claude.
+13. Las reglas semánticas de permisos viven en qz-agent-kit y cada harness recibe un adapter verificable.
 
 ## Harnesses soportados
 
@@ -705,4 +709,3 @@ Se aprobaron todas las recomendaciones:
 
 Fase de decisiones conceptuales: completa.
 Próximo bloque: matriz consolidada de migración.
-

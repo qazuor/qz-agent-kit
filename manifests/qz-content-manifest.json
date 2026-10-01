@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "qz-content-pack",
   "sourceOfTruth": "source",
-  "generatedAt": "2026-09-30T22:19:37.152Z",
+  "generatedAt": "2026-10-01T09:15:03.331Z",
   "content": [
     {
       "path": "source/agents/qz-implementation.md",
@@ -66,19 +66,35 @@
     },
     {
       "path": "source/instructions/AGENTS.md",
-      "sha256": "6ec8b49562bb1936e933d15ec2cfd37bf2d24919b6cbe15a036a4e024c79914c"
+      "sha256": "cff2fd3a3c9e892ecbae9284921993af66a2d7c319b0c87e9a4a82825ecb69c6"
     },
     {
       "path": "source/skills/qz-agents/SKILL.md",
       "sha256": "a908fc48a19d14885666f27fe0b3b600da513da82eda2ab400ebd6aad4af045e"
     },
     {
+      "path": "source/skills/qz-cloudflare/SKILL.md",
+      "sha256": "df38bbf03389351316e8764f478230237f6f9240d2f35dd033aa71f2f9ec9efe"
+    },
+    {
       "path": "source/skills/qz-commands/SKILL.md",
       "sha256": "358b97f9a213465b8758c00993c559ef9212e83ff54eb7aa1712f116d0cf6689"
     },
     {
+      "path": "source/skills/qz-env-safety/SKILL.md",
+      "sha256": "19b38bacdc185b6272fd171e5c218e26e6f490132b755bb7411b7dfc9c7fbdd5"
+    },
+    {
       "path": "source/skills/qz-linear-backlog/SKILL.md",
       "sha256": "4b935a35f804ee9875dff9bdaf079376930aefd14bc4c72326e456110fea21f9"
+    },
+    {
+      "path": "source/skills/qz-output-style/SKILL.md",
+      "sha256": "451dad08a2adabb4a7c57f50b57ff996ba1b5141e7ba9effbeba2928dbf2ae96"
+    },
+    {
+      "path": "source/skills/qz-permissions/SKILL.md",
+      "sha256": "b598e0be163aab15714119f3236c8efa5f88c5255451b47673b5c82ac7fda6ab"
     },
     {
       "path": "source/skills/qz-refine-spec/SKILL.md",
@@ -91,6 +107,10 @@
     {
       "path": "source/skills/qz-shell-safety/SKILL.md",
       "sha256": "2a4e3e30527354adbd9dac80cf665b32fb92fb4abed3012133df72d9d507bc72"
+    },
+    {
+      "path": "source/skills/qz-web-perf/SKILL.md",
+      "sha256": "8a057d10ad76b89edf51a8b473896cb35d6741ce8f1355257d318f2533c15b13"
     }
   ]
 }

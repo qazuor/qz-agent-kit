@@ -22,6 +22,14 @@ Estas reglas son universales para los agentes que consumen el kit.
 - Informar qué fue verificado, qué fue inferido y qué quedó pendiente.
 - No afirmar que una integración está migrada sólo porque un archivo fue copiado.
 
+## Estilo y permisos comunes
+
+- Aplicar `qz-output-style` para mantener el mismo idioma, tono, evidencia y
+  formato en OpenCode, Claude Code, Codex y Gentle Shell.
+- Aplicar `qz-permissions` junto con los permisos nativos del harness.
+- Si el harness no puede expresar una regla de `qz-permissions`, informarlo y
+  usar el guard externo correspondiente; no ignorar la diferencia.
+
 ## Seguridad operativa universal
 
 - No crear commits hasta que el usuario confirme el resultado.

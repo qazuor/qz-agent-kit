@@ -30,7 +30,8 @@ const roots = {
   claude: [
     ['commands', join(home, '.claude/commands')],
     ['skills', join(home, '.claude/skills')],
-    ['agents', join(home, '.claude/agents')]
+    ['agents', join(home, '.claude/agents')],
+    ['output-styles', join(home, '.claude/output-styles')]
   ],
   codex: [
     ['skills', join(home, '.codex/skills')],
@@ -41,6 +42,16 @@ const roots = {
     ['skills', join(home, '.gentle-shell/agent/skills')],
     ['agents', join(home, '.gentle-shell/agent/agents')]
   ]
+}
+const extraRoots = {
+  opencode: [],
+  claude: [
+    ['rtk', join(home, '.claude/RTK.md')],
+    ['rtk-hook', join(home, '.claude/hooks/rtk-rewrite.sh')],
+    ['rtk-hook', join(home, '.claude/hooks/.rtk-hook.sha256')]
+  ],
+  codex: [],
+  'gentle-shell': []
 }
 
 function normalize(value) {
@@ -96,11 +107,13 @@ function categoryForPath(client, path) {
 function recommendation(client, category, path) {
   const gentle = gentleManaged.get(path)
   if (gentle) return { recommendation: 'reemplazado-por-gentle', reason: `recurso administrado por ${gentle.source}`, confidence: 'alta', replacement: 'instalación oficial de Gentle AI' }
+  if (/(^|[/._-])rtk([/._-]|$)/i.test(path)) return { recommendation: 'eliminar', reason: 'RTK retirado del stack de todos los CLI', confidence: 'alta', replacement: null }
   const relativeName = relative(roots[client].find(([kind, dir]) => kind === category)?.[1] || home, path)
   const base = relativeName.split('/').at(-1) || relativeName
   const parts = relativeName.split('/')
   const identity = category === 'skills' && parts.length > 1 ? parts.at(-2) : base
   const normalized = normalize(identity)
+  if (normalized === 'gotesting') return { recommendation: 'eliminar', reason: 'go-testing retirado del stack; no hay repositorio Go objetivo', confidence: 'alta', replacement: null }
   if (normalized.startsWith('qz')) return { recommendation: 'eliminar', reason: 'recurso administrado por qz-agent-kit', confidence: 'alta', replacement: null }
   for (const [candidate, id] of knownNames) {
     if (candidate === normalized || candidate.replace(/^qz/, '') === normalized || normalized === candidate.replace(/^hops/, '')) {
@@ -123,6 +136,15 @@ function buildPlan() {
         items.push({ id: createHash('sha256').update(path).digest('hex').slice(0, 12), client, category, path, ...advice, protected: false })
       }
     }
+    for (const [category, path] of extraRoots[client] || []) {
+      if (!existsSync(path) || !lstatSync(path).isFile() || protectedPattern.test(path)) continue
+      const advice = recommendation(client, category, path)
+      items.push({ id: createHash('sha256').update(path).digest('hex').slice(0, 12), client, category, path, ...advice, protected: false })
+    }
+  }
+  for (const path of walk(join(home, '.config/rtk'))) {
+    const advice = recommendation('kit', 'rtk', path)
+    items.push({ id: createHash('sha256').update(path).digest('hex').slice(0, 12), client: 'kit', category: 'rtk', path, ...advice, protected: false })
   }
   for (const [path, metadata] of gentleManaged) {
     if (items.some((item) => item.path === path)) continue
@@ -132,6 +154,7 @@ function buildPlan() {
 }
 
 if (!has('--plan') && !has('--apply')) throw new Error('elegí --plan o --apply')
+const approveAll = has('--approve-all')
 const plan = buildPlan()
 if (has('--plan')) {
   // The interactive qz-kit menu only needs a bounded preview. Keeping the
@@ -141,7 +164,25 @@ if (has('--plan')) {
   else console.log(JSON.stringify(plan, null, 2))
   process.exit(0)
 }
-if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('clean --apply requiere una terminal interactiva para confirmar cada elemento')
+if (approveAll) {
+  const approved = plan.items.filter((item) => ['eliminar', 'reemplazado-por-qz', 'reemplazado-por-gentle'].includes(item.recommendation))
+  mkdirSync(backupRoot, { recursive: true })
+  const removed = []
+  for (const item of approved) {
+    if (!existsSync(item.path) || !lstatSync(item.path).isFile()) continue
+    const backup = join(backupRoot, item.client, relative(home, item.path))
+    mkdirSync(dirname(backup), { recursive: true })
+    copyFileSync(item.path, backup)
+    rmSync(item.path, { force: true })
+    removed.push({ path: item.path, backup, recommendation: item.recommendation })
+  }
+  const receipt = { ...plan, approval: 'approve-all', approved: approved.map(({ path, client, category, recommendation, replacement }) => ({ path, client, category, recommendation, replacement })), removed, backup: backupRoot, mutations: removed.map((entry) => entry.path), secretValues: 'not-read' }
+  const receiptPath = join(backupRoot, 'clean-receipt.json')
+  writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, { mode: 0o600 })
+  console.log(JSON.stringify({ ...receipt, receipt: receiptPath }, null, 2))
+  process.exit(0)
+}
+if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('clean --apply requiere una terminal interactiva para confirmar cada elemento; use --approve-all sólo para candidatos ya clasificados')
 intro('qz-agent-kit · limpieza total interactiva')
 const approved = []
 for (const item of plan.items) {

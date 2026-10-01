@@ -19,6 +19,7 @@ parse(execFileSync(qz, ['context', 'smoke'], { cwd: fixture, encoding: 'utf8' })
 
 const renderRoot = mkdtempSync(join(tmpdir(), 'qz-render-'))
 const installHome = mkdtempSync(join(tmpdir(), 'qz-install-'))
+const wizardHome = mkdtempSync(join(tmpdir(), 'qz-wizard-home-'))
 const configRoot = mkdtempSync(join(tmpdir(), 'qz-config-'))
 const invalidUpdateHome = mkdtempSync(join(tmpdir(), 'qz-invalid-update-home-'))
 const invalidProject = mkdtempSync(join(tmpdir(), 'qz-invalid-project-'))
@@ -26,6 +27,12 @@ const registryHome = mkdtempSync(join(tmpdir(), 'qz-registry-'))
 const fallbackRoot = mkdtempSync(join(tmpdir(), 'qz-fallback-'))
 const externalPlan = join(configRoot, 'install-plan.json')
 try {
+  const wizardInput = join(configRoot, 'wizard-input.json')
+  writeFileSync(wizardInput, `${JSON.stringify({ schemaVersion: 1, home: wizardHome, clients: [], components: [], providers: [] })}\n`)
+  const wizardRun = spawnSync(node, [resolve(root, 'scripts/install-wizard.mjs'), '--from', wizardInput, '--home', wizardHome, '--apply'], { cwd: root, encoding: 'utf8' })
+  if (wizardRun.status !== 0 || !existsSync(join(wizardHome, '.config/qz-agent-kit/install-plan.json')) || existsSync(join(configRoot, '.config/qz-agent-kit/install-plan.json'))) {
+    throw new Error(`install-wizard no aisló su plan bajo --home: ${wizardRun.stderr}`)
+  }
   const memoryFixture = join(configRoot, 'claude-memory')
   mkdirSync(memoryFixture, { recursive: true })
   writeFileSync(join(memoryFixture, 'feedback_example.md'), '# Feedback\nUsar el verificador del proyecto.\n')
@@ -247,6 +254,22 @@ try {
   if (synchronized.targetDetails.some((target) => target.state !== 'current')) {
     throw new Error('el plan no marcó como current una instalación recién aplicada')
   }
+  const parityBefore = spawnSync(node, [resolve(root, 'scripts/parity.mjs'), '--home', installHome, '--json'], { cwd: root, encoding: 'utf8' })
+  const parityBeforeResult = parse(parityBefore.stdout)
+  if (parityBefore.status !== 0 || parityBeforeResult.portable.missing !== 0 || parityBeforeResult.nativeOutputStyle.state !== 'current') {
+    throw new Error('parity no detectó correctamente una instalación aislada')
+  }
+  const instructionsBefore = spawnSync(node, [resolve(root, 'scripts/instructions-merge.mjs'), '--home', installHome, '--plan', '--json'], { cwd: root, encoding: 'utf8' })
+  const instructionsBeforeResult = parse(instructionsBefore.stdout)
+  if (instructionsBefore.status !== 1 || instructionsBeforeResult.targets.some((target) => target.state !== 'create-required')) {
+    throw new Error('instructions-merge --plan no detectó destinos nuevos')
+  }
+  const instructionsApplied = parse(execFileSync(node, [resolve(root, 'scripts/instructions-merge.mjs'), '--home', installHome, '--apply', '--approve', 'QZ_INSTRUCTIONS_MERGE', '--json'], { cwd: root, encoding: 'utf8' }))
+  if (!instructionsApplied.backup || !existsSync(join(installHome, '.config/opencode/AGENTS.md')) || !existsSync(join(installHome, '.codex/AGENTS.md'))) {
+    throw new Error('instructions-merge no creó sus destinos aislados y backup')
+  }
+  const instructionsOpenCode = readFileSync(join(installHome, '.config/opencode/AGENTS.md'), 'utf8')
+  if (!instructionsOpenCode.includes('qz-agent-kit:instructions:start')) throw new Error('instructions-merge no escribió el bloque delimitado')
   mkdirSync(join(installHome, '.config/qz-agent-kit'), { recursive: true })
   writeFileSync(join(installHome, '.config/qz-agent-kit/install-plan.json'), `${JSON.stringify({ schemaVersion: 1, clients: ['opencode'], components: [], providers: [] })}\n`)
   const updateCheck = parse(execFileSync(resolve(root, 'bin/qz-kit'), ['update', '--check', '--home', installHome], { cwd: root, encoding: 'utf8' }))
@@ -302,6 +325,7 @@ try {
 } finally {
   rmSync(renderRoot, { recursive: true, force: true })
   rmSync(installHome, { recursive: true, force: true })
+  rmSync(wizardHome, { recursive: true, force: true })
   rmSync(configRoot, { recursive: true, force: true })
   rmSync(invalidUpdateHome, { recursive: true, force: true })
   rmSync(invalidProject, { recursive: true, force: true })

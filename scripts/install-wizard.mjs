@@ -11,10 +11,12 @@ const root = resolve(new URL('..', import.meta.url).pathname)
 const defaultHome = homedir()
 const packageSourceHash = createHash('sha256').update(readFileSync(resolve(root, 'package.json'))).digest('hex')
 const gitRevision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
-const manifestPath = resolve(process.env.QZ_KIT_HOME || defaultHome, '.config/qz-agent-kit/install-plan.json')
 const wizardArgs = process.argv.slice(2)
 const hasArg = (flag) => wizardArgs.includes(flag)
 const argValue = (flag) => { const i = wizardArgs.indexOf(flag); return i >= 0 ? wizardArgs[i + 1] : undefined }
+const importedPlanPath = argValue('--from')
+const requestedHome = argValue('--home')
+const initialManifestPath = resolve(process.env.QZ_KIT_HOME || requestedHome || defaultHome, '.config/qz-agent-kit/install-plan.json')
 const clients = [
   { value: 'opencode', label: 'OpenCode', hint: 'comandos, skills y agentes qz' },
   { value: 'gentle-shell', label: 'Gentle Shell', hint: 'prompts, skills y agentes qz' },
@@ -136,11 +138,11 @@ const runExternalComponents = async (plan) => {
   }
 }
 
-const importedPlanPath = argValue('--from')
-const previous = readPlan(importedPlanPath ? resolve(importedPlanPath) : manifestPath)
+const previous = readPlan(importedPlanPath ? resolve(importedPlanPath) : initialManifestPath)
 const nonInteractive = hasArg('--non-interactive') || Boolean(importedPlanPath)
-if (nonInteractive && !previous) throw new Error(`no se encontró un plan válido: ${importedPlanPath || manifestPath}`)
+if (nonInteractive && !previous) throw new Error(`no se encontró un plan válido: ${importedPlanPath || initialManifestPath}`)
 const targetHome = resolve(argValue('--home') || (importedPlanPath ? defaultHome : previous?.home || defaultHome))
+const manifestPath = resolve(process.env.QZ_KIT_HOME || targetHome, '.config/qz-agent-kit/install-plan.json')
 intro('qz-agent-kit · instalación guiada')
 if (previous) console.log(`Plan cargado: ${importedPlanPath ? resolve(importedPlanPath) : manifestPath}`)
 const detectedClients = clients.filter(({ value }) => detect(value)).map(({ value }) => value)
@@ -155,7 +157,7 @@ const plan = {
   kit: '@qz/agent-kit',
   createdAt: previous?.createdAt || new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  sourcePackageHash,
+  sourcePackageHash: packageSourceHash,
   sourceCommit: gitRevision.status === 0 ? gitRevision.stdout.trim() : null,
   home: targetHome,
   clients: selectedClients,
