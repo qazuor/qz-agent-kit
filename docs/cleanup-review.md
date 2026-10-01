@@ -150,6 +150,10 @@ Recomendación: conservarlos inicialmente y revisar luego los SDD, porque ODD es
 
 ## Claude Code
 
+### Verificación de procedencia Gentle AI
+
+No hay entradas de Claude Code en ninguno de los snapshots nativos de Gentle AI inspeccionados. Por lo tanto, los recursos externos de Claude no se pasan a eliminación por este motivo; siguen requiriendo una decisión independiente.
+
 ### Eliminar
 
 #### Commands
@@ -227,6 +231,10 @@ También quedan para una evaluación separada los hooks de CodeGraph, Engram, RT
 
 ## Codex
 
+### Verificación de procedencia Gentle AI
+
+No hay entradas de Codex en ninguno de los snapshots nativos de Gentle AI inspeccionados. Sus skills externos no se pasan a eliminación por este motivo; siguen requiriendo una decisión independiente.
+
 ### Eliminar
 
 Codex tiene la capa qz instalada como skills:
@@ -265,6 +273,34 @@ Recomendación: conservarlos. No hay evidencia suficiente para eliminarlos.
 No se tocarán `config.toml`, reglas sandbox, autenticación, bases SQLite internas, historial, snapshots ni estado de sesiones.
 
 ## Gentle Shell
+
+### Recursos confirmados como administrados por Gentle
+
+El manifiesto `~/.gentle-shell/agent/gentle-ai/managed-assets.json` confirma como administrados por Gentle los siguientes recursos. Deben pasar a la eliminación condicionada a una reinstalación correcta de Gentle Shell:
+
+#### Agents
+
+- `gentle-ai-explore.md`
+- `gentle-ai-verify.md`
+- `gentle-ai-worker.md`
+- `jd-fix-agent.md`
+- `jd-judge-a.md`
+- `jd-judge-b.md`
+- `review-readability.md`
+- `review-reliability.md`
+- `review-resilience.md`
+- `review-risk.md`
+
+#### Chain
+
+- `chains/4r-review.chain.md`
+
+Además, los snapshots nativos de Gentle AI registran como creados por su instalación:
+
+- `APPEND_SYSTEM.md`
+- `mcp.json`
+
+Estos dos archivos son configuración de Gentle Shell y no aparecen en el inventario estándar de commands/skills/agents/prompts; también deben limpiarse únicamente después de comprobar que la reinstalación de Gentle los regenera correctamente.
 
 ### Eliminar
 
