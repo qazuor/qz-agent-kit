@@ -22,6 +22,7 @@ const choice = await select({
     { value: 'doctor', label: 'Ejecutar doctor', hint: 'diagnóstico del ecosistema' },
     { value: 'verify', label: 'Verificar seguridad y estado', hint: 'comprobaciones read-only' },
     { value: 'memory', label: 'Revisar memoria', hint: 'escaneo read-only de memorias Claude' },
+    { value: 'clean', label: 'Planificar limpieza total', hint: 'clasifica recursos legacy; no borra sin confirmación' },
     { value: 'help', label: 'Ver ayuda', hint: 'comandos disponibles' },
     { value: 'exit', label: 'Salir' }
   ]
@@ -43,6 +44,8 @@ const args = choice === 'install'
           ? ['verify']
           : choice === 'memory'
             ? ['memory', 'scan', '--json']
+            : choice === 'clean'
+              ? ['clean', '--plan']
             : ['--help']
 const result = spawnSync(process.execPath, [bin, ...args], { stdio: 'inherit' })
 process.exit(result.status ?? 1)

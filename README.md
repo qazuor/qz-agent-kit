@@ -186,6 +186,22 @@ selección pendiente hasta que exista un adapter verificable para cada uno. El
 wizard nunca lee, copia, limpia ni migra credenciales, `.env` o la base de
 Engram.
 
+La instalación normal reconcilia únicamente archivos administrados por qz. Si
+una versión nueva deja de administrar un archivo `qz-*`, `qz-kit install
+--check` lo informa como obsoleto y `--apply` lo respalda y elimina. Los
+recursos legacy que nunca administró qz-agent-kit quedan intactos.
+
+Para analizar una limpieza total de recursos legacy sin tocar nada:
+
+```bash
+qz-kit clean --plan --client all
+```
+
+El modo `qz-kit clean --apply` muestra cada elemento candidato y pide una
+confirmación individual. Sólo considera commands, skills, agents y prompts de
+los cuatro CLI; excluye auth, settings, MCPs, sesiones, memoria, bases y rutas
+con nombres sensibles. Cada elemento aprobado se respalda antes de eliminarse.
+
 Para automatización se conservan `--plan`, `--check` y `--apply`. La instalación
 interactiva equivale a elegir clientes y luego ejecutar `--apply`; no reemplaza
 el plan read-only ni el rollback.

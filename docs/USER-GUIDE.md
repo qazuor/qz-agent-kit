@@ -50,6 +50,11 @@ qz-kit verify
 
 El flujo conserva un registro de procedencia y compara el estado instalado con la fuente. `--check` es de lectura; `--plan` muestra acciones; `update` aplica la actualización. Antes de una actualización importante conviene guardar el plan y revisar el diff. Para volver atrás se usa la versión anterior del repositorio y se ejecuta nuevamente el instalador; no se borran automáticamente proyectos, worktrees, Git, DBs ni memorias Engram.
 
+Los archivos `qz-*` que fueron administrados por una instalación anterior y ya
+no forman parte del manifest se informan como obsoletos en `--check` y se
+respaldan antes de eliminarse durante `--apply`. Los archivos legacy ajenos al
+kit no se eliminan automáticamente.
+
 ## Comandos principales
 
 | Comando | Uso | Efecto |
@@ -61,6 +66,8 @@ El flujo conserva un registro de procedencia y compara el estado instalado con l
 | `qz-kit project init` | registrar un proyecto | mutante en el proyecto |
 | `qz-kit project sync` | sincronizar adapter y comandos | mutante en el proyecto |
 | `qz-kit memory scan` | relevar memoria de Claude y clasificar candidatos | sólo lectura |
+| `qz-kit clean --plan` | inventariar y recomendar limpieza legacy | lectura |
+| `qz-kit clean --apply` | confirmar y limpiar elementos seleccionados | mutante, interactivo |
 | `qz-kit external list` | ver adapters externos | lectura |
 | `qz-kit external doctor` | diagnosticar adapters | lectura |
 | `qz-kit external-plan` | mostrar acciones externas declaradas | lectura |

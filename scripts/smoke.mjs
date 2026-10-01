@@ -232,6 +232,17 @@ try {
   if (apply.missing.length || apply.contentDrift.length || !existsSync(join(installHome, '.local/bin/qz')) || !existsSync(join(installHome, '.local/bin/qz-start-issue'))) {
     throw new Error('instalación smoke incompleta')
   }
+  const stableInstallManifest = join(installHome, '.local/state/qz-agent-kit/install-manifest.json')
+  const staleTarget = join(installHome, '.config/opencode/commands/qz-retired.md')
+  const stableInstall = JSON.parse(readFileSync(stableInstallManifest, 'utf8'))
+  writeFileSync(staleTarget, 'legacy qz fixture\n')
+  stableInstall.targets.push({ client: 'opencode', id: 'qz-retired', target: staleTarget })
+  writeFileSync(stableInstallManifest, `${JSON.stringify(stableInstall)}\n`)
+  const staleCheck = spawnSync(node, [resolve(root, 'scripts/install.mjs'), '--check', '--home', installHome], { cwd: root, encoding: 'utf8' })
+  const staleCheckResult = parse(staleCheck.stdout)
+  if (staleCheck.status === 0 || !staleCheckResult.stale.some((entry) => entry.target === staleTarget)) throw new Error('install --check no detectó un qz-* obsoleto')
+  const staleApply = parse(run('scripts/install.mjs', ['--apply', '--home', installHome]))
+  if (existsSync(staleTarget) || !staleApply.removed.includes(staleTarget)) throw new Error('install --apply no eliminó el qz-* obsoleto')
   const synchronized = parse(run('scripts/install.mjs', ['--plan', '--home', installHome]))
   if (synchronized.targetDetails.some((target) => target.state !== 'current')) {
     throw new Error('el plan no marcó como current una instalación recién aplicada')

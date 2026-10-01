@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { chmodSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { chmodSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
@@ -28,6 +28,8 @@ const selected = requestedClients === 'none' ? [] : !requestedClients || request
 if (selected.length === 0 && requestedClients !== 'none') throw new Error('--client no puede estar vacío')
 if (selected.some((name) => !names.includes(name))) throw new Error(`cliente inválido: ${selected.join(', ')}`)
 const home = resolve(value('--home') || homedir())
+const stateRoot = join(home, '.local/state/qz-agent-kit')
+const currentManifestPath = join(stateRoot, 'install-manifest.json')
 const destination = {
   opencode: join(home, '.config/opencode/commands'),
   claude: join(home, '.claude/commands'),
@@ -98,6 +100,20 @@ const drift = targets.filter(({ source, target }) => existsSync(target) && creat
 const contentDrift = contentManifest
   ? contentManifest.content.filter(({ path, sha256 }) => createHash('sha256').update(readFileSync(resolve(root, path))).digest('hex') !== sha256).map(({ path }) => path)
   : ['manifests/qz-content-manifest.json']
+const currentTargetKeys = new Set(targets.map(({ client, id, target }) => `${client}\0${id}\0${target}`))
+let previousManifest = null
+if (existsSync(currentManifestPath)) {
+  try {
+    const parsed = JSON.parse(readFileSync(currentManifestPath, 'utf8'))
+    if (parsed?.secrets === 'values-not-read' && Array.isArray(parsed.targets)) previousManifest = parsed
+  } catch {
+    previousManifest = null
+  }
+}
+const staleTargets = (previousManifest?.targets || [])
+  .filter((entry) => entry && typeof entry.target === 'string' && (!selected.length || selected.includes(entry.client) || entry.client === 'kit'))
+  .filter((entry) => !currentTargetKeys.has(`${entry.client}\0${entry.id}\0${entry.target}`))
+  .filter((entry) => existsSync(entry.target))
 const result = {
   mode: has('--apply') ? 'apply' : has('--check') ? 'check' : 'plan',
   kit: manifest.manifestId,
@@ -119,6 +135,7 @@ const result = {
   })),
   missing,
   drift,
+  stale: staleTargets.map(({ client, id, target }) => ({ client, id, target })),
   contentDrift,
   mutations: has('--apply') ? 'scoped qz-managed files only' : 'none',
   secretValues: 'not-read'
@@ -127,7 +144,7 @@ const result = {
 if (!has('--apply')) {
   console.log(JSON.stringify(result, null, 2))
   const targetDrift = result.targetDetails.some((target) => target.state !== 'current')
-  process.exit(missing.length || contentDrift.length || (has('--check') && targetDrift) ? 1 : 0)
+  process.exit(missing.length || contentDrift.length || (has('--check') && (targetDrift || staleTargets.length)) ? 1 : 0)
 }
 if (missing.length) throw new Error(`faltan fuentes: ${missing.join(', ')}`)
 if (contentDrift.length) throw new Error(`content manifest desactualizado; ejecutar npm run manifest y revisar: ${contentDrift.join(', ')}`)
@@ -135,6 +152,7 @@ if (contentDrift.length) throw new Error(`content manifest desactualizado; ejecu
 const backupRoot = join(home, '.local/state/qz-agent-kit/backups', new Date().toISOString().replaceAll(':', '-'))
 mkdirSync(backupRoot, { recursive: true })
 const backed = []
+const removed = []
 for (const item of targets) {
   if (existsSync(item.target)) {
     const backup = join(backupRoot, item.client, item.id + (item.executable ? '' : '.md'))
@@ -146,9 +164,19 @@ for (const item of targets) {
   copyFileSync(item.source, item.target)
   if (item.executable) chmodSync(item.target, 0o755)
 }
-const installManifest = { kit: manifest.manifestId, kitVersion: packageJson.version, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, rollback: backupRoot, secrets: 'values-not-read' }
+for (const item of staleTargets) {
+  const backup = join(backupRoot, 'stale', item.client, item.id + (item.target.endsWith('.md') ? '.md' : ''))
+  mkdirSync(dirname(backup), { recursive: true })
+  copyFileSync(item.target, backup)
+  rmSync(item.target, { force: true })
+  backed.push({ target: item.target, backup, stale: true })
+  removed.push(item.target)
+}
+const installManifest = { kit: manifest.manifestId, kitVersion: packageJson.version, sourceVersion: manifest.schemaVersion, installedAt: new Date().toISOString(), clients: selected, targets: targets.map(({ client, id, target }) => ({ client, id, target })), backups: backed, removed, rollback: backupRoot, secrets: 'values-not-read' }
 const gitRevision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
 installManifest.sourcePackageHash = packageSourceHash
 installManifest.sourceCommit = gitRevision.status === 0 ? gitRevision.stdout.trim() : null
 writeFileSync(join(backupRoot, 'install-manifest.json'), `${JSON.stringify(installManifest, null, 2)}\n`)
-console.log(JSON.stringify({ ...result, backup: backupRoot, installed: targets.length, rollbackManifest: join(backupRoot, 'install-manifest.json') }, null, 2))
+mkdirSync(stateRoot, { recursive: true })
+writeFileSync(currentManifestPath, `${JSON.stringify(installManifest, null, 2)}\n`, { mode: 0o600 })
+console.log(JSON.stringify({ ...result, backup: backupRoot, installed: targets.length, removed, rollbackManifest: join(backupRoot, 'install-manifest.json') }, null, 2))
