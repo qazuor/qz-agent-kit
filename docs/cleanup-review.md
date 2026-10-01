@@ -20,25 +20,36 @@ Se elimina la configuración vieja cuando se haya verificado el backup y la rein
 4. **Context7**: configuraciones MCP antiguas (`~/.claude/mcp/context7.json`, entradas `context7` en `opencode.json` y equivalentes de otros clientes) y skills duplicadas como `context7-mcp`. No se borra ningún token ni archivo de autenticación. El adapter de Context7 queda como componente seleccionable de qz-kit y deberá verificarse durante la reinstalación.
 5. **Workflows que sólo duplican qz-kit**: comandos legacy sin prefijo, skills de worktree/issue/handoff que únicamente envolvían el flujo qz y aliases duplicados. Se eliminan cuando el inventario confirme que son copias y no una personalización independiente.
 
+### Decisiones incorporadas después de la primera revisión
+
+- **RTK**: pasa directamente a `ELIMINAR` en cualquier cliente donde esté instalado. No formará parte del stack nuevo.
+- **CodeGraph**: deja de ser una instalación suelta de Claude. Se incorpora como componente externo administrado por qz-kit, con adapter por cliente, backup, detección, versión y doctor. Hasta que ese adapter exista, no se elimina la instalación actual sin un recibo de migración.
+- **Cloudflare y relacionados** (`cloudflare`, `cloudflare-email-service`, `durable-objects`, `workers-best-practices`, `wrangler`): pasan a candidatos de la fuente de verdad de qz-kit. Se debe decidir entre importar upstream versionado o mantener skills propias derivadas; no se instalarán copias independientes en cada CLI.
+- **web-perf**: se evaluará como skill portable de qz-kit, conservando la dependencia de navegador/DevTools sólo cuando el cliente la soporte.
+- **Validación Bash/env**: se evaluará como guard/skill portable de qz-kit. Se conservarán las reglas que no estén cubiertas por `qz verify`, `qz preflight` o los guards de Hospeda.
+- **Output styles, rules y permisos locales**: se evaluarán como configuración portable con adapters. Se migrarán únicamente las reglas de comportamiento y seguridad; no se copiarán archivos internos incompatibles entre clientes.
+- **Prompts `hops-*`**: si el adapter de Hospeda ya incluye su contraparte funcional, los prompts instalados actualmente pasan a `ELIMINAR`. No se mantendrán dos implementaciones del mismo workflow.
+- **Agentes `jd-*` y `review-*`**: el snapshot local de Gentle AI 3.7.0 confirma que Gentle Shell los administra hoy. Antes de borrarlos se debe ejecutar un `gentle-ai install --dry-run` de la versión vigente y comprobar si siguen siendo parte del preset o fueron deprecados. Si la instalación limpia los regenera, se eliminan las copias actuales; si ya no los regenera, quedan en `A EVALUAR` como legacy explícito.
+
 ### `A EVALUAR` (no tienen reemplazo confirmado)
 
 Estos recursos no se eliminan ahora. La decisión se toma por grupo, verificando uso real y dependencia:
 
 | Cliente / grupo | Qué hace | Reemplazo confirmado | Decisión pendiente |
 |---|---|---|---|
-| Claude `cloudflare`, `cloudflare-email-service`, `durable-objects`, `workers-best-practices`, `wrangler` | Documentación, recetas y revisión para Cloudflare/Workers | Ninguno en qz-kit, Gentle o Engram | Conservar sólo si se trabaja con Cloudflare |
+| Claude `cloudflare`, `cloudflare-email-service`, `durable-objects`, `workers-best-practices`, `wrangler` | Documentación, recetas y revisión para Cloudflare/Workers | Candidato a skill portable administrado por qz-kit | Decidir import upstream vs skill propio; luego eliminar copias por cliente |
 | Claude `agents-sdk`, `sandbox-sdk` | Guías para construir agentes y sandboxes | Ninguno | Conservar si se usan esas plataformas; si no, retirar |
-| Claude `web-perf` | Mediciones de rendimiento con navegador/DevTools | No hay reemplazo equivalente en qz-kit | Conservar si se hacen auditorías web |
+| Claude `web-perf` | Mediciones de rendimiento con navegador/DevTools | Candidato a skill portable qz-kit, condicionado al soporte de browser | Validar dependencia y adapters |
 | Claude `go-testing` | Patrones de pruebas Go y golden files | No hay reemplazo equivalente | Conservar sólo para repos Go |
 | Claude `synced` | Bundle sincronizado de skills externas; su procedencia individual no está verificada | Ninguno confirmado | Auditar contenido y origen antes de decidir |
-| Claude hooks CodeGraph | Indexación/relaciones del código para contexto | Ninguno confirmado | Decidir si el valor supera mantenimiento y consumo |
-| Claude RTK | Compactación de salida de terminal para ahorrar contexto/tokens | qz-kit no lo reemplaza | Medir ahorro real antes de conservar |
-| Claude validación Bash/env | Guardrails para comandos y variables locales | qz-kit cubre parte con `verify`/preflight, no todo | Comparar reglas y conservar lo que no esté duplicado |
-| Claude output styles, rules, planes y permisos locales | Personalización de comportamiento y controles del cliente | No hay equivalencia 1:1 entre los cuatro CLI | Revisar uno por uno; no eliminar por nombre |
+| Claude hooks CodeGraph | Indexación/relaciones del código para contexto | Candidato a componente externo administrado por qz-kit | Definir adapter, versionado, backup y doctor; luego eliminar instalaciones sueltas |
+| Claude RTK | Compactación de salida de terminal para ahorrar contexto/tokens | No se conservará | **Eliminar en todos los clientes** |
+| Claude validación Bash/env | Guardrails para comandos y variables locales | Candidato a guards/skills qz-kit; `verify` y `preflight` ya cubren parte | Extraer reglas no duplicadas y eliminar la instalación independiente |
+| Claude output styles, rules y permisos locales | Personalización de comportamiento y controles del cliente | Candidato a configuración portable con adapters qz-kit | Migrar sólo reglas portables; descartar formato interno incompatible |
 | Codex `.system` | Skills del sistema provistas por Codex | No corresponde reemplazarlas con qz-kit | Conservar; son parte del cliente |
 | Codex `agents-sdk`, `cloudflare*`, `durable-objects`, `sandbox-sdk`, `web-perf`, `workers-*`, `wrangler` | Skills generales de plataforma | Ninguno confirmado | Conservar sólo cuando exista uso |
-| Gentle Shell prompts `hops-*` | Workflows 100% Hospeda: DB, servidores, artifacts, Linear y worktrees | No son parte del paquete genérico qz-kit | Evaluar/migrar al adapter Hospeda; no borrar desde la limpieza global |
-| Gentle Shell agentes de review `jd-*` y `review-*` | Exploración, revisión 4R y jueces | Gentle los administra, pero su utilidad frente a RDD/ODD aún debe validarse | Si se reinstala Gentle, limpiar copias viejas y decidir si se habilitan |
+| Gentle Shell prompts `hops-*` | Workflows 100% Hospeda: DB, servidores, artifacts, Linear y worktrees | Adapter de Hospeda, si contiene la misma función | Si el adapter está completo, eliminar los prompts actuales |
+| Gentle Shell agentes de review `jd-*` y `review-*` | Exploración, revisión 4R y jueces | Instalación limpia de Gentle Shell, sólo si la versión vigente aún los incluye | Verificar `--dry-run`; eliminar si se regeneran, evaluar si fueron deprecados |
 
 ### Evidencia de procedencia
 
@@ -271,7 +282,7 @@ Skills externos (633 archivos):
 
 Los grupos más grandes son `cloudflare` (321 archivos), `synced` (226) y `worktree` (34). No se recomienda borrarlos automáticamente.
 
-También quedan para una evaluación separada los hooks de CodeGraph, Engram, RTK y validación Bash; MCP de Context7 y Engram; plugins; output styles; reglas; planes y sincronización de permisos.
+Los hooks de CodeGraph, la validación Bash/env, output styles, reglas y permisos pasan a la evaluación de portabilidad descrita arriba. Engram y Context7 pasan a `ELIMINAR` por procedencia/reemplazo; RTK pasa directamente a `ELIMINAR`. Los planes y plugins sin reemplazo confirmado siguen requiriendo revisión individual.
 
 ## Codex
 
