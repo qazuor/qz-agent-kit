@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, resolve } from 'node:path'
-import { confirm, intro, isCancel, multiselect, outro, cancel } from '@clack/prompts'
+import { confirm, intro, isCancel, multiselect, outro, cancel, text } from '@clack/prompts'
 import { assertValidPlan } from './plan-schema.mjs'
 
 const root = resolve(new URL('..', import.meta.url).pathname)
@@ -22,9 +22,9 @@ const clients = [
   { value: 'codex', label: 'Codex', hint: 'skills, agentes e instrucciones qz' }
 ]
 const components = [
-  { value: 'gentle-ai', label: 'Gentle AI', hint: 'instalación/configuración externa; queda como pendiente hasta automatizarla' },
-  { value: 'engram', label: 'Engram', hint: 'memoria; nunca copia ni modifica la base automáticamente' },
-  { value: 'context7', label: 'Context7', hint: 'MCP/documentación; configuración separada' },
+  { value: 'gentle-ai', label: 'Gentle AI', hint: 'preview, backup nativo, instalación oficial y doctor' },
+  { value: 'engram', label: 'Engram', hint: 'backup SQLite, integridad y setup MCP; nunca migra memoria implícitamente' },
+  { value: 'context7', label: 'Context7', hint: 'MCP/documentación; queda como pendiente hasta configurar su adapter' },
   { value: 'rdd-review', label: 'RDD / review', hint: 'opcional y actualmente desactivado por defecto' },
   { value: 'background-agents', label: 'Background agents', hint: 'opcional; no se activa por defecto' }
 ]
@@ -52,6 +52,71 @@ const choose = async (question, options, initialValues) => {
 const savePlan = (plan) => {
   mkdirSync(dirname(manifestPath), { recursive: true })
   writeFileSync(manifestPath, `${JSON.stringify(plan, null, 2)}\n`)
+}
+
+const runJson = (script, args, home = null) => {
+  const env = home ? { ...process.env, HOME: home } : process.env
+  const result = spawnSync(process.execPath, [resolve(root, 'scripts', script), ...args], { encoding: 'utf8', stdio: ['inherit', 'pipe', 'pipe'], maxBuffer: 2 * 1024 * 1024, env })
+  let parsed = null
+  try { parsed = JSON.parse(result.stdout || '') } catch {}
+  return { result, parsed }
+}
+
+const runExternalComponents = async (plan) => {
+  const selected = new Set(plan.components || [])
+  const supported = [...selected].filter((component) => ['gentle-ai', 'engram'].includes(component))
+  const pending = [...selected].filter((component) => !['gentle-ai', 'engram'].includes(component))
+  if (pending.length) console.log(`Componentes externos aún no automatizados: ${pending.join(', ')}.`)
+  if (!supported.length) return
+  if (nonInteractive && !hasArg('--external-apply')) {
+    console.log('Componentes externos seleccionados pero no aplicados: el modo no interactivo requiere --external-apply explícito.')
+    return
+  }
+  const proceed = nonInteractive || await confirm({ message: `¿Ejecutar ahora los adapters oficiales (${supported.join(', ')})?`, initialValue: false })
+  if (isCancel(proceed) || !proceed) {
+    console.log('Componentes externos registrados como pendientes; no se ejecutaron mutaciones externas.')
+    return
+  }
+  const receiptRoot = resolve(plan.home, '.local/state/qz-agent-kit/external-receipts')
+  mkdirSync(receiptRoot, { recursive: true, mode: 0o700 })
+  for (const component of supported) {
+    if (component === 'gentle-ai' && !plan.clients.includes('opencode')) {
+      console.log('Gentle AI: pendiente; el adapter verificado actualmente requiere OpenCode.')
+      continue
+    }
+    let project = argValue('--engram-project')
+    if (component === 'engram' && !project && !nonInteractive) {
+      const answer = await text({ message: 'Proyecto de Engram para configurar (vacío para dejarlo pendiente):', placeholder: 'hospeda', defaultValue: '' })
+      if (isCancel(answer)) { console.log('Engram: cancelado; no se tocó la memoria.'); continue }
+      project = answer.trim() || null
+    }
+    if (component === 'engram' && !project) {
+      console.log('Engram: pendiente; hace falta --engram-project <nombre> y un backup verificable.')
+      continue
+    }
+    const receipt = resolve(receiptRoot, `${component}-preview.json`)
+    const previewArgs = ['--component', component, '--from', manifestPath, '--receipt', receipt, '--force-receipt']
+    if (project) previewArgs.push('--project', project)
+    const preview = runJson('external-preview.mjs', previewArgs, plan.home)
+    const previewOk = preview.result.status === 0 && preview.parsed?.results?.find((item) => item.component === component)?.status === 'ok'
+    if (!previewOk) {
+      console.log(`${component}: preview no aprobado; queda pendiente y no se ejecuta.`)
+      continue
+    }
+    if (component === 'engram') {
+      const backup = resolve(receiptRoot, 'engram-backup')
+      const backupResult = runJson('external-backup.mjs', ['--component', 'engram', '--project', project, '--approve', 'ENGRAM_BACKUP', '--output', backup], plan.home)
+      if (backupResult.result.status !== 0 || backupResult.parsed?.backup?.integrity !== 'ok') {
+        console.log('Engram: backup o integrity_check falló; no se ejecuta setup.')
+        continue
+      }
+      const apply = runJson('external-apply.mjs', ['--component', 'engram', '--project', project, '--backup', resolve(backup, 'manifest.json'), '--receipt', receipt, '--from', manifestPath, '--approve', 'ENGRAM_APPLY'], plan.home)
+      console.log(`Engram: ${apply.result.status === 0 ? 'configurado y verificado' : 'falló; revisar receipt'}.`)
+      continue
+    }
+    const apply = runJson('external-apply.mjs', ['--component', component, '--receipt', receipt, '--from', manifestPath, '--approve', 'GENTLE_AI_APPLY', '--home', plan.home], plan.home)
+    console.log(`Gentle AI: ${apply.result.status === 0 ? 'instalado/configurado y verificado' : 'falló; revisar receipt'}.`)
+  }
 }
 
 const importedPlanPath = argValue('--from')
@@ -99,5 +164,5 @@ if (!apply) { outro('Plan guardado; no se aplicaron cambios.'); process.exit(0) 
 const args = ['--apply', '--home', plan.home, '--client', selectedClients.length ? selectedClients.join(',') : 'none', '--skip-wizard']
 const result = spawnSync(process.execPath, [resolve(root, 'scripts/install.mjs'), ...args], { stdio: 'inherit' })
 if (result.status !== 0) process.exit(result.status ?? 1)
-console.log('Componentes externos registrados como selección pendiente; cada adapter se implementará de forma explícita y verificable.')
+await runExternalComponents(plan)
 outro('Capa qz instalada.')

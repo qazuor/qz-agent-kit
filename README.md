@@ -181,10 +181,12 @@ CLI disponibles, permite elegir qué clientes sincronizar y registra las
 selecciones de Gentle AI, Engram, Context7, revisiones, agentes en segundo plano
 y proveedores. El plan queda en
 `~/.config/qz-agent-kit/install-plan.json` para repetirlo o auditarlo. La capa
-qz se aplica con backup; los componentes externos quedan explícitamente como
-selección pendiente hasta que exista un adapter verificable para cada uno. El
-wizard nunca lee, copia, limpia ni migra credenciales, `.env` o la base de
-Engram.
+qz se aplica con backup. Gentle AI y Engram tienen adapters ejecutables: después
+de un preview exitoso, backup y confirmación explícita, el wizard puede ejecutar
+sus instaladores oficiales y validar el resultado con doctor. Context7,
+revisiones y background agents siguen registrados como componentes pendientes
+hasta contar con adapters verificables. El wizard nunca lee, copia, limpia ni
+migra credenciales, `.env` o la base de Engram sin el flujo explícito de backup.
 
 La instalación normal reconcilia únicamente archivos administrados por qz. Si
 una versión nueva deja de administrar un archivo `qz-*`, `qz-kit install
@@ -198,9 +200,10 @@ qz-kit clean --plan --client all
 ```
 
 El modo `qz-kit clean --apply` muestra cada elemento candidato y pide una
-confirmación individual. Sólo considera commands, skills, agents y prompts de
-los cuatro CLI; excluye auth, settings, MCPs, sesiones, memoria, bases y rutas
-con nombres sensibles. Cada elemento aprobado se respalda antes de eliminarse.
+confirmación individual. Considera commands, skills, agents y prompts de los
+cuatro CLI, además de archivos Gentle que un snapshot marque como administrados;
+excluye auth, sesiones, memoria, bases y rutas con nombres sensibles. Cada
+elemento aprobado se respalda antes de eliminarse.
 
 Para automatización se conservan `--plan`, `--check` y `--apply`. La instalación
 interactiva equivale a elegir clientes y luego ejecutar `--apply`; no reemplaza
@@ -213,7 +216,8 @@ qz-kit install --from ~/.config/qz-agent-kit/install-plan.json --apply
 ```
 
 Ese modo sólo reutiliza selecciones del plan; sigue creando el backup normal y
-no convierte componentes externos pendientes en instalaciones implícitas.
+requiere `--external-apply` para ejecutar adapters externos en modo no
+interactivo.
 Las rutas absolutas del equipo que creó el plan no se reutilizan: por defecto
 se instala en el `HOME` actual. Se puede indicar otro destino con `--home`.
 

@@ -4,7 +4,7 @@ Fecha del relevamiento: 2026-10-01
 Modo: solo lectura  
 Clientes revisados: OpenCode, Claude Code, Codex y Gentle Shell
 
-Este informe separa los recursos administrados por `qz-agent-kit` de los recursos externos. No se eliminó ningún archivo.
+Este informe separa los recursos administrados por `qz-agent-kit` de los recursos externos. No se eliminó ningún archivo. Después de confirmar la procedencia de Gentle AI, el comando `qz-kit clean` también reconoce sus recursos administrados como reemplazables, siempre que exista el snapshot o manifiesto local que lo demuestre.
 
 ## Resumen
 
@@ -386,5 +386,7 @@ Estos prompts no se eliminan ahora: son específicos de Hospeda y no todos tiene
 ## Confirmación pendiente
 
 La eliminación propuesta se limita a los 62 elementos de las secciones `Eliminar`. No se tocarán los elementos de `A definir por Qazuor`.
+
+La cifra 62 corresponde al inventario inicial de qz-agent-kit. El inventario dinámico de OpenCode y Gentle Shell puede ser mayor porque ahora incorpora los recursos confirmados por los snapshots de Gentle AI y `managed-assets.json`. Los archivos de configuración Gentle (`opencode.json`, `AGENTS.md`, `tui.json`, plugins y temas) siguen requiriendo la reinstalación verificable de Gentle antes de aplicar la limpieza.
 
 Después de la confirmación se hará una limpieza respaldada y luego una instalación limpia de qz-agent-kit.

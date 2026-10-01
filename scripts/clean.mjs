@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { confirm, intro, isCancel, outro } from '@clack/prompts'
 import { createHash } from 'node:crypto'
-import { copyFileSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join, relative, resolve } from 'node:path'
 
@@ -20,6 +20,7 @@ const backupRoot = join(stateRoot, 'clean-backups', timestamp)
 const protectedPattern = /(^|[._-])(auth|credential|token|secret|password|cookie|private[-_]?key|\.env)([._-]|$)|(^|[/])(settings|sessions?|memory|databases?)([/._-]|$)/i
 const knownCommands = manifest.commands.map((entry) => entry.id)
 const knownNames = new Map(knownCommands.map((id) => [normalize(id), id]))
+const gentleManaged = new Map()
 const roots = {
   opencode: [
     ['commands', join(home, '.config/opencode/commands')],
@@ -57,7 +58,44 @@ function walk(directory, out = []) {
   return out
 }
 
+function registerGentlePath(client, path, source) {
+  if (!selected.includes(client)) return
+  if (!path || !existsSync(path) || protectedPattern.test(path)) return
+  gentleManaged.set(path, { client, source })
+}
+
+function discoverGentleManagedPaths() {
+  const opencodeBackupRoot = join(home, '.gentle-ai/backups')
+  if (existsSync(opencodeBackupRoot) && lstatSync(opencodeBackupRoot).isDirectory()) {
+    const snapshots = readdirSync(opencodeBackupRoot).map((name) => join(opencodeBackupRoot, name, 'manifest.json')).filter(existsSync).sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)
+    for (const manifestPath of snapshots) {
+      try {
+        const snapshot = JSON.parse(readFileSync(manifestPath, 'utf8'))
+        for (const entry of snapshot.entries || []) if (entry.existed === false && typeof entry.original_path === 'string' && entry.original_path.startsWith(home + '/.config/opencode/')) registerGentlePath('opencode', entry.original_path, 'Gentle AI snapshot')
+      } catch { /* invalid or incomplete snapshot: ignore */ }
+    }
+  }
+  const managedPath = join(home, '.gentle-shell/agent/gentle-ai/managed-assets.json')
+  if (existsSync(managedPath)) {
+    try {
+      const managed = JSON.parse(readFileSync(managedPath, 'utf8'))
+      for (const asset of Object.keys(managed.assets || {})) registerGentlePath('gentle-shell', join(home, '.gentle-shell/agent', asset), 'Gentle Shell managed-assets')
+    } catch { /* invalid managed-assets: ignore */ }
+  }
+  for (const path of [join(home, '.gentle-shell/agent/APPEND_SYSTEM.md'), join(home, '.gentle-shell/agent/mcp.json')]) registerGentlePath('gentle-shell', path, 'Gentle AI snapshot')
+}
+
+function categoryForPath(client, path) {
+  const rootCandidates = roots[client] || []
+  const rootEntry = rootCandidates.find(([, directory]) => path === directory || path.startsWith(directory + '/'))
+  if (rootEntry) return rootEntry[0]
+  const relativePath = client === 'opencode' ? relative(join(home, '.config/opencode'), path) : relative(join(home, '.gentle-shell/agent'), path)
+  return relativePath.split('/')[0] || 'config'
+}
+
 function recommendation(client, category, path) {
+  const gentle = gentleManaged.get(path)
+  if (gentle) return { recommendation: 'reemplazado-por-gentle', reason: `recurso administrado por ${gentle.source}`, confidence: 'alta', replacement: 'instalación oficial de Gentle AI' }
   const relativeName = relative(roots[client].find(([kind, dir]) => kind === category)?.[1] || home, path)
   const base = relativeName.split('/').at(-1) || relativeName
   const parts = relativeName.split('/')
@@ -75,6 +113,7 @@ function recommendation(client, category, path) {
 }
 
 function buildPlan() {
+  discoverGentleManagedPaths()
   const items = []
   for (const client of selected) {
     if (!roots[client]) throw new Error(`cliente inválido: ${client}`)
@@ -85,7 +124,11 @@ function buildPlan() {
       }
     }
   }
-  return { schemaVersion: 1, mode: 'total-clean', generatedAt: new Date().toISOString(), clients: selected, items, summary: { total: items.length, remove: items.filter((item) => ['eliminar', 'reemplazado-por-qz'].includes(item.recommendation)).length, keep: items.filter((item) => item.recommendation === 'conservar').length, review: items.filter((item) => item.recommendation === 'revisar').length }, protectedPolicy: 'secret-like paths, auth, settings, sessions, memory and databases are excluded', mutations: 'none', secretValues: 'not-read' }
+  for (const [path, metadata] of gentleManaged) {
+    if (items.some((item) => item.path === path)) continue
+    items.push({ id: createHash('sha256').update(path).digest('hex').slice(0, 12), client: metadata.client, category: categoryForPath(metadata.client, path), path, ...recommendation(metadata.client, categoryForPath(metadata.client, path), path), protected: false })
+  }
+  return { schemaVersion: 1, mode: 'total-clean', generatedAt: new Date().toISOString(), clients: selected, items, summary: { total: items.length, remove: items.filter((item) => ['eliminar', 'reemplazado-por-qz', 'reemplazado-por-gentle'].includes(item.recommendation)).length, keep: items.filter((item) => item.recommendation === 'conservar').length, review: items.filter((item) => item.recommendation === 'revisar').length }, protectedPolicy: 'secret-like paths, auth, settings, sessions, memory and databases are excluded', mutations: 'none', secretValues: 'not-read' }
 }
 
 if (!has('--plan') && !has('--apply')) throw new Error('elegí --plan o --apply')
@@ -102,7 +145,7 @@ if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('clean --appl
 intro('qz-agent-kit · limpieza total interactiva')
 const approved = []
 for (const item of plan.items) {
-  if (!['eliminar', 'reemplazado-por-qz', 'revisar'].includes(item.recommendation)) continue
+  if (!['eliminar', 'reemplazado-por-qz', 'reemplazado-por-gentle', 'revisar'].includes(item.recommendation)) continue
   const label = `${item.client}/${item.category}: ${item.path}\n  ${item.recommendation} · ${item.reason}${item.replacement ? ` · reemplazo: ${item.replacement}` : ''}`
   const answer = await confirm({ message: label, initialValue: item.recommendation !== 'revisar' })
   if (isCancel(answer)) { outro('Limpieza cancelada; no se aplicaron cambios.'); process.exit(130) }

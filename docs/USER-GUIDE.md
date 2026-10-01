@@ -100,7 +100,7 @@ Los nombres específicos de Hospeda siguen siendo `hops-*` y viven en el adapter
 
 `qz-engram` deja pasar únicamente operaciones de lectura: versión, doctor, estadísticas, proyectos, búsqueda, contexto, timeline, conflictos, estado cloud y quick test. Bloquea import, export, sync, setup, consolidate, prune y cualquier escritura. La memoria se conserva fuera de Git y se respalda antes de cualquier limpieza.
 
-`qz-gentle` permite inspeccionar versión, doctor, estado SDD/ODD, review y telemetry. Bloquea instalación, upgrade, sync, restore, desinstalación y mutaciones de review o telemetry. Las actualizaciones de Gentle y Engram se hacen desde una etapa explícita del instalador, nunca como efecto oculto de un comando de trabajo.
+`qz-gentle` permite inspeccionar versión, doctor, estado SDD/ODD, review y telemetry. Bloquea instalación, upgrade, sync, restore, desinstalación y mutaciones de review o telemetry. `qz-kit install` puede ejecutar la instalación oficial de Gentle AI después de preview, backup nativo y confirmación explícita; las actualizaciones nunca ocurren como efecto oculto de un comando de trabajo.
 
 El flujo externo de Engram exige un proyecto, un backup SQLite consistente y un
 receipt de preview:
