@@ -169,6 +169,13 @@ qz-kit install --plan
 qz-kit install --apply
 ```
 
+Si ejecutás `qz-kit` sin argumentos desde una terminal, se abre el menú
+interactivo principal. Desde allí podés iniciar la instalación, comprobar drift,
+ver el plan de actualización, ejecutar diagnósticos, revisar memoria o ver la
+ayuda. Los subcomandos explícitos siguen disponibles para scripts y CI; fuera
+de una terminal interactiva, `qz-kit` sin argumentos termina con una indicación
+de uso para evitar bloquearse esperando entrada.
+
 En una máquina nueva, `qz-kit install` abre un wizard interactivo. Detecta los
 CLI disponibles, permite elegir qué clientes sincronizar y registra las
 selecciones de Gentle AI, Engram, Context7, revisiones, agentes en segundo plano

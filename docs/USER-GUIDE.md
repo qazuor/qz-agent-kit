@@ -25,6 +25,10 @@ qz-kit check
 
 `qz-kit install` detecta los harness disponibles, muestra una selección interactiva y prepara componentes comunes. Puede instalar o configurar Gentle AI, Engram, OpenCode, Gentle Shell, instrucciones, skills, agentes, comandos y servicios opcionales. No se deben copiar secretos al repositorio.
 
+También podés ejecutar `qz-kit` sin argumentos para abrir el menú principal. Ese
+menú reúne instalación, comprobación, plan de actualización, doctor, verify y
+escaneo de memoria. En scripts o CI usá siempre un subcomando explícito.
+
 Para instalar la capa de un proyecto:
 
 ```bash

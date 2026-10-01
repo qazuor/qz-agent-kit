@@ -5,13 +5,20 @@ import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { assertValidPlan } from '../scripts/plan-schema.mjs'
 
-const [command = 'help', ...args] = process.argv.slice(2)
+const rawArgs = process.argv.slice(2)
+const packageRoot = resolve(new URL('..', import.meta.url).pathname)
+if (rawArgs.length === 0) {
+  const menu = resolve(packageRoot, 'scripts/kit-menu.mjs')
+  const result = spawnSync(process.execPath, [menu], { stdio: 'inherit' })
+  process.exit(result.status ?? 1)
+}
+const [command, ...args] = rawArgs
 const packageJson = JSON.parse(readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'package.json'), 'utf8'))
 if (command === '--version' || command === 'version') {
   console.log(`${packageJson.name} ${packageJson.version}`)
   process.exit(0)
 }
-const script = resolve(new URL('..', import.meta.url).pathname, 'scripts/install.mjs')
+const script = resolve(packageRoot, 'scripts/install.mjs')
 const rollback = resolve(new URL('..', import.meta.url).pathname, 'scripts/rollback.mjs')
 const projects = resolve(new URL('..', import.meta.url).pathname, 'scripts/projects.mjs')
 const doctor = resolve(new URL('..', import.meta.url).pathname, 'scripts/doctor.mjs')
