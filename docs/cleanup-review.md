@@ -22,6 +22,73 @@ Credenciales, tokens, historiales, sesiones, bases de datos, caches y archivos s
 
 ## OpenCode
 
+### Recursos confirmados como instalados por Gentle AI
+
+La procedencia se verificó contra el snapshot nativo de Gentle AI del 2026-09-15. Los siguientes 74 recursos aparecen registrados como creados por la instalación de Gentle (`existed: false`):
+
+#### Commands Gentle
+
+- `sdd-apply.md`
+- `sdd-archive.md`
+- `sdd-continue.md`
+- `sdd-explore.md`
+- `sdd-ff.md`
+- `sdd-init.md`
+- `sdd-new.md`
+- `sdd-onboard.md`
+- `sdd-research.md`
+- `sdd-status.md`
+- `sdd-verify.md`
+
+#### Skills Gentle
+
+- `_shared` (12 archivos)
+- `branch-pr`
+- `chained-pr`
+- `cognitive-doc-design`
+- `comment-writer`
+- `gentle-ai-bench`
+- `go-testing`
+- `issue-creation`
+- `judgment-day`
+- `rdd-defect-workflow`
+- `sdd-apply`
+- `sdd-archive`
+- `sdd-design`
+- `sdd-explore`
+- `sdd-init`
+- `sdd-onboard`
+- `sdd-propose`
+- `sdd-research`
+- `sdd-spec`
+- `sdd-tasks`
+- `sdd-verify`
+- `skill-creator`
+- `skill-improver`
+- `skill-registry`
+- `systemic-issue-triage`
+- `work-unit-commits`
+
+#### Plugins y configuración Gentle
+
+- `plugins/background-agents.ts`
+- `plugins/model-variants.ts`
+- `plugins/opencode-review-transport.ts`
+- `plugins/review-result-artifacts.ts`
+- `plugins/sdd-task-result-artifacts.ts`
+- `plugins/skill-registry.ts`
+- `plugins/telemetry-runtime.ts`
+- `themes/gentleman-cute.json`
+- `themes/gentleman.json`
+- `tui-plugins/gentle-logo.tsx`
+- `tui.json`
+- `.gentle-ai-default-agent.json`
+- `.gentle-ai-telemetry-runtime.json`
+- `AGENTS.md`
+- `opencode.json`
+
+Estos recursos deben pasar a la lista de eliminación **condicionada a una reinstalación exitosa de Gentle AI**. No deben borrarse mediante una instalación de qz-agent-kit solamente, porque qz-agent-kit actualmente no los genera.
+
 ### Eliminar
 
 #### Commands
