@@ -28,6 +28,10 @@
     "preview": "engram doctor --json --check sqlite_lock_contention --project <project>",
     "prerequisites": ["backup externo de ~/.engram", "check SQLite por proyecto", "decidir integración MCP", "confirmar protocolo full"]
   },
+  "bootstrap": {
+    "tokens": ["go", "install", "github.com/Gentleman-Programming/engram/cmd/engram@latest"],
+    "prerequisites": ["Go disponible en PATH", "confirmación explícita", "canal estable"]
+  },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"
 }

@@ -266,6 +266,17 @@ qz-kit external-backup-status --component gentle-ai
 qz-kit external-backup-status --component engram --project hospeda
 ```
 
+Si el binario oficial no está instalado, el wizard puede ofrecer un bootstrap
+allowlisted mediante Go, siempre con confirmación explícita:
+
+```bash
+qz-kit external-bootstrap --component gentle-ai --approve QZ_EXTERNAL_BOOTSTRAP
+qz-kit external-bootstrap --component engram --approve QZ_EXTERNAL_BOOTSTRAP
+```
+
+Los comandos de bootstrap están declarados por cada adapter, no vienen de una
+entrada libre del usuario y no usan shell. Requieren Go disponible en `PATH`.
+
 Un preview exitoso no instala, actualiza ni configura nada y no habilita el
 `apply` del adapter. El receipt es opcional y sólo se escribe cuando se pasa
 explícitamente la ruta.

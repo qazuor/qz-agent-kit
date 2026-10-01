@@ -102,6 +102,10 @@ Los nombres específicos de Hospeda siguen siendo `hops-*` y viven en el adapter
 
 `qz-gentle` permite inspeccionar versión, doctor, estado SDD/ODD, review y telemetry. Bloquea instalación, upgrade, sync, restore, desinstalación y mutaciones de review o telemetry. `qz-kit install` puede ejecutar la instalación oficial de Gentle AI después de preview, backup nativo y confirmación explícita; las actualizaciones nunca ocurren como efecto oculto de un comando de trabajo.
 
+Si Gentle AI o Engram no están instalados, el wizard puede ofrecer el bootstrap
+estable declarado por el adapter mediante `go install`. Requiere Go disponible,
+confirmación explícita y no ejecuta comandos arbitrarios.
+
 El flujo externo de Engram exige un proyecto, un backup SQLite consistente y un
 receipt de preview:
 

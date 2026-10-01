@@ -28,6 +28,10 @@
     "preview": "gentle-ai install --dry-run --agent opencode --scope global --preset full-gentleman --persona gentleman --sdd-mode single --opencode-background-subagents=off --pi-background-subagents=off",
     "prerequisites": ["preflight aprobado", "preview sin drift", "backup de configuraciones administradas"]
   },
+  "bootstrap": {
+    "tokens": ["go", "install", "github.com/gentleman-programming/gentle-ai/v4/cmd/gentle-ai@latest"],
+    "prerequisites": ["Go disponible en PATH", "confirmación explícita", "canal estable"]
+  },
   "secrets": "never-read-or-copied",
   "source": "adapter-contract; exact versions resolved only during an explicit plan"
 }

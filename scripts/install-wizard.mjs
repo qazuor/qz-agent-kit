@@ -97,7 +97,24 @@ const runExternalComponents = async (plan) => {
     const receipt = resolve(receiptRoot, `${component}-preview.json`)
     const previewArgs = ['--component', component, '--from', manifestPath, '--receipt', receipt, '--force-receipt']
     if (project) previewArgs.push('--project', project)
-    const preview = runJson('external-preview.mjs', previewArgs, plan.home)
+    let preview = runJson('external-preview.mjs', previewArgs, plan.home)
+    const previewStatus = preview.parsed?.results?.find((item) => item.component === component)?.status
+    if (previewStatus === 'unavailable') {
+      const bootstrap = nonInteractive
+        ? hasArg('--external-bootstrap')
+        : await confirm({ message: `${component} no está instalado. ¿Instalar el binario oficial estable ahora?`, initialValue: false })
+      if (isCancel(bootstrap) || !bootstrap) {
+        console.log(`${component}: binario ausente; queda pendiente.`)
+        continue
+      }
+      const bootstrapReceipt = resolve(receiptRoot, `${component}-bootstrap.json`)
+      const bootstrapResult = runJson('external-bootstrap.mjs', ['--component', component, '--from', manifestPath, '--approve', 'QZ_EXTERNAL_BOOTSTRAP', '--receipt', bootstrapReceipt], plan.home)
+      if (bootstrapResult.result.status !== 0) {
+        console.log(`${component}: bootstrap falló; no se ejecuta configuración.`)
+        continue
+      }
+      preview = runJson('external-preview.mjs', previewArgs, plan.home)
+    }
     const previewOk = preview.result.status === 0 && preview.parsed?.results?.find((item) => item.component === component)?.status === 'ok'
     if (!previewOk) {
       console.log(`${component}: preview no aprobado; queda pendiente y no se ejecuta.`)
