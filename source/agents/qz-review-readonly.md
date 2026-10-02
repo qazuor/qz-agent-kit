@@ -1,4 +1,5 @@
 ---
+name: qz-review-readonly
 description: Revisión técnica read-only con evidencia verificable
 mode: subagent
 ---

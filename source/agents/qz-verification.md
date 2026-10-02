@@ -1,4 +1,5 @@
 ---
+name: qz-verification
 description: Verificación y diagnóstico posterior a un cambio
 mode: subagent
 ---

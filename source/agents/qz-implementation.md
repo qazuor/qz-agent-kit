@@ -1,4 +1,5 @@
 ---
+name: qz-implementation
 description: Implementación guiada por el adapter del proyecto
 mode: subagent
 ---

@@ -2,19 +2,19 @@
   "schemaVersion": 1,
   "manifestId": "qz-content-pack",
   "sourceOfTruth": "source",
-  "generatedAt": "2026-10-01T20:36:40.390Z",
+  "generatedAt": "2026-10-02T02:05:51.850Z",
   "content": [
     {
       "path": "source/agents/qz-implementation.md",
-      "sha256": "ee3c7e79bdd3960b2a394fa12ea9cd16681088bc39ac4b65ae374420e4e13cc1"
+      "sha256": "a50106081fb77888fb77a14461c7c2255b71fea8fc2ea9be5e28336928ca53f9"
     },
     {
       "path": "source/agents/qz-review-readonly.md",
-      "sha256": "8dec1e2bb5d820a44ed15a8e8f46126a62146452b7edf51a58de5dd9ce777f81"
+      "sha256": "709c930ac3baf6bd6bfc4cb9221754e449abf19225a5f88564dadd857a5d5c72"
     },
     {
       "path": "source/agents/qz-verification.md",
-      "sha256": "762eb3ef8a2c138e0db37201f8d59c29be828bf4d38173b33a154d410eaf254a"
+      "sha256": "f764cb7ccaa79e7876356f0025d1a33abf2f8e8f9f755c800d49f1e4ae9e616b"
     },
     {
       "path": "source/commands/qz-artifact.md",
