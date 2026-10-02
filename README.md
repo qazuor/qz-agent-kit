@@ -183,11 +183,10 @@ y proveedores. El plan queda en
 `~/.config/qz-agent-kit/install-plan.json` para repetirlo o auditarlo. La capa
 qz se aplica con backup. Gentle AI y Engram tienen adapters ejecutables: después
 de un preview exitoso, backup y confirmación explícita, el wizard puede ejecutar
-sus instaladores oficiales y validar el resultado con doctor. Context7,
-revisiones y background agents se verifican mediante probes read-only después
-de la configuración oficial: Context7 debe aparecer conectado en OpenCode, RDD
-debe estar habilitado globalmente y el launcher administrado de OpenCode debe
-existir. El wizard nunca lee, copia, limpia ni
+sus instaladores oficiales y validar el resultado con doctor. Al seleccionar
+Gentle AI, Context7 y el launcher de background de OpenCode se provisionan como
+parte de su instalación oficial, y RDD/review se habilita explícitamente con
+`gentle-ai review mode enable`. El wizard nunca lee, copia, limpia ni
 migra credenciales, `.env` o la base de Engram sin el flujo explícito de backup.
 
 La instalación normal reconcilia únicamente archivos administrados por qz. Si

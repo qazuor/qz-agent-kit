@@ -26,9 +26,9 @@ const clients = [
 const components = [
   { value: 'gentle-ai', label: 'Gentle AI', hint: 'preview, backup nativo, instalación oficial y doctor' },
   { value: 'engram', label: 'Engram', hint: 'backup SQLite, integridad y setup MCP; nunca migra memoria implícitamente' },
-  { value: 'context7', label: 'Context7', hint: 'MCP/documentación; queda como pendiente hasta configurar su adapter' },
-  { value: 'rdd-review', label: 'RDD / review', hint: 'opcional y actualmente desactivado por defecto' },
-  { value: 'background-agents', label: 'Background agents', hint: 'opcional; no se activa por defecto' }
+  { value: 'context7', label: 'Context7', hint: 'MCP/documentación; lo provisiona Gentle AI para OpenCode' },
+  { value: 'rdd-review', label: 'RDD / review', hint: 'activa el modo global de revisión de Gentle AI' },
+  { value: 'background-agents', label: 'Background agents', hint: 'activa background sólo en OpenCode; Pi queda en foreground' }
 ]
 const providers = [
   { value: 'openai', label: 'OpenAI', hint: 'usar login/API existente, sin leer credenciales' },
@@ -67,8 +67,9 @@ const runJson = (script, args, home = null) => {
 const runExternalComponents = async (plan) => {
   const selected = new Set(plan.components || [])
   const supported = [...selected].filter((component) => ['gentle-ai', 'engram'].includes(component))
-  const pending = [...selected].filter((component) => !['gentle-ai', 'engram'].includes(component))
-  if (pending.length) console.log(`Componentes externos aún no automatizados: ${pending.join(', ')}.`)
+  const delegated = [...selected].filter((component) => ['context7', 'rdd-review', 'background-agents'].includes(component))
+  if (delegated.length) console.log(`Componentes delegados a Gentle AI/OpenCode: ${delegated.join(', ')}.`)
+  if (delegated.length && !selected.has('gentle-ai')) console.log('Estos componentes requieren seleccionar Gentle AI para poder provisionarse; quedan registrados sin mutación.')
   if (!supported.length) return
   if (nonInteractive && !hasArg('--external-apply')) {
     console.log('Componentes externos seleccionados pero no aplicados: el modo no interactivo requiere --external-apply explícito.')
@@ -134,7 +135,12 @@ const runExternalComponents = async (plan) => {
       continue
     }
     const apply = runJson('external-apply.mjs', ['--component', component, '--receipt', receipt, '--from', manifestPath, '--approve', 'GENTLE_AI_APPLY', '--home', plan.home], plan.home)
-    console.log(`Gentle AI: ${apply.result.status === 0 ? 'instalado/configurado y verificado' : 'falló; revisar receipt'}.`)
+    const gentleOk = apply.result.status === 0
+    console.log(`Gentle AI: ${gentleOk ? 'instalado/configurado y verificado' : 'falló; revisar receipt'}.`)
+    if (gentleOk && selected.has('rdd-review')) {
+      const review = spawnSync('gentle-ai', ['review', 'mode', 'enable', '--scope', 'global', '--json'], { encoding: 'utf8', stdio: 'inherit', timeout: 30000, env: { ...process.env, HOME: plan.home } })
+      console.log(`RDD/review: ${review.status === 0 ? 'habilitado globalmente' : 'no se pudo habilitar; revisar Gentle AI'}.`)
+    }
   }
 }
 
